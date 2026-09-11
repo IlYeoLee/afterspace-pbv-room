@@ -266,7 +266,7 @@ ol.steps li.on{color:var(--navy);font-weight:800}
       <li>앞줄은 뒤를 보고 가므로 옆 창을 크게</li></ul></div>
     <div class="card"><h3>책상</h3><ul class="px">
       <li>평소엔 팔걸이 상자 속에 세워 접힘</li>
-      <li>펼치면 폭 = 좌석 폭 + 50, 깊이 330, 높이 580</li>
+      <li>펼치면 폭 = 좌석 폭 + 50, 깊이 330, 높이 580. 배와 약 100 띄워 드나들기 편하게</li>
       <li>판 전체가 16:9 접이 화면. 한 줄 3명이면 약 23″, 4명이면 약 17″</li>
       <li>반쪽만 종이 모드로 바꿔 종이에 필기</li>
       <li>옆 책상과 자석으로 이어 붙임</li>
@@ -369,7 +369,7 @@ function build(bodyId,lay,n,door){
     for(let i=0;i<n;i++){const x=P+i*(sw+P);
       o.seats.push(seatD(x,r1,sw,'up',{x:x+sw/2,y:r1-250}));
       o.seats.push(seatD(x,r2,sw,'up',{x:x+sw/2,y:r2-250}));
-      o.desks.push({x:x-P/2,y:r1-130,w:sw+P,h:330},{x:x-P/2,y:r2-130,w:sw+P,h:330});
+      o.desks.push({x:x-P/2,y:r1-230,w:sw+P,h:330},{x:x-P/2,y:r2-230,w:sw+P,h:330});
       o.stow=(o.stow||[]).concat([{x:x+sw,y:r1+100,w:P,h:400},{x:x+sw,y:r2+100,w:P,h:400}]);}
     o.door={side:'r',a:SC+(F1-door)/2,b:SC+(F1+door)/2,w:door}; o.door2={side:'r',a:r1+SD,b:r1+SD+door,w:door};
     const d1={x:W+600,y:(o.door.a+o.door.b)/2},d2={x:W+600,y:(o.door2.a+o.door2.b)/2};
@@ -377,7 +377,7 @@ function build(bodyId,lay,n,door){
     o.care={x:0,y:SC+60,w:450,h:SD,face:'down',fold:120,stand:{x:W/2,y:SC+260}};
     o.utils.push({x:0,y:te,w:W,h:L-te,t:'사물함 트렁크 · 칸마다 이름 화면 (뒷문)'});
     o.screens.push({x:W*.1,y:0,w:W*.8,t:'대형 공용 화면'});
-    o.floor.push({x:0,y:SC,w:W,h:F1},{x:0,y:r1+SD,w:W,h:F2}); o.floorStay.push({x:450,y:SC,w:W-450,h:F1-130},{x:0,y:r1+SD,w:W,h:F2-130});
+    o.floor.push({x:0,y:SC,w:W,h:F1},{x:0,y:r1+SD,w:W,h:F2}); o.floorStay.push({x:450,y:SC,w:W-450,h:F1-230},{x:0,y:r1+SD,w:W,h:F2-230});
     o.clearBoard=Math.min(F1,F2); o.clearStay=Math.min(F1,F2)-130; o.floorTxt=`바닥 ${fmt(F2)} × ${fmt(W)}`;
     o.narrow=(x,y)=>x>W-260; o.swivel=false; o.rearDoor=false; o.screenAll=true; o.faces='none';
     o.archFeet=[r1,r2].filter(y=>y-300<B.arch[1]&&y>B.arch[0]).length*2;
@@ -387,7 +387,7 @@ function build(bodyId,lay,n,door){
     for(let i=0;i<n;i++){const x=P+i*(sw+P);
       o.seats.push(seatD(x,FU,sw,'down',{x:x+sw/2,y:m0+250}));
       o.seats.push(seatD(x,m1,sw,'up',{x:x+sw/2,y:m1-250}));
-      o.desks.push({x:x-P/2,y:FU+BK+180,w:sw+P,h:330},{x:x-P/2,y:L-RU-BK-510,w:sw+P,h:330});
+      o.desks.push({x:x-P/2,y:FU+BK+280,w:sw+P,h:330},{x:x-P/2,y:L-RU-BK-610,w:sw+P,h:330});
       o.stow=(o.stow||[]).concat([{x:x+sw,y:FU+BK,w:P,h:400},{x:x+sw,y:m1+SD-BK-400,w:P,h:400}]);}
     let da=mc-door/2;const fa=-B.front+1260;if(da-fa<door&&fa+2*door<=Math.min(B.arch[0],m1))da=Math.max(m0,fa+door);
     o.door={side:'r',a:da,b:da+door,w:door};const dc=da+door/2;
@@ -397,8 +397,8 @@ function build(bodyId,lay,n,door){
     o.utils.push({x:0,y:mc-225-650,w:300,h:600,h3:.7,t:''},{x:0,y:mc+275,w:300,h:600,h3:.7,t:''});o.tools=700;
     o.utils.push({x:0,y:0,w:W,h:FU,t:'공용 수납 · 구급'},{x:0,y:L-RU,w:W,h:RU,t:'체험 장비 · 우비 (뒷문)'});
     const sh9=Math.max(0,Math.min(B.H-50-1120,W*.92*9/16)),sw9=sh9*16/9;o.screens.push({x:(W-sw9)/2,y:0,w:sw9,h:sh9,band:1,t:'대형 화면 · 뒷줄이 봄'},{x:(W-sw9)/2,y:L,w:sw9,h:sh9,band:1,t:'대형 화면 · 앞줄이 봄'});
-    o.floor.push({x:0,y:m0,w:W,h:m1-m0}); o.floorStay.push({x:0,y:m0+130,w:W,h:m1-m0-260});
-    o.clearBoard=Math.min(m1-m0,W-300); o.clearStay=m1-m0-260; o.floorTxt=`바닥 ${fmt(m1-m0)} × ${fmt(W)}`;
+    o.floor.push({x:0,y:m0,w:W,h:m1-m0}); o.floorStay.push({x:0,y:m0+230,w:W,h:m1-m0-460});
+    o.clearBoard=Math.min(m1-m0,W-300); o.clearStay=m1-m0-460; o.floorTxt=`바닥 ${fmt(m1-m0)} × ${fmt(W)}`;
     o.narrow=(x,y)=>x>W-260; o.swivel=false; o.rearDoor=false; o.screenAll=true; o.screenBand=true; o.faces='all';
     o.archFeet=(m1-300<B.arch[1]&&m1>B.arch[0])?2:0;
   } else {
@@ -679,7 +679,7 @@ function drawPod(){
   h.push(rc(kp.x-165,kp.y-110,330,220,'fill="#1B2A5E"'));
   if(v.belt>0)h.push(`<line x1="${kp.x+150}" y1="${kp.y-100}" x2="${lp(kp.x+150,kp.x-150,v.belt)}" y2="${lp(kp.y-100,kp.y+100,v.belt)}" stroke="#fff" stroke-width="26"/>`);
   // 책상: 세움 → 앞으로 나오며 올라옴 → 눕혀짐 → 펼침
-  const y0=60-190*v.rise,wd=12+(H-12)*v.flop,wt=wd+H*v.open,xr=px+6;
+  const y0=60-290*v.rise,wd=12+(H-12)*v.flop,wt=wd+H*v.open,xr=px+6;
   if(v.rise>0||v.flop>0){h.push(rc(xr-wt,y0,wt,330,`fill="#8C9BC8" stroke="#1B2A5E" stroke-width="5"`));
     if(v.open>0&&v.open<1)h.push(`<line x1="${xr-H}" y1="${y0}" x2="${xr-H}" y2="${y0+330}" stroke="#1B2A5E" stroke-width="5" stroke-dasharray="12 8"/>`);
     if(v.open>.6){const hh2=Math.min(282,(wt-40)*9/16),ww2=hh2*16/9;h.push(rc(xr-wt/2-ww2/2,y0+24,ww2,hh2,`fill="#1B2A5E" opacity="${(v.open-.6)/.4}"`))}}
@@ -698,7 +698,7 @@ function drawPod(){
   if(v.sit>0){h.push(`<g opacity="${v.sit}">`+rc(-20,Z(480),420,130,'fill="#1B2A5E"')+rc(-50,Z(350),110,350,'fill="#1B2A5E"')+rc(250,Z(880),130,530,'fill="#1B2A5E"')+rc(240,Z(1070),150,180,'fill="#1B2A5E"')+'</g>');
     if(v.belt>0)h.push(`<line x1="330" y1="${Z(840)}" x2="${lp(330,220,v.belt)}" y2="${lp(Z(840),Z(470),v.belt)}" stroke="#fff" stroke-width="24"/>`);}
   const dz=lp(370+260*v.rise,580,v.flop),dh=lp(210,24,v.flop);
-  h.push(rc(60-190*v.rise,Z(dz+dh),330,dh,'fill="#8C9BC8" stroke="#1B2A5E" stroke-width="5"'));
+  h.push(rc(60-290*v.rise,Z(dz+dh),330,dh,'fill="#8C9BC8" stroke="#1B2A5E" stroke-width="5"'));
   h.push(tx(-980,Z(1420),`책상 높이 ${Math.round(dz)}`,'fill="#1B2A5E" font-size="60" font-weight="700"'),tx(-980,Z(1330),`서랍 ${Math.round(380*e)} 나옴`,'fill="#525C74" font-size="56"'));
   $('podSide').setAttribute('viewBox','-1000 0 1620 1560');
   $('podSide').innerHTML=`<g font-family="42dot Sans, system-ui, sans-serif">${h.join('')}</g>`;
@@ -805,7 +805,9 @@ function init3D(){const T=THREE,host=$('c3'),r=new T.WebGLRenderer({antialias:tr
   const size=()=>{const w=host.clientWidth,h=host.clientHeight;if(!w)return;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()};new ResizeObserver(size).observe(host);size();
   Object.assign(V3,{r,cam,ctl});const loop=()=>{requestAnimationFrame(loop);if(!V3.on||!V3.scene)return;if(V3.deskP!==V3.deskTo){V3.deskP+=Math.sign(V3.deskTo-V3.deskP)*Math.min(Math.abs(V3.deskTo-V3.deskP),.006);poseRigs()}ctl.update();r.render(V3.scene,cam)};loop();
   $('camDoor').onclick=()=>camSet('door');$('camExt').onclick=()=>camSet('ext');$('cap').onclick=capture3D;$('labT').onclick=()=>{V3.labOn=V3.labOn===false;(V3.labels||[]).forEach(l=>l.visible=V3.labOn);$('labT').textContent=V3.labOn?'치수 끄기':'치수 켜기'};$('camTop').onclick=()=>camSet('top');$('camIn').onclick=()=>camSet('in');$('camDesk').onclick=()=>{st.mode='stay';refresh();camSet('desk')};$('deskTog').onclick=()=>{if(st.mode==='board'){st.mode='stay';refresh()}else V3.deskTo=V3.deskTo>.5?0:1;camSet('desk')}}
-function camSet(k){(V3.labels||[]).forEach(l=>l.visible=!/^k\d+$/.test(k)&&V3.labOn!==false);V3.roofOn=k==='ext';if(V3.roofG)V3.roofG.visible=V3.roofOn;if(V3.glass)V3.glass.opacity=V3.roofOn?.82:.42;(V3.kids||[]).forEach((K,i)=>{if(K.sit.userData.v!==undefined)K.sit.visible=K.sit.userData.v;delete K.sit.userData.v});
+function camSet(k){(V3.labels||[]).forEach(l=>l.visible=!/^(k\d+|t)$/.test(k)&&V3.labOn!==false);if(V3.tSit){V3.tSit.visible=k==='t'?false:V3.tSitV}V3.roofOn=k==='ext';if(V3.roofG)V3.roofG.visible=V3.roofOn;if(V3.glass)V3.glass.opacity=V3.roofOn?.82:.42;(V3.kids||[]).forEach((K,i)=>{if(K.sit.userData.v!==undefined)K.sit.visible=K.sit.userData.v;delete K.sit.userData.v});
+  if(k==='t'){const o=V3.o,c=o.care,f=st.mode==='move'?c.face:(c.stayFace||c.face),d={up:[0,-1],down:[0,1],l:[-1,0],r:[1,0]}[f],cx=(c.x+c.w/2)/1e3,cz=(c.y+c.h/2)/1e3;
+    V3.cam.fov=70;V3.cam.updateProjectionMatrix();V3.cam.position.set(cx+d[0]*.06,1.22,cz+d[1]*.06);V3.ctl.target.set(cx+d[0]*2,.8,cz+d[1]*2);V3.ctl.update();return}
   if(/^k\d+$/.test(k)){const o=V3.o,i=+k.slice(1),s=o.seats[i];if(!s)return;const f=(st.mode==='stay'&&s.stayFace)?s.stayFace:s.face,d={up:[0,-1],down:[0,1],l:[-1,0],r:[1,0]}[f],cx=(s.x+s.w/2)/1e3,cz=(s.y+s.h/2)/1e3,K=V3.kids[i];
     if(K){K.sit.userData.v=K.sit.visible;K.sit.visible=false}V3.cam.fov=62;V3.cam.updateProjectionMatrix();V3.cam.position.set(cx+d[0]*.04,.98,cz+d[1]*.04);V3.ctl.target.set(cx+d[0]*2,.92,cz+d[1]*2);V3.ctl.update();return}
   const o=V3.o,W=o.B.W/1e3,L=o.B.L/1e3,d=o.door,dz=d.side==='r'?(d.a+d.b)/2e3:L;V3.cam.fov=k==='in'?60:35;V3.cam.updateProjectionMatrix();
@@ -816,7 +818,7 @@ async function capture3D(){const r=V3.r,pr=r.getPixelRatio(),lv=(V3.labels||[]).
   if(window.claude&&window.claude.use){const dl=await window.claude.use('downloads');if(!dl){$('simMsg').textContent='이 화면에서는 저장할 수 없음 · 배포 링크에서 저장';return}
     try{await dl.save({filename:name,data:blob});$('simMsg').textContent='이미지 저장됨'}catch(e){if(e&&e.code!=='declined')$('simMsg').textContent='저장 안 됨 · '+(e.code||'')}return}
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
-function kidButtons(o){$('kidCams').innerHTML=o.seats.map((s,i)=>`<button class="line" data-k="${i}">아이 ${i+1} 눈</button>`).join('');$('kidCams').querySelectorAll('button').forEach(b=>b.onclick=()=>camSet('k'+b.dataset.k))}
+function kidButtons(o){$('kidCams').innerHTML=`<button class="line" data-k="t">선생님 눈</button>`+o.seats.map((s,i)=>`<button class="line" data-k="${i}">아이 ${i+1} 눈</button>`).join('');$('kidCams').querySelectorAll('button').forEach(b=>b.onclick=()=>camSet(b.dataset.k==='t'?'t':'k'+b.dataset.k))}
 function tex(w,h,f){const c=document.createElement('canvas');c.width=w;c.height=h;f(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=8;return t}
 function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=(B.ext[1]-B.W)/2*k,BELT=.95;
   if(V3.scene)V3.scene.traverse(q=>{q.geometry&&q.geometry.dispose();[].concat(q.material||[]).forEach(m=>{m.map&&m.map.dispose();m.dispose()})});
@@ -844,13 +846,14 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   // ── 차체: 하부 · 클래딩 · 앞 · 뒤 · 휠아치 · 바퀴
   rb(car,paint,X0,Zf+.15,XW,BL-.3,.34,-.34,.06);rb(car,clad,X0-.01,Zf+.35,XW+.02,BL-.7,.16,-.4,.05);
   const floorP=new T.Mesh(new T.PlaneGeometry(W,L),floorM);floorP.rotation.x=-Math.PI/2;floorP.position.set(W/2,.002,L/2);floorP.receiveShadow=true;car.add(floorP);
-  rb(car,paint,X0,Zf,XW,.62,.88,-.32,.16);rb(car,roofM,X0+.03,Zf+.03,XW-.06,.24,.42,.52,.07);rb(car,clad,X0+.24,Zf-.06,XW-.48,.3,.34,-.3,.06);rb(car,clad,X0+.08,Zf+.02,XW-.16,.12,.16,-.4,.05);
+  rb(car,paint,X0,Zf,XW,.7,.84,-.32,.14);rb(car,roofM,X0,Zf,XW,.7,.45,.5,.1);rb(car,clad,X0+.24,Zf-.06,XW-.48,.3,.34,-.3,.06);rb(car,clad,X0+.08,Zf+.02,XW-.16,.12,.16,-.4,.05);
+  rb(car,lock,0,Zf+.7,W,-Zf-.7,.4,0,.03);rb(car,roofM,X0,Zf+.02,XW,.22,.07,Hc,.03);
   const ledT=tex(1024,160,(x,w,h)=>{x.fillStyle='#FF2D3D';x.fillRect(0,0,w,h);x.fillStyle='#FFFFFF';x.font='500 96px "42dot Sans",sans-serif';x.textBaseline='middle';x.fillText('34',70,84);
     [0,1,2,3].forEach(i=>{x.globalAlpha=.45+i*.18;x.fillRect(360+i*46,70,26,26)});x.globalAlpha=1;[[0,2],[1,1],[1,3],[2,0],[2,4],[3,1],[3,2],[3,3],[4,0],[4,4]].forEach(([r,c])=>x.fillRect(820+c*22,40+r*22,20,20))});
-  const led=new T.Mesh(new T.PlaneGeometry(XW-.62,.17),new T.MeshStandardMaterial({map:ledT,emissive:'#FFFFFF',emissiveMap:ledT,emissiveIntensity:.9}));led.position.set(W/2,.73,Zf+.025);car.add(led);
-  for(const sd of [-1,1]){const lx=sd<0?X0+.05:X0+XW-.09;rb(car,lightW,lx,Zf+.04,.04,.04,.42,.5,.012,false);rb(car,lightW,sd<0?lx:lx-.09,Zf+.04,.13,.04,.04,.5,.012,false);
+  const led=new T.Mesh(new T.PlaneGeometry(XW-.62,.17),new T.MeshStandardMaterial({map:ledT,emissive:'#FFFFFF',emissiveMap:ledT,emissiveIntensity:.9}));led.rotation.y=Math.PI;led.position.set(W/2,.73,Zf-.004);car.add(led);
+  for(const sd of [-1,1]){const lx=sd<0?X0+.05:X0+XW-.09;rb(car,lightW,lx,Zf-.012,.04,.04,.42,.52,.012,false);rb(car,lightW,sd<0?lx:lx-.09,Zf-.012,.13,.04,.04,.52,.012,false);
     rb(car,lightR,lx,Zr-.04,.04,.05,.62,.55,.015,false)}
-  const wsd=rb(car,blackG,X0+.03,Zf+.12,XW-.06,.03,Hc-.9,.92,.02,false);wsd.rotation.x=-.07;
+  rb(car,blackG,X0+.005,Zf+.02,XW-.01,.05,Hc-BELT,BELT,.03,false);
   rb(car,paint,X0,L,XW,.15,BELT+.3,-.3,.06);rb(car,blackG,X0+.01,L+.03,XW-.02,.1,Hc-BELT,BELT,.03,false);
   const archS=new T.Shape();archS.moveTo(-.64,-.3);archS.lineTo(-.64,.34);archS.quadraticCurveTo(-.64,.54,-.44,.54);archS.lineTo(.44,.54);archS.quadraticCurveTo(.64,.54,.64,.34);archS.lineTo(.64,-.3);archS.lineTo(.36,-.3);
   archS.absarc(0,0,.465,-.7,Math.PI+.7,false);archS.lineTo(-.64,-.3);const archG=new T.ExtrudeGeometry(archS,{depth:.06,bevelEnabled:true,bevelSize:.012,bevelThickness:.012,bevelSegments:2,curveSegments:24});
@@ -863,7 +866,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   const aw=(W-B.Wa)/2*k;rb(car,lock,0,B.arch[0]*k,aw,(B.arch[1]-B.arch[0])*k,.3,0,.03);rb(car,lock,W-aw,B.arch[0]*k,aw,(B.arch[1]-B.arch[0])*k,.3,0,.03);
   // 옆면: 흰 아래 + 검은 유리 위 + 벨트라인 크롬
   const side=(x0,w,z0,d)=>{if(d<=.01)return;rb(car,paint,x0,z0,w,d,BELT+.3,-.3,.03);rb(car,blackG,x0,z0,w,d,Hc-BELT,BELT,.02,false);rb(car,alu,x0+(x0<0?-.004:w-.004),z0,.008,d,.012,BELT-.006,.004,false);rb(car,roofM,x0,z0,w,d,.06,Hc,.02)};
-  side(X0,ew,Zf+.5,L-Zf-.5);let zc=Zf+.5;const doors=[o.door,o.door2].filter(d=>d&&d.side==='r').sort((a,b)=>a.a-b.a);
+  side(X0,ew,Zf+.06,L-Zf-.06);let zc=Zf+.06;const doors=[o.door,o.door2].filter(d=>d&&d.side==='r').sort((a,b)=>a.a-b.a);
   for(const d of doors){side(W,ew,zc,d.a*k-zc);zc=d.b*k;rb(car,yellow,W-.02,d.a*k,ew+.02,d.w*k,.02,.002,.005,false);
     const fwd=(d.a-(-B.front+1260))>=d.w,pz=fwd?d.a*k-d.w*k:d.b*k;rb(car,paint,W+ew,pz,.045,d.w*k,BELT+.3,-.3,.02);rb(car,blackG,W+ew,pz,.045,d.w*k,Hc-BELT,BELT,.02,false)}
   side(W,ew,zc,L-zc);if(o.door.side==='rear')rb(car,yellow,o.door.a*k,L,o.door.w*k,.12,.02,.002,.005,false);
@@ -904,7 +907,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
       const top=new T.Mesh(new T.PlaneGeometry(H-.02,.31),darkScr);top.rotation.x=-Math.PI/2;top.position.y=.0085;l.add(top);
       if(b){const bot=top.clone();bot.rotation.x=Math.PI/2;bot.position.y=-.0085;l.add(bot)}
       const edge=new T.Mesh(new T.BoxGeometry(H-.01,.004,.004),lightW);edge.position.set(0,0,-.166);l.add(edge);return l};
-    const sh2=Math.min(.3,(2*H-.04)*9/16),scr=new T.Mesh(new T.PlaneGeometry(sh2*16/9,sh2),dm);scr.rotation.x=-Math.PI/2;scr.position.set(w/2+.025-H,.5895,-.215);g.add(scr);
+    const sh2=Math.min(.3,(2*H-.04)*9/16),scr=new T.Mesh(new T.PlaneGeometry(sh2*16/9,sh2),dm);scr.rotation.x=-Math.PI/2;scr.position.set(w/2+.025-H,.5895,-.315);g.add(scr);
     return {g,dr,bag,A:leaf(0),Bf:leaf(1),scr,w,H}});
   V3.deskP=V3.deskP||0;V3.deskTo=mode==='stay'?1:0;poseRigs();
   for(const a of (o.stow||[])){rb(car,lock,a.x*k,a.y*k,a.w*k,a.h*k,.6,0,.015);rb(car,navy,a.x*k+.004,a.y*k+.02,a.w*k-.008,a.h*k-.04,.012,.6,.005,false)}
@@ -930,7 +933,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   rb(car,darkScr,.015,(c.y+80)*k,.012,(c.h-160)*k,.3,1.05,.01);
   const tSit=person(1.68,'#EEF1F5',true,'#22222A'),tStand=person(1.68,'#EEF1F5',false,'#22222A');car.add(tSit);car.add(tStand);
   tSit.position.set((c.x+c.w/2)*k,.42,(c.y+c.h/2)*k);tSit.rotation.y=ang[mode==='move'?c.face:(c.stayFace||c.face)];tSit.translateZ(.03);tStand.position.set(c.stand.x*k,0,c.stand.y*k);tStand.rotation.y=-Math.PI/2;
-  tSit.visible=mode==='move'||(mode==='stay'&&!!c.stayFace);tStand.visible=!tSit.visible;
+  tSit.visible=mode==='move'||(mode==='stay'&&!!c.stayFace);tStand.visible=!tSit.visible;V3.tSit=tSit;V3.tSitV=tSit.visible;
   const lab=(t,x,y,z)=>{const tt=tex(512,128,(g,w,h)=>{g.fillStyle='#FFFFFF';g.fillRect(0,0,w,h);g.fillStyle='#FF2D3D';g.fillRect(24,50,28,28);g.fillStyle='#1B2A5E';g.font='800 52px "42dot Sans",sans-serif';g.textBaseline='middle';g.fillText(t,72,66)});
     const sp=new T.Sprite(new T.SpriteMaterial({map:tt,depthTest:false}));sp.scale.set(.66,.165,1);sp.position.set(x,y,z);sp.renderOrder=9;S.add(sp);V3.labels.push(sp)};
   // ── 치수선 (토글: 치수 · 이름표)
@@ -965,7 +968,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
 }
 // 책상: 세움(상자 속) → 올라오며 앞으로 → 무릎 위로 눕힘 → 반쪽 펼침. p 0~1
 function poseRigs(){const p=V3.deskP;(V3.rig||[]).forEach(r=>{if(!r)return;const {A,Bf,w,H}=r,e=v=>Math.max(0,Math.min(1,v)),up=e(p*3),fl=e(p*3-1),op=e(p*3-2);
-  const ax=w/2+.025,sv={x:ax,y:.36+H/2+.25*up,z:-.015-.19*up},fx=ax-H/2,fold=ax-H,fz=-.215;
+  const ax=w/2+.025,sv={x:ax,y:.36+H/2+.25*up,z:-.015-.3*up},fx=ax-H/2,fold=ax-H,fz=-.315;
   A.rotation.set(0,0,Math.PI/2*(1-fl));A.position.set(lp(sv.x,fx,fl),lp(sv.y,.58,fl),lp(sv.z,fz,fl));
   const ph=Math.PI*op;if(op>0){Bf.rotation.set(0,0,ph);Bf.position.set(fold+H/2*Math.cos(ph),.58+.015*(1-op)+H/2*Math.sin(ph),fz)}else{Bf.rotation.copy(A.rotation);Bf.position.set(A.position.x+.016*(1-fl),A.position.y+.015*fl,A.position.z)}
   r.scr.visible=p>.995})}
