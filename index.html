@@ -138,7 +138,7 @@ ol.steps li.on{color:var(--navy);font-weight:800}
 
 <header style="display:grid;gap:14px">
   <div class="eyebrow">AFTERSPACE PBV · 실내 배치 · 완전자율주행</div>
-  <h1>아이 6명과 선생님 1명이 <em>마주 앉는</em> 차</h1>
+  <h1 id="heroT">아이 6명과 선생님 1명이 <em>마주 앉는</em> 차</h1>
   <p class="lede">PV7 하이루프 무인 차체 기준 실내 배치안입니다. 170 cm 선생님이 서서 움직일 수 있는 높이입니다. 두 줄 좌석이 서로 마주 보고, 그 사이 바닥으로 폭 1.25 m 옆문이 열립니다. 모든 치수는 mm이고, 아래 시뮬레이터에서 차체와 배치를 바꿔 볼 수 있습니다.</p>
   <div class="kpis" id="kpis"></div>
 </header>
@@ -601,8 +601,10 @@ function refresh(){
   $('layNote').textContent=LAYS[st.lay].note;$('modeNote').textContent=MODE_NOTE[st.mode];
   const o=cur();o.n=st.n;draw($('plan'),o,st.mode);
   const t=o.fits?times(o,'k'):null;
+  $('heroT').innerHTML=st.solo?'아이 6명이 <em>마주 앉는</em> 무인 차':'아이 6명과 선생님 1명이 <em>마주 앉는</em> 차';
+  if($('kpis'))$('kpis').innerHTML=$('kpis').innerHTML.replace(/<small>(\+ 선생님 1|· 선생님 없음)<\/small>/,st.solo?'<small>· 선생님 없음</small>':'<small>+ 선생님 1</small>');
   $('stats').innerHTML=[
-    ['아이 · 케어러',`${o.kids} · 1`],['좌석 폭',fmt(o.seatW)],
+    ['아이 · 케어러',o.noCare?`${o.kids} · 0 (완전 무인)`:`${o.kids} · 1`],['좌석 폭',fmt(o.seatW)],
     ['탑승 때 비는 바닥',o.lay==='D'?o.floorTxt.replace('바닥 ',''):`통로 폭 ${fmt(o.clearBoard)}`],
     ['머묾 때 남는 바닥',fmt(Math.max(0,o.clearStay))],['문 → 가장 먼 자리',(o.walk/1000).toFixed(1)+' m'],
     ['탑승 전원 착석',t?t.board+'초':'—'],['하차 (가방 챙김)',t?t.exit+'초':'—'],['비상 하차',t?t.emer+'초':'—'],
