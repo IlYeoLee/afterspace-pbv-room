@@ -947,12 +947,12 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
     if(sc.side==='l'){g.rotation.y=Math.PI/2;g.position.set(.02,yb+sh/2,(sc.y+sc.w/2)*k)}else if(sc.y===0)g.position.set((sc.x+sc.w/2)*k,yb+sh/2,(sc.band?fz:0)+.022);else{g.rotation.y=Math.PI;g.position.set((sc.x+sc.w/2)*k,yb+sh/2,(sc.band?rz:L)-.022)}car.add(g)}
   // ── 좌석: 좌석 좌표계는 −z가 앞, 방석 윗면 0.36
   const ang={up:0,down:Math.PI,l:Math.PI/2,r:-Math.PI/2};
-  const seat=(cx,cz,w,face,accent=navy)=>{const g=new T.Group();g.position.set(cx,0,cz);g.rotation.y=ang[face];car.add(g);
+  const seat=(cx,cz,w,face,accent=navy,adult=0)=>{const bh=adult?.64:.5,hy=adult?.8:.6,g=new T.Group();g.position.set(cx,0,cz);g.rotation.y=ang[face];car.add(g);
     for(const sd of [-1,1])rb(g,fabD,sd*(w/2-.02)-.015,-.2,.03,.4,.28,0,.01);rb(g,fabD,-w/2+.02,.14,w-.04,.06,.28,0,.01);rb(g,accent,-w/2+.03,-.21,w-.06,.02,.05,.0,.008);
     rb(g,fab,-w/2+.003,-.26,w-.006,.41,.09,.27,.04);
-    const bk=new T.Group();bk.position.set(0,.34,.19);bk.rotation.x=-.1;g.add(bk);rb(bk,fab,-w/2+.003,-.06,w-.006,.12,.64,0,.06);for(const sx of [-.06,.06])rb(bk,alu,sx-.009,-.012,.018,.018,.1,.62,.008);{const hr=new T.Group();hr.position.set(0,.8,-.01);hr.rotation.x=.12;bk.add(hr);rb(hr,fab,-w*.31,-.05,w*.62,.1,.17,-.085,.05);rb(hr,fabD,-.003,-.052,.006,.004,.11,-.055,.002,false)}
-    rb(bk,accent,-w*.08,-.052,w*.16,.012,.1,.5,.004,false);
-    const st=new T.Mesh(new T.BoxGeometry(.045,.6,.006),strap);st.position.set(w*.12,.34,-.07);st.rotation.set(-.1,0,.5);bk.add(st);const lp2=new T.Mesh(new T.BoxGeometry(w*.7,.045,.006),strap);lp2.position.set(0,.06,-.07);bk.add(lp2);
+    const bk=new T.Group();bk.position.set(0,.34,.19);bk.rotation.x=-.1;g.add(bk);rb(bk,fab,-w/2+.003,-.06,w-.006,.12,bh,0,.06);for(const sx of [-.06,.06])rb(bk,alu,sx-.009,-.012,.018,.018,hy-bh,bh-.02,.008);{const hr=new T.Group();hr.position.set(0,hy,-.01);hr.rotation.x=.12;bk.add(hr);rb(hr,fab,-w*.31,-.05,w*.62,.1,.17,-.085,.05);rb(hr,fabD,-.003,-.052,.006,.004,.11,-.055,.002,false)}
+    rb(bk,accent,-w*.08,-.052,w*.16,.012,.1,bh-.14,.004,false);
+    const st=new T.Mesh(new T.BoxGeometry(.045,bh-.04,.006),strap);st.position.set(w*.12,bh/2+.02,-.07);st.rotation.set(-.1,0,.5);bk.add(st);const lp2=new T.Mesh(new T.BoxGeometry(w*.7,.045,.006),strap);lp2.position.set(0,.06,-.07);bk.add(lp2);
     return g};
   const dT=tex(1024,576,(x,w,h)=>{x.fillStyle='#14161C';x.fillRect(0,0,w,h)});{const di=new Image();di.onload=()=>{const c=dT.image,x=c.getContext('2d');const iw=Math.min(c.width,c.height*di.width/di.height),ix=(c.width-iw)/2;x.drawImage(di,0,0,2,di.height,0,0,ix+2,c.height);x.drawImage(di,di.width-2,0,2,di.height,ix+iw-2,0,ix+2,c.height);x.drawImage(di,ix,0,iw,c.height);dT.needsUpdate=true};di.src=FIG_DESK}
   const dm=new T.MeshStandardMaterial({map:dT,emissive:'#FFFFFF',emissiveMap:dT,emissiveIntensity:.65,roughness:.2});
@@ -986,7 +986,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   V3.kids=o.seats.map((s,i)=>{const r=V3.rig[i],sit=person(1.4,SH[i%SH.length],true,'#2E3A55',mode==='move'?'lap':'write'),stand=person(1.4,SH[i%SH.length],false);
     const f=(mode==='stay'&&s.stayFace)?s.stayFace:s.face;sit.position.set((s.x+s.w/2)*k,.4,(s.y+s.h/2)*k);sit.rotation.y=ang[f];sit.translateZ(.03);car.add(sit);car.add(stand);stand.visible=false;sit.visible=mode!=='board';return {sit,stand}});
   const c=(mode!=='move'&&o.careBay)?o.careBay:o.care,cf3=mode==='move'?c.face:c.stayFace,tdk=(mode!=='move'&&o.tdeskBay)?o.tdeskBay:o.tdesk;
-  if(o.noCare){}else if(cf3){const tg=seat((c.x+c.w/2)*k,(c.y+c.h/2)*k,c.w*k,cf3,mat('#FF2D3D',{roughness:.6}));{const hw=c.w*k/2;for(const sx of [-1,1]){rb(tg,lock,sx>0?hw:-hw-.05,-.2,.05,.4,.6,0,.015);rb(tg,navy,(sx>0?hw:-hw-.05)+.004,-.18,.042,.36,.012,.6,.005,false)}}if(tdk){const w=.512,H=.281,leaf=b=>{const l=new T.Group();tg.add(l);const base=new T.Mesh(rgeo(H,.016,.33,.006),deskTop);base.castShadow=true;l.add(base);
+  if(o.noCare){}else if(cf3){const tg=seat((c.x+c.w/2)*k,(c.y+c.h/2)*k,c.w*k,cf3,mat('#FF2D3D',{roughness:.6}),1);{const hw=c.w*k/2;for(const sx of [-1,1]){rb(tg,lock,sx>0?hw:-hw-.05,-.2,.05,.4,.6,0,.015);rb(tg,navy,(sx>0?hw:-hw-.05)+.004,-.18,.042,.36,.012,.6,.005,false)}}if(tdk){const w=.512,H=.281,leaf=b=>{const l=new T.Group();tg.add(l);const base=new T.Mesh(rgeo(H,.016,.33,.006),deskTop);base.castShadow=true;l.add(base);
       const top=new T.Mesh(new T.PlaneGeometry(H-.02,.31),darkScr);top.rotation.x=-Math.PI/2;top.position.y=.0085;l.add(top);if(b){const bot=top.clone();bot.rotation.x=Math.PI/2;bot.position.y=-.0085;l.add(bot)}
       const edge=new T.Mesh(new T.BoxGeometry(H-.01,.004,.004),lightW);edge.position.set(0,0,-.166);l.add(edge);return l};
       const tt=tex(1024,576,(x,w2,h)=>{x.fillStyle='#1B2A5E';x.fillRect(0,0,w2,h);x.fillStyle='#FFFFFF';x.font='700 40px "42dot Sans",sans-serif';x.fillText('앞 화면',40,70);x.fillText('뒤 화면',530,70);
