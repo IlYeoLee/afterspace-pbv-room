@@ -912,8 +912,8 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   const aw=(W-B.Wa)/2*k;rb(car,lock,0,B.arch[0]*k,aw+.04,(B.arch[1]-B.arch[0])*k,.42,0,.04);rb(car,lock,W-aw-.04,B.arch[0]*k,aw+.04,(B.arch[1]-B.arch[0])*k,.42,0,.04);
   // 옆면: 흰 아래 + 검은 유리 위 + 벨트라인 크롬
   const side=(x0,w,z0,d)=>{if(d<=.01)return;const ze=z0+d;let zs=z0;for(const [a,b] of [[fw-.5,fw+.5],[rw-.5,rw+.5]]){if(b<=zs||a>=ze)continue;if(a>zs)rb(car,paint,x0,zs,w,a-zs,.7,-.3,.03);zs=Math.max(zs,b)}if(ze>zs)rb(car,paint,x0,zs,w,ze-zs,.7,-.3,.03);rb(car,paint,x0,z0,w,d,BELT-.4,.4,.03);rb(car,blackG,x0,z0,w,d,Hc-BELT,BELT,.02,false);rb(car,alu,x0+(x0<0?-.004:w-.004),z0,.008,d,.012,BELT-.006,.004,false);rb(car,roofM,x0,z0,w,d,.06,Hc,.02);
-    // 창 기둥: 약 1.1 m마다 가는 기둥. 선생님 쪽 벽은 선생님 머리가 창 한가운데 오도록 기둥을 좌우로 비켜 세움
-    {const n=Math.max(1,Math.round(d/1.1)),pn=d/n,ps=[],cz=x0<0&&o.care&&!o.noCare?(o.care.y+o.care.h/2)*k:null;if(cz!==null&&cz>z0&&cz<ze){for(let q=cz-pn/2;q>z0+.2;q-=pn)ps.push(q);for(let q=cz+pn/2;q<ze-.2;q+=pn)ps.push(q)}else for(let i=1;i<n;i++)ps.push(z0+pn*i);for(const q of ps)rb(car,paint,x0-.003,q-.04,w+.006,.08,Hc-BELT,BELT,.012)}};
+    // 창 기둥: 약 1.1 m마다 가는 기둥. 선생님 쪽 벽은 대표 기둥 2개만(선생님 좌우 ±0.65 m, 가운데 창 1.3 m)
+    {const n=Math.max(1,Math.round(d/1.1)),pn=d/n,ps=[],cz=x0<0&&o.care&&!o.noCare?(o.care.y+o.care.h/2)*k:null;if(cz!==null&&cz>z0&&cz<ze){for(const q of [cz-.65,cz+.65])if(q>z0+.2&&q<ze-.2)ps.push(q)}else for(let i=1;i<n;i++)ps.push(z0+pn*i);for(const q of ps)rb(car,paint,x0-.003,q-.04,w+.006,.08,Hc-BELT,BELT,.012)}};
   const bayOn=o.bay&&mode!=='move';
   if(bayOn){const by=o.bay.y*k,bh=o.bay.h*k,bd=o.bay.d*k,bx=X0-bd;side(X0,ew,Zf+.06,by-Zf-.06);side(X0,ew,by+bh,L-by-bh);side(bx,ew,by,bh);
     for(const z of [by-.05,by+bh])rb(car,paint,bx,z,bd+ew,.05,BELT+.3,-.3,.02),rb(car,blackG,bx,z,bd+ew,.05,Hc-BELT,BELT,.02,false),rb(car,roofM,bx,z,bd+ew,.05,.06,Hc,.02);
