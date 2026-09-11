@@ -139,7 +139,7 @@ ol.steps li.on{color:var(--navy);font-weight:800}
 <header style="display:grid;gap:14px">
   <div class="eyebrow">AFTERSPACE PBV · 실내 배치 · 완전자율주행</div>
   <h1>아이 6명과 선생님 1명이 <em>마주 앉는</em> 차</h1>
-  <p class="lede">PV7 하이루프 무인 차체 기준 실내 배치안입니다. 170 cm 선생님이 서서 움직일 수 있는 높이입니다. 두 줄 좌석이 서로 마주 보고, 그 사이 바닥으로 폭 1.3 m 옆문이 열립니다. 모든 치수는 mm이고, 아래 시뮬레이터에서 차체와 배치를 바꿔 볼 수 있습니다.</p>
+  <p class="lede">PV7 하이루프 무인 차체 기준 실내 배치안입니다. 170 cm 선생님이 서서 움직일 수 있는 높이입니다. 두 줄 좌석이 서로 마주 보고, 그 사이 바닥으로 폭 1.25 m 옆문이 열립니다. 모든 치수는 mm이고, 아래 시뮬레이터에서 차체와 배치를 바꿔 볼 수 있습니다.</p>
   <div class="kpis" id="kpis"></div>
 </header>
 
@@ -190,7 +190,7 @@ ol.steps li.on{color:var(--navy);font-weight:800}
           <div class="seg"><input type="radio" name="mode" id="mB" value="board" checked><label for="mB">탑승</label><input type="radio" name="mode" id="mM" value="move"><label for="mM">이동</label><input type="radio" name="mode" id="mS" value="stay"><label for="mS">머묾</label></div>
           <small id="modeNote"></small></div>
         <div class="ctl"><div class="lab">문 폭 <output id="doorO"></output></div>
-          <input type="range" id="door" min="700" max="1600" step="25" value="1300">
+          <input type="range" id="door" min="700" max="1600" step="25" value="1250">
           <small>PV5 순정 775. 열린 문짝이 바퀴 위에 걸리면 안 됨</small></div>
       </div>
       <div class="box"><h3>수치</h3><dl class="stats" id="stats"></dl></div>
@@ -338,7 +338,7 @@ const BODIES={
 const LAYS={
   U:{name:'U · 토론형 U자',note:'양옆 아이는 서로 마주 보고, 뒤 아이는 선생님을 봄. U자가 열린 앞쪽에 화면과 선생님, 문. 옆 좌석은 이동 0° · 화면 45° · 토론 90°로 돌아감'},
   F:{name:'F · 앞 화면 극장식',note:'두 줄 모두 앞 대형 화면을 봄. 줄마다 앞에 바닥과 옆문이 하나씩. 뒷줄은 150 높은 단. 회전 좌석 없음'},
-  D:{name:'D · 라운지 (제안)',note:'두 줄이 마주 봄. 1,300 옆문이 가운데 바닥으로 열려 들어서면 가로로 넓은 방. 대형 화면은 앞뒤 벽 2면, 선생님은 문 맞은편 벽. 회전 좌석 없음'},
+  D:{name:'D · 라운지 (제안)',note:'두 줄이 마주 봄. 1,250 옆문이 가운데 바닥으로 열려 들어서면 가로로 넓은 방. 대형 화면은 앞뒤 벽 2면, 선생님은 문 맞은편 벽. 회전 좌석 없음'},
   A:{name:'A · 벽 포드 (기획서 07 평면)',note:'양쪽 벽을 따라 앞보기 포드. 머묾에서 안쪽으로 90° 회전. 뒤 넓은 문으로 탑승'},
   B:{name:'B · 지그재그 벽 포드',note:'A에서 한쪽을 반 칸 밀어 머묾 때 책상이 엇갈리게 함. 길이가 반 칸 더 필요'},
   C:{name:'C · 소프트 U',note:'앞쪽 옆문으로 탑승. 옆벽 포드 + 뒷줄 2석, 모두 앞 공용 화면을 봄. 머묾에서 옆 포드 45° 회전'},
@@ -398,7 +398,7 @@ function build(bodyId,lay,n,door){
       o.desks.push({x:x-P/2,y:FU+BK+280,w:sw+P,h:330},{x:x-P/2,y:L-RU-BK-610,w:sw+P,h:330});
       o.stow=(o.stow||[]).concat([{x:x+sw,y:FU+BK,w:P,h:400},{x:x+sw,y:m1+SD-BK-400,w:P,h:400}]);}
     o.stow.push({x:SX,y:FU+BK,w:P,h:400,arm:1},{x:SX,y:m1+SD-BK-400,w:P,h:400,arm:1});
-    let da=mc-door/2;const fa=-B.front+1260;if(da-fa<door&&fa+2*door<=Math.min(B.arch[0],m1))da=Math.max(m0,fa+door);
+    let da=mc-door/2;const fa=-B.front+1380;if(da-fa<door&&fa+2*door<=Math.min(B.arch[0],m1))da=Math.max(m0,fa+door);
     o.door={side:'r',a:da,b:da+door,w:door};const dc=da+door/2;
     o.out={x:W+600,y:dc}; o.inn={x:W-150,y:dc};
     o.paths=o.seats.map(s=>[o.out,o.inn,s.stand]);
@@ -450,7 +450,7 @@ function build(bodyId,lay,n,door){
     o.swivel=true; o.rearDoor=doorSide==='rear'; o.screenAll=true; o.faces='some';
     o.archFeet=o.seats.filter(s=>s.side&&s.y-250<B.arch[1]&&s.y>B.arch[0]).length;
   }
-  const fa=-B.front+880+380;
+  const fa=-B.front+880+500;
   o.leaf=[o.door,o.door2].filter(d=>d&&d.side==='r').map(d=>{const ah=d.a-fa,bh=B.arch[0]-d.b;return ah>=d.w?'앞으로':bh>=d.w?'뒤로':(ah>=d.w/2&&bh>=d.w/2)?'양쪽으로 갈라져':null});
   o.doorArch=[o.door,o.door2].filter(d=>d&&d.side==='r'&&d.a<B.arch[1]&&d.b>B.arch[0]).length;
   o.kids=o.seats.length;
@@ -583,7 +583,7 @@ function checks(o){
 </script>
 <script>
 const $=id=>document.getElementById(id);
-const st={body:'pv7w',lay:'D',n:3,mode:'board',door:1300};
+const st={body:'pv7w',lay:'D',n:3,mode:'board',door:1250};
 let anim=null;
 const cache={};
 function times(o,k){const key=[o.B.name,o.B.L,o.B.W,o.B.Wa,o.B.arch,o.lay,o.n,st.door].join();return cache[key]||(cache[key]={board:runSim(o,'board'),exit:runSim(o,'exit'),emer:runSim(o,'emer')})}
@@ -633,7 +633,7 @@ document.querySelectorAll('input[name=mode]').forEach(r=>r.onchange=()=>{st.mode
 $('door').oninput=e=>{st.door=+e.target.value;refresh()};
 
 function buildTable(){
-  const C=[['D',1300,'넓은 옆문, 서로 마주 보기, 회전 좌석 없음'],['U',900,'토론하기 좋지만 문을 900보다 키울 수 없고 회전 좌석 4개'],['F',900,'화면 보기는 가장 편하지만 모두 앞만 봐서 교실 같음'],['A',900,'기획서 첫 평면. 뒷문 탑승이 차 다니는 쪽과 겹치고, 머물 때 책상끼리 막힘']];
+  const C=[['D',1250,'넓은 옆문, 서로 마주 보기, 회전 좌석 없음'],['U',900,'토론하기 좋지만 문을 900보다 키울 수 없고 회전 좌석 4개'],['F',900,'화면 보기는 가장 편하지만 모두 앞만 봐서 교실 같음'],['A',900,'기획서 첫 평면. 뒷문 탑승이 차 다니는 쪽과 겹치고, 머물 때 책상끼리 막힘']];
   const face={all:'서로 보임',some:'돌려야 보임',none:'뒤통수'};
   $('cmp').innerHTML=C.map(([l,dr,v])=>{const o=build('pv7hr',l,3,dr);o.n=3;const t=o.fits?times(o):null;
     return `<div class="cmpc" data-k="${l},${dr}" tabindex="0" role="button"><div class="lbl">${LAYS[l].name}</div><svg data-l="${l}" data-d="${dr}" aria-hidden="true"></svg>
@@ -647,12 +647,12 @@ const modeCards=[['board','탑승','문이 열리면 가운데 바닥 전체와 
  ['move','이동','앞줄은 뒤를, 뒷줄은 앞을 보고 벨트 착용. 선생님은 화면 아래 좌석에서 모두를 봄. 앞줄 멀미를 줄이려고 옆 창을 크게, 공용 화면에는 앞 카메라 영상'],
  ['stay','머묾','책상을 무릎 위로 펼치고 서로 얼굴을 보며 활동. 고개를 돌리면 대형 화면. 선생님은 바닥 가운데로']];
 $('modes').innerHTML=modeCards.map(([m,t,p])=>`<div class="card"><div class="lbl">${t}</div><svg data-m="${m}" role="img" aria-label="${t} 상태 평면"></svg><p>${p}</p></div>`).join('');
-{const o=build('pv7hr','D',3,1300);document.querySelectorAll('#modes svg').forEach(s=>{draw(s,o,s.dataset.m,null,true);s.style.aspectRatio='0.62';})}
+{const o=build('pv7hr','D',3,1250);document.querySelectorAll('#modes svg').forEach(s=>{draw(s,o,s.dataset.m,null,true);s.style.aspectRatio='0.62';})}
 
 
 // 머리 숫자
-{const a=build('pv7hr','D',3,1300),b=build('pv5','D',3,900),ta=times(Object.assign(a,{n:3})),tb=times(Object.assign(b,{n:3}));
- $('kpis').innerHTML=[[`1,300<small>mm</small>`,'옆문 폭 · PV5 순정 775의 1.7배'],[`6<small>+ 선생님 1</small>`,`좌석 폭 ${fmt(a.seatW)} · 서랍과 책상 6세트`],
+{const a=build('pv7hr','D',3,1250),b=build('pv5','D',3,900),ta=times(Object.assign(a,{n:3})),tb=times(Object.assign(b,{n:3}));
+ $('kpis').innerHTML=[[`1,250<small>mm</small>`,'옆문 폭 · PV5 순정 775의 1.6배'],[`6<small>+ 선생님 1</small>`,`좌석 폭 ${fmt(a.seatW)} · 서랍과 책상 6세트`],
   [`${(a.walk/1000).toFixed(1)}<small>m</small>`,'문에서 가장 먼 자리까지'],[`${ta.board}<small>초</small>`,'6명 전원 착석 (시뮬)'],[`${ta.emer}<small>초</small>`,'6명 비상 하차 (시뮬)']]
   .map(([v,l])=>`<div class="kpi"><b>${v}</b><span>${l}</span></div>`).join('');}
 buildTable();refresh();
@@ -886,8 +886,8 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
     rb(car,lightR,lx,Zr-.04,.04,.05,.62,.55,.015,false)}
   rb(car,blackG,X0+.005,Zf+.02,XW-.01,.05,Hc-BELT,BELT,.03,false);
   rb(car,paint,X0,L,XW,.15,BELT+.3,-.3,.06);rb(car,blackG,X0+.01,L+.03,XW-.02,.1,Hc-BELT,BELT,.03,false);
-  const archS=new T.Shape();archS.moveTo(-.64,-.3);archS.lineTo(-.64,.34);archS.quadraticCurveTo(-.64,.54,-.44,.54);archS.lineTo(.44,.54);archS.quadraticCurveTo(.64,.54,.64,.34);archS.lineTo(.64,-.3);archS.lineTo(.36,-.3);
-  archS.absarc(0,0,.465,-.7,Math.PI+.7,false);archS.lineTo(-.64,-.3);const archG=new T.ExtrudeGeometry(archS,{depth:.06,bevelEnabled:true,bevelSize:.012,bevelThickness:.012,bevelSegments:2,curveSegments:24});
+  const archS=new T.Shape();archS.moveTo(-.5,-.3);archS.lineTo(-.5,.36);archS.quadraticCurveTo(-.5,.54,-.32,.54);archS.lineTo(.32,.54);archS.quadraticCurveTo(.5,.54,.5,.36);archS.lineTo(.5,-.3);archS.lineTo(.36,-.3);
+  archS.absarc(0,0,.44,-.75,Math.PI+.75,false);archS.lineTo(-.5,-.3);const archG=new T.ExtrudeGeometry(archS,{depth:.06,bevelEnabled:true,bevelSize:.012,bevelThickness:.012,bevelSegments:2,curveSegments:24});
   const tireG=new T.LatheGeometry([[.28,-.12],[.33,-.125],[.36,-.105],[.37,-.06],[.37,.06],[.36,.105],[.33,.125],[.28,.12]].map(([r,y])=>new T.Vector2(r,y)),40);
   const hubT=tex(256,256,(x,w,h)=>{x.fillStyle='#DADDE2';x.beginPath();x.arc(128,128,126,0,7);x.fill();x.fillStyle='#23252B';x.fillRect(92,14,72,228);x.fillRect(14,92,228,72);x.fillStyle='#F4F5F7';x.fillRect(108,108,40,40)});
   const hubM=new T.MeshStandardMaterial({map:hubT,roughness:.3,metalness:.6,envMapIntensity:1});
@@ -905,7 +905,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
     V3.bayRoof=rb(car,roofM,bx,by-.05,bd+ew,bh+.1,.07,Hc+.02,.04)}
   else side(X0,ew,Zf+.06,L-Zf-.06);let zc=Zf+.06;const doors=[o.door,o.door2].filter(d=>d&&d.side==='r').sort((a,b)=>a.a-b.a);
   for(const d of doors){side(W,ew,zc,d.a*k-zc);zc=d.b*k;rb(car,yellow,W-.02,d.a*k,ew+.02,d.w*k,.02,.002,.005,false);
-    const fwd=(d.a-(-B.front+1260))>=d.w,pz=fwd?d.a*k-d.w*k:d.b*k,lg=new T.Group();car.add(lg);rb(lg,paint,W+ew,pz,.045,d.w*k,BELT,0,.02);rb(lg,blackG,W+ew,pz,.045,d.w*k,Hc-BELT,BELT,.02,false);V3.leaves.push({g:lg,dz:d.a*k-pz,dx:-ew+.01})}
+    const fwd=(d.a-(-B.front+1380))>=d.w,pz=fwd?d.a*k-d.w*k:d.b*k,lg=new T.Group();car.add(lg);rb(lg,paint,W+ew,pz,.045,d.w*k,BELT,0,.02);rb(lg,blackG,W+ew,pz,.045,d.w*k,Hc-BELT,BELT,.02,false);V3.leaves.push({g:lg,dz:d.a*k-pz,dx:-ew+.01})}
   side(W,ew,zc,L-zc);if(o.door.side==='rear')rb(car,yellow,o.door.a*k,L,o.door.w*k,.12,.02,.002,.005,false);
   V3.roofG=new T.Group();car.add(V3.roofG);rb(V3.roofG,roofM,X0,Zf+.1,XW,Zr-Zf-.12,.07,Hc+.02,.05);for(let i=1;i<4;i++)rb(V3.roofG,lightW,W*.15,L*i/4,W*.7,.02,.01,Hc-.005,.004,false);V3.roofG.visible=V3.roofOn||false;if(V3.bayRoof){car.remove(V3.bayRoof);V3.roofG.add(V3.bayRoof);V3.bayRoof=null}
   // 비어 있는 바닥 (연하게)
