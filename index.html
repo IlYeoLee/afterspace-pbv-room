@@ -794,7 +794,7 @@ function init3D(){const T=THREE,host=$('c3'),r=new T.WebGLRenderer({antialias:tr
   Object.assign(V3,{r,cam,ctl});const loop=()=>{requestAnimationFrame(loop);if(!V3.on||!V3.scene)return;ctl.update();r.render(V3.scene,cam)};loop();
   $('camDoor').onclick=()=>camSet('door');$('camTop').onclick=()=>camSet('top');$('camIn').onclick=()=>camSet('in')}
 function camSet(k){const o=V3.o,W=o.B.W/1e3,L=o.B.L/1e3,d=o.door,dz=d.side==='r'?(d.a+d.b)/2e3:L;V3.cam.fov=k==='in'?60:35;V3.cam.updateProjectionMatrix();
-  const P={door:[[W+4.6,3.3,dz+2.6],[W/2,.45,dz]],top:[[W/2+.01,L*1.6+3,L/2+1.2],[W/2,0,L/2]],in:[[W-.25,1.2,dz+.3],[0,.95,dz]]}[k];V3.cam.position.set(...P[0]);V3.ctl.target.set(...P[1]);V3.ctl.update()}
+  const P={door:[[W+4.2,4.6,dz+3.2],[W/2,.3,dz-.2]],top:[[W/2+.01,L*1.6+3,L/2+1.2],[W/2,0,L/2]],in:[[W-.25,1.2,dz+.3],[0,.95,dz]]}[k];V3.cam.position.set(...P[0]);V3.ctl.target.set(...P[1]);V3.ctl.update()}
 function on3D(o,mode){if(!V3.on||!window.THREE)return;if(!V3.r)init3D();const first=!V3.o||V3.o.B!==o.B||V3.o.lay!==o.lay;build3D(o,mode);if(first)camSet('door')}
 function tex(w,h,f){const c=document.createElement('canvas');c.width=w;c.height=h;f(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=8;return t}
 function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=(B.ext[1]-B.W)/2*k;
@@ -818,7 +818,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   wall(-ew,ew,0,L);wall(-ew,W+2*ew,L,.12);
   let zc=0;const rd=doors.filter(d=>d.side==='r').sort((a,b)=>a.a-b.a);
   for(const d of rd){wall(W,ew,zc,d.a*k-zc);zc=d.b*k;box(car,cYellow,W-.02,d.a*k,ew+.02,d.w*k,.025,0,false);
-    const lf=(d.a-(-B.front+1260))>=d.w?-1:1,pz=lf<0?d.a*k-d.w*k:d.b*k;box(car,cWhite,W+ew,pz,.05,d.w*k,BELT);box(car,cGlass,W+ew,pz,.05,d.w*k,Hc-BELT,BELT,false)}
+    const lf=(d.a-(-B.front+1260))>=d.w?-1:1,pz=lf<0?d.a*k-d.w*k:d.b*k;box(car,mat('#FFFFFF',{roughness:.4,transparent:true,opacity:.45,depthWrite:false}),W+ew,pz,.04,d.w*k,BELT,0,false);box(car,cGlass,W+ew,pz,.04,d.w*k,Hc-BELT,BELT,false)}
   wall(W,ew,zc,L-zc);
   if(o.door.side==='rear')box(car,cYellow,o.door.a*k,L,o.door.w*k,.12,.025,0,false);
   // 비어 있는 바닥
@@ -858,7 +858,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   V3.kids=o.seats.map((s,i)=>{const f=(mode==='stay'&&s.stayFace)?s.stayFace:s.face,sit=person(1.4,SH[i%SH.length],true),stand=person(1.4,SH[i%SH.length],false,'#FF8A1F');
     sit.position.set((s.x+s.w/2)*k,0,(s.y+s.h/2)*k);sit.rotation.y=ang[f];car.add(sit);car.add(stand);stand.visible=false;sit.visible=mode!=='board';return {sit,stand}});
   const tSit=person(1.68,'#EEF1F5',true),tStand=person(1.68,'#EEF1F5',false);car.add(tSit);car.add(tStand);
-  tSit.position.set((c.x+c.w/2)*k,0,(c.y+c.h/2)*k);tSit.rotation.y=ang[c.face];tStand.position.set(c.stand.x*k,0,c.stand.y*k);tStand.rotation.y=-Math.PI/2;tSit.visible=mode==='move';tStand.visible=mode!=='move';
+  tSit.position.set((c.x+c.w/2)*k,0,(c.y+c.h/2)*k);tSit.rotation.y=ang[c.face];const tp=mode==='board'&&o.lay==='D'?{x:420,y:c.y-350}:c.stand;tStand.position.set(tp.x*k,0,tp.y*k);tStand.rotation.y=-Math.PI/2;tSit.visible=mode==='move';tStand.visible=mode!=='move';
   // 빛: 하늘 + 해 (그림자)
   S.add(new T.HemisphereLight('#FFFFFF','#C9D2DD',.62));const sun=new T.DirectionalLight('#FFFFFF',1.05);sun.position.set(W+4,7,L+3);sun.target.position.set(W/2,0,L/2);S.add(sun.target);
   sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-4,right:4,top:4,bottom:-4,near:.5,far:25});sun.shadow.bias=-.0004;sun.shadow.normalBias=.02;S.add(sun);
