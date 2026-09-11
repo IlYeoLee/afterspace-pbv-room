@@ -149,7 +149,7 @@ ol.steps li.on{color:var(--navy);font-weight:800}
         <p id="simMsg"></p>
       </div>
       <svg id="plan" role="img" aria-label="차량 실내 평면도"></svg>
-      <div id="c3" hidden><div class="v3bar"><button class="line" id="camDoor">문 앞에서</button><button class="line" id="camTop">위에서</button><button class="line" id="camIn">안에서</button></div><p class="v3note">끌어서 돌리기 · 휠로 확대</p></div>
+      <div id="c3" hidden><div class="v3bar"><button class="line" id="camDoor">문 앞에서</button><button class="line" id="camTop">위에서</button><button class="line" id="camIn">안에서</button><button class="line" id="camDesk">앉아서 책상 편 모습</button></div><p class="v3note">끌어서 돌리기 · 휠로 확대</p></div>
       <div class="legend">
         <span><i style="background:#1B2A5E"></i>아이</span>
         <span><i style="background:#FF2D3D"></i>선생님</span>
@@ -266,7 +266,7 @@ ol.steps li.on{color:var(--navy);font-weight:800}
       <li>상자에 잠겨야 차가 출발</li></ul></div>
     <div class="card"><h3>수납</h3><ul class="px">
       <li>좌석 밑 서랍: 책가방 + 외투</li>
-      <li>머리 위 개인 칸: 이름이 뜨는 사물함</li>
+      <li>책상 앞 가장자리 이름 띠: 맞은편 친구가 봄</li>
       <li>팔걸이 윗면: 물병 · 필통</li>
       <li>체험 장비 · 우비는 뒤 공용 칸</li></ul></div>
   </div>
@@ -276,7 +276,7 @@ ol.steps li.on{color:var(--navy);font-weight:800}
   <h2>선생님 자리와 법 기준</h2>
   <div class="two">
     <div class="card"><h3>선생님</h3><ul class="px">
-      <li>문 맞은편 벽, 21:9 대형 화면(약 77″) 아래 접이 좌석</li>
+      <li>문 맞은편 벽 가운데 접이 좌석 + 벽 운영 화면</li>
       <li>이동 중에는 앉아서 여섯 명을 모두 1.5 m 안에서 봄</li>
       <li>머물 때는 좌석을 접고 바닥 가운데로</li>
       <li>문 쪽을 막지 않음</li>
@@ -323,7 +323,7 @@ const BODIES={
 const LAYS={
   U:{name:'U · 토론형 U자',note:'양옆 아이는 서로 마주 보고, 뒤 아이는 선생님을 봄. U자가 열린 앞쪽에 화면과 선생님, 문. 옆 좌석은 이동 0° · 화면 45° · 토론 90°로 돌아감'},
   F:{name:'F · 앞 화면 극장식',note:'두 줄 모두 앞 대형 화면을 봄. 줄마다 앞에 바닥과 옆문이 하나씩. 뒷줄은 150 높은 단. 회전 좌석 없음'},
-  D:{name:'D · 라운지 (제안)',note:'두 줄이 마주 봄. 1,300 옆문이 가운데 바닥으로 열려 들어서면 가로로 넓은 방. 대형 화면은 문 맞은편 벽, 선생님은 그 아래. 회전 좌석 없음'},
+  D:{name:'D · 라운지 (제안)',note:'두 줄이 마주 봄. 1,300 옆문이 가운데 바닥으로 열려 들어서면 가로로 넓은 방. 대형 화면은 앞뒤 벽 2면, 선생님은 문 맞은편 벽. 회전 좌석 없음'},
   A:{name:'A · 벽 포드 (기획서 07 평면)',note:'양쪽 벽을 따라 앞보기 포드. 머묾에서 안쪽으로 90° 회전. 뒤 넓은 문으로 탑승'},
   B:{name:'B · 지그재그 벽 포드',note:'A에서 한쪽을 반 칸 밀어 머묾 때 책상이 엇갈리게 함. 길이가 반 칸 더 필요'},
   C:{name:'C · 소프트 U',note:'앞쪽 옆문으로 탑승. 옆벽 포드 + 뒷줄 2석, 모두 앞 공용 화면을 봄. 머묾에서 옆 포드 45° 회전'},
@@ -385,11 +385,11 @@ function build(bodyId,lay,n,door){
     o.out={x:W+600,y:mc}; o.inn={x:W-150,y:mc};
     o.paths=o.seats.map(s=>[o.out,o.inn,s.stand]);
     o.care={x:0,y:mc-225,w:450,h:450,face:'up',fold:120,stand:{x:W*.42,y:mc}};
-    o.utils.push({x:0,y:0,w:W,h:FU,t:'머리 위 개인 칸 · 이름 화면'},{x:0,y:L-RU,w:W,h:RU,t:'머리 위 개인 칸 · 체험 장비 (뒷문)'});
-    const sw2=Math.min(m1-m0-200,1800);o.screens.push({side:'l',y:mc-sw2/2,w:sw2,t:'대형 공용 화면'});
+    o.utils.push({x:0,y:0,w:W,h:FU,t:'공용 수납 · 구급'},{x:0,y:L-RU,w:W,h:RU,t:'체험 장비 · 우비 (뒷문)'});
+    o.screens.push({x:W*.04,y:0,w:W*.92,band:1,t:'대형 화면 · 뒷줄이 봄'},{x:W*.04,y:L,w:W*.92,band:1,t:'대형 화면 · 앞줄이 봄'});
     o.floor.push({x:0,y:m0,w:W,h:m1-m0}); o.floorStay.push({x:0,y:m0+130,w:W,h:m1-m0-260});
     o.clearBoard=Math.min(m1-m0,W-120); o.clearStay=m1-m0-260; o.floorTxt=`바닥 ${fmt(m1-m0)} × ${fmt(W)}`;
-    o.narrow=(x,y)=>x>W-260; o.swivel=false; o.rearDoor=false; o.screenAll=true; o.screenSide=true; o.faces='all';
+    o.narrow=(x,y)=>x>W-260; o.swivel=false; o.rearDoor=false; o.screenAll=true; o.screenBand=true; o.faces='all';
     o.archFeet=(m1-300<B.arch[1]&&m1>B.arch[0])?2:0;
   } else {
     // A·B·C: 벽 포드. 앞보기(MOVE), 머묾에서 회전
@@ -537,7 +537,7 @@ function checks(o){
   o.swivel?add('warn',o.lay==='U'?'옆 좌석 회전: 이동 0° · 화면 45° · 토론 90°':'이동 중 앞보기 잠금이 필요한 회전 좌석',o.lay==='U'?'이동 중에는 앞보기로 잠겨야 출발 · 회전 기구 '+(o.kids-2)+'개':'옆보기 상태로 달리면 안 됨 · 회전 기구 6~8개 원가와 고장 지점'):add('ok','회전 좌석 없음 · 앞보기와 뒤보기만');
   o.rearDoor?add('fail','뒷문 탑승 · 전진 도킹하면 차량 동선 쪽으로 열림','Care Yard 원칙 PEOPLE INSIDE / VEHICLES OUTSIDE와 충돌'):add('ok','옆문이 아이 쪽 데크로 열림');
   o.faces==='all'?add('ok','토론: 아이끼리 얼굴이 보이고 선생님이 모두의 얼굴을 봄'):o.faces==='some'?add('warn','토론: 머묾 때 회전해야 얼굴이 보임'):add('fail','토론: 앞사람 뒤통수만 보임','교실·자습실 구조');
-  o.screenAll?add('ok',o.screenSide?`모든 아이가 옆벽 대형 화면을 봄 · ${Math.round(Math.hypot(o.screens[0].w,o.screens[0].w*3/7)/25.4)}″ 21:9`:'모든 아이가 앞 대형 화면을 봄',o.screenSide?'문을 열면 정면에 화면 · 화면 쪽 끝자리는 가깝고 비스듬함':''):add('fail','앞줄이 대형 화면을 등짐','공용 화면을 앞뒤 2면으로 나눠야 함 · 한 화면 수업 불가');
+  o.screenAll?add('ok',o.screenBand?'모든 아이가 맞은편 줄 머리 위 대형 화면을 봄 · 앞뒤 2면':'모든 아이가 앞 대형 화면을 봄',o.screenBand?'고개를 돌리지 않고 친구 얼굴과 화면을 같이 봄 · 두 화면은 같은 내용':''):add('fail','앞줄이 대형 화면을 등짐','공용 화면을 앞뒤 2면으로 나눠야 함 · 한 화면 수업 불가');
   o.doorArch?add('fail','옆문이 휠하우스 위에 걸림','문을 앞으로 당기거나 문 폭을 줄여야 함'):null;
   if(o.leaf.length)o.leaf.includes(null)?add('fail',`문 ${fmt(o.door.w)} · 열린 문짝을 둘 옆면이 없음`,'문짝은 바퀴 위로 미끄러질 수 없음 · 문 폭을 줄여야 함'):add('ok',`문 ${fmt(o.door.w)} · 문짝이 ${o.leaf[0]} 미끄러짐`,o.leaf[0]==='앞으로'?'운전석 문이 없는 무인 차라 앞쪽 옆면을 문짝 자리로 씀':'');
   o.pass===0?add('ok','좁은 통로에서 남의 자리 앞 통과 0회'):add('warn',`좁은 통로에서 남의 자리 앞 통과 ${o.pass}회`,'가방 벗는 아이 뒤에서 줄이 멈춤');
@@ -605,7 +605,7 @@ function buildTable(){
   const face={all:'서로 보임',some:'돌려야 보임',none:'뒤통수'};
   $('cmp').innerHTML=C.map(([l,dr,v])=>{const o=build('pv7',l,3,dr);o.n=3;const t=o.fits?times(o):null;
     return `<div class="cmpc" data-k="${l},${dr}" tabindex="0" role="button"><div class="lbl">${LAYS[l].name}</div><svg data-l="${l}" data-d="${dr}" aria-hidden="true"></svg>
-      <dl class="stats"><dt>얼굴</dt><dd>${face[o.faces]}</dd><dt>대형 화면</dt><dd>${o.screenAll?(o.screenSide?'옆벽':'앞벽'):'앞뒤 2개'}</dd><dt>문</dt><dd>${o.rearDoor?'뒷문':fmt(o.door.w)+(o.door2?' × 2':'')}</dd><dt>탑승</dt><dd>${t?t.board+'초':'—'}</dd><dt>머물 때 바닥</dt><dd>${fmt(Math.max(0,o.clearStay))}</dd></dl><p>${v}</p></div>`}).join('');
+      <dl class="stats"><dt>얼굴</dt><dd>${face[o.faces]}</dd><dt>대형 화면</dt><dd>${o.screenBand?'맞은편 벽 2면':o.screenAll?'앞벽':'앞뒤 2개'}</dd><dt>문</dt><dd>${o.rearDoor?'뒷문':fmt(o.door.w)+(o.door2?' × 2':'')}</dd><dt>탑승</dt><dd>${t?t.board+'초':'—'}</dd><dt>머물 때 바닥</dt><dd>${fmt(Math.max(0,o.clearStay))}</dd></dl><p>${v}</p></div>`}).join('');
   $('cmp').querySelectorAll('.cmpc').forEach(c=>{const [l,dr]=c.dataset.k.split(',');draw(c.querySelector('svg'),Object.assign(build('pv7',l,3,+dr),{n:3}),'stay',null,true);
     const go=()=>{Object.assign(st,{body:'pv7',lay:l,n:3,door:+dr});refresh();$('plan').scrollIntoView({behavior:'smooth',block:'center'})};c.onclick=go;c.onkeydown=e=>{if(e.key==='Enter')go()}});
 }
@@ -620,7 +620,7 @@ $('modes').innerHTML=modeCards.map(([m,t,p])=>`<div class="card"><div class="lbl
 
 // 머리 숫자
 {const a=build('pv7','D',3,1300),b=build('pv5','D',3,900),ta=times(Object.assign(a,{n:3})),tb=times(Object.assign(b,{n:3}));
- $('kpis').innerHTML=[[`1,300<small>mm</small>`,'옆문 폭 · PV5 순정 775의 1.7배'],[`6<small>+ 선생님 1</small>`,`좌석 폭 ${fmt(a.seatW)} · 개인 칸 6`],
+ $('kpis').innerHTML=[[`1,300<small>mm</small>`,'옆문 폭 · PV5 순정 775의 1.7배'],[`6<small>+ 선생님 1</small>`,`좌석 폭 ${fmt(a.seatW)} · 서랍과 책상 6세트`],
   [`${(a.walk/1000).toFixed(1)}<small>m</small>`,'문에서 가장 먼 자리까지'],[`${ta.board}<small>초</small>`,'6명 전원 착석 (시뮬)'],[`${ta.emer}<small>초</small>`,'6명 비상 하차 (시뮬)']]
   .map(([v,l])=>`<div class="kpi"><b>${v}</b><span>${l}</span></div>`).join('');}
 buildTable();refresh();
@@ -774,9 +774,9 @@ function drawDesk(){
   g.push(T(950,300,`한 줄 3개 = ${fmt(3*Wd)} × 330 긴 탁자`,'fill="#525C74" font-size="15"'));
   $('deskStates').innerHTML=`<g font-family="42dot Sans, system-ui, sans-serif">${g.join('')}</g>`;
 }
-function drawBoards(){const o=cur(),Wd=podSW+P,sH=Math.min(282,(Wd-40)*9/16),sW=sH*16/9,sc=o.screens.find(x=>x.side==='l');
+function drawBoards(){const o=cur(),Wd=podSW+P,sH=Math.min(282,(Wd-40)*9/16),sW=sH*16/9,sc=o.screens.find(x=>x.band),bh=Math.max(0,o.B.H-50-1150);
   $('boards').innerHTML=[['책상 화면 실제 크기',`${fmt(sW)} × ${fmt(sH)} mm · ${Math.round(Math.hypot(sW,sH)/25.4)}″ 16:9`],['책상 피그마 대지','1600 × 900 (16:9) · 가운데 x 800에 접힘선, 좌우 20 px 안전 여백'],
-   ['캐빈 화면 실제 크기',sc?`${fmt(sc.w)} × ${fmt(sc.w*3/7)} mm · ${Math.round(Math.hypot(sc.w,sc.w*3/7)/25.4)}″ 21:9`:'배치 D에서 확인'],['캐빈 피그마 대지','2520 × 1080 (21:9 = 7:3)']].map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('')}
+   ['캐빈 화면 실제 크기 (앞뒤 2면)',sc?`${fmt(sc.w)} × ${fmt(bh)} mm · ${Math.round(Math.hypot(sc.w,bh)/25.4)}″ · 약 32:9`:'배치 D에서 확인'],['캐빈 피그마 대지','3840 × 1080 (32:9) · 두 면 같은 화면']].map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('')}
 {const oc=window.onCfg;window.onCfg=o=>{oc(o);drawDesk();drawBoards()};drawDesk();drawBoards();}
 </script>
 <script>
@@ -791,10 +791,10 @@ function init3D(){const T=THREE,host=$('c3'),r=new T.WebGLRenderer({antialias:tr
   r.shadowMap.enabled=true;r.shadowMap.type=T.PCFSoftShadowMap;r.outputEncoding=T.sRGBEncoding;r.toneMapping=T.ACESFilmicToneMapping;r.toneMappingExposure=.9;r.setPixelRatio(Math.min(2,devicePixelRatio));host.appendChild(r.domElement);
   const cam=new T.PerspectiveCamera(35,1,.05,200),ctl=new T.OrbitControls(cam,r.domElement);ctl.enableDamping=true;ctl.maxPolarAngle=Math.PI*.495;
   const size=()=>{const w=host.clientWidth,h=host.clientHeight;if(!w)return;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()};new ResizeObserver(size).observe(host);size();
-  Object.assign(V3,{r,cam,ctl});const loop=()=>{requestAnimationFrame(loop);if(!V3.on||!V3.scene)return;ctl.update();r.render(V3.scene,cam)};loop();
-  $('camDoor').onclick=()=>camSet('door');$('camTop').onclick=()=>camSet('top');$('camIn').onclick=()=>camSet('in')}
+  Object.assign(V3,{r,cam,ctl});const loop=()=>{requestAnimationFrame(loop);if(!V3.on||!V3.scene)return;if(V3.deskP!==V3.deskTo){V3.deskP+=Math.sign(V3.deskTo-V3.deskP)*Math.min(Math.abs(V3.deskTo-V3.deskP),.012);poseRigs()}ctl.update();r.render(V3.scene,cam)};loop();
+  $('camDoor').onclick=()=>camSet('door');$('camTop').onclick=()=>camSet('top');$('camIn').onclick=()=>camSet('in');$('camDesk').onclick=()=>{st.mode='stay';refresh();camSet('desk')}}
 function camSet(k){const o=V3.o,W=o.B.W/1e3,L=o.B.L/1e3,d=o.door,dz=d.side==='r'?(d.a+d.b)/2e3:L;V3.cam.fov=k==='in'?60:35;V3.cam.updateProjectionMatrix();
-  const P={door:[[W+4.2,4.6,dz+3.2],[W/2,.3,dz-.2]],top:[[W/2+.01,L*1.6+3,L/2+1.2],[W/2,0,L/2]],in:[[W-.25,1.2,dz+.3],[0,.95,dz]]}[k];V3.cam.position.set(...P[0]);V3.ctl.target.set(...P[1]);V3.ctl.update()}
+  const P={door:[[W+4.2,4.6,dz+3.2],[W/2,.3,dz-.2]],top:[[W/2+.01,L*1.6+3,L/2+1.2],[W/2,0,L/2]],in:[[W-.25,1.2,dz+.3],[0,.95,dz]],desk:[[W-.05,2.05,dz+.9],[W*.45,.5,.75]]}[k];V3.cam.position.set(...P[0]);V3.ctl.target.set(...P[1]);V3.ctl.update()}
 function on3D(o,mode){if(!V3.on||!window.THREE)return;if(!V3.r)init3D();const first=!V3.o||V3.o.B!==o.B||V3.o.lay!==o.lay;build3D(o,mode);if(first)camSet('door')}
 function tex(w,h,f){const c=document.createElement('canvas');c.width=w;c.height=h;f(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=8;return t}
 function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=(B.ext[1]-B.W)/2*k;
@@ -808,30 +808,45 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   // 땅 · 차체
   const g0=new T.Mesh(new T.PlaneGeometry(60,60),mat('#E9EDF2'));g0.rotation.x=-Math.PI/2;g0.position.set(W/2,-.4,L/2);g0.receiveShadow=true;S.add(g0);
   const car=new T.Group();car.position.y=0;S.add(car);
-  box(car,cWhite,-ew,-B.front*k,W+2*ew,B.ext[0]*k,.4,-.4);box(car,cFloor,0,0,W,L,.02,0,false);
+  const cClad=mat('#3A3D45',{roughness:.7}),cBlackG=mat('#15171C',{roughness:.08,metalness:.4,transparent:true,opacity:.22,depthWrite:false}),cBlack=mat('#15171C',{roughness:.2,metalness:.3});
+  const X0=-ew,XW=W+2*ew,Zf=-B.front*k,Zr=L+.15;
+  box(car,cWhite,X0,Zf+.05,XW,Zr-Zf-.1,.3,-.28);box(car,cClad,X0-.01,Zf,XW+.02,Zr-Zf,.14,-.42);box(car,cFloor,0,0,W,L,.02,0,false);
   const fw=(-B.front+880)*k,rw=(B.arch[0]+B.arch[1])/2e3;
-  for(const wz of [fw,rw])for(const wx of [-ew-.02,W+ew-.22]){const t=new T.Mesh(new T.CylinderGeometry(.36,.36,.24,28),cTire);t.rotation.z=Math.PI/2;t.position.set(wx+.12,-.04,wz);t.castShadow=true;car.add(t)}
+  const hubT=tex(256,256,(x,w,h)=>{x.fillStyle='#D5D8DE';x.beginPath();x.arc(128,128,124,0,7);x.fill();x.fillStyle='#22222A';x.fillRect(96,20,64,216);x.fillRect(20,96,216,64);x.fillStyle='#EEF0F3';x.fillRect(110,110,36,36)});
+  const hubM=new T.MeshStandardMaterial({map:hubT,roughness:.35,metalness:.5});
+  for(const wz of [fw,rw])for(const sd of [-1,1]){const wx=sd<0?X0-.02:X0+XW+.02,t=new T.Mesh(new T.CylinderGeometry(.36,.36,.24,32),cTire);t.rotation.z=Math.PI/2;t.position.set(wx-sd*.1,-.04,wz);t.castShadow=true;car.add(t);
+    const hb=new T.Mesh(new T.CircleGeometry(.25,32),hubM);hb.rotation.y=sd*Math.PI/2;hb.position.set(wx+sd*.025,-.04,wz);car.add(hb);box(car,cClad,sd<0?X0-.035:X0+XW-.045,wz-.52,.08,1.04,.5,-.3)}
   const aw=(W-B.Wa)/2*k;box(car,cWhite,0,B.arch[0]*k,aw,(B.arch[1]-B.arch[0])*k,.3);box(car,cWhite,W-aw,B.arch[0]*k,aw,(B.arch[1]-B.arch[0])*k,.3);
-  box(car,cWhite,-ew,-B.front*k,W+2*ew,B.front*k-.02,.9);const ws=box(car,cGlass,0,-.55,W,.02,.8,.9,false);ws.rotation.x=-.5;
+  box(car,cWhite,X0,Zf+.12,XW,-Zf-.14,.95);box(car,cClad,X0+.18,Zf-.02,XW-.36,.2,.42,-.3);box(car,cBlack,X0+.12,Zf+.08,XW-.24,.06,.36,.52);
+  const ledT=tex(1024,160,(x,w,h)=>{x.fillStyle='#FF2D3D';x.fillRect(0,0,w,h);x.fillStyle='#FFFFFF';x.font='500 96px "42dot Sans",sans-serif';x.textBaseline='middle';x.fillText('34',60,84);
+    [0,1,2,3].forEach(i=>{x.globalAlpha=.45+i*.18;x.fillRect(330+i*46,70,26,26)});x.globalAlpha=1;[[0,2],[1,1],[1,3],[2,0],[2,4],[3,1],[3,2],[3,3],[4,0],[4,4]].forEach(([r,c])=>x.fillRect(820+c*22,40+r*22,20,20))});
+  const led=new T.Mesh(new T.PlaneGeometry(XW-.5,.2),new T.MeshStandardMaterial({map:ledT,emissive:'#FFFFFF',emissiveMap:ledT,emissiveIntensity:.9}));led.rotation.y=Math.PI;led.position.set(W/2,.7,Zf+.075);led.rotation.y=0;led.position.z=Zf+.07;car.add(led);
+  for(const sd of [-1,1]){const lx=sd<0?X0+.07:X0+XW-.1;box(car,mat('#FFFFFF',{emissive:'#FFFFFF',emissiveIntensity:1.2}),lx,Zf+.06,.03,.03,.5,.45,false);box(car,mat('#FF2D3D',{emissive:'#FF2D3D',emissiveIntensity:1}),lx,Zr-.02,.03,.03,.6,.5,false)}
+  const ws=box(car,cBlackG,X0+.05,Zf+.2,XW-.1,.02,.9,.95,false);ws.rotation.x=-.42;
   const BELT=.95,doors=[o.door,o.door2].filter(Boolean);
-  const wall=(x0,w,z0,d)=>{box(car,cWhite,x0,z0,w,d,BELT);box(car,cGlass,x0,z0,w,d,Hc-BELT,BELT,false);box(car,cWhite,x0,z0,w,d,.06,Hc,false)};
+  const wall=(x0,w,z0,d)=>{box(car,cWhite,x0,z0,w,d,BELT);box(car,cBlackG,x0,z0,w,d,Hc-BELT,BELT,false);box(car,cBlack,x0,z0,w,d,.05,Hc,false)};
   wall(-ew,ew,0,L);wall(-ew,W+2*ew,L,.12);
   let zc=0;const rd=doors.filter(d=>d.side==='r').sort((a,b)=>a.a-b.a);
   for(const d of rd){wall(W,ew,zc,d.a*k-zc);zc=d.b*k;box(car,cYellow,W-.02,d.a*k,ew+.02,d.w*k,.025,0,false);
-    const lf=(d.a-(-B.front+1260))>=d.w?-1:1,pz=lf<0?d.a*k-d.w*k:d.b*k;box(car,mat('#FFFFFF',{roughness:.4,transparent:true,opacity:.45,depthWrite:false}),W+ew,pz,.04,d.w*k,BELT,0,false);box(car,cGlass,W+ew,pz,.04,d.w*k,Hc-BELT,BELT,false)}
+    const lf=(d.a-(-B.front+1260))>=d.w?-1:1,pz=lf<0?d.a*k-d.w*k:d.b*k;box(car,mat('#FFFFFF',{roughness:.4,transparent:true,opacity:.45,depthWrite:false}),W+ew,pz,.04,d.w*k,BELT,0,false);box(car,cBlackG,W+ew,pz,.04,d.w*k,Hc-BELT,BELT,false)}
   wall(W,ew,zc,L-zc);
   if(o.door.side==='rear')box(car,cYellow,o.door.a*k,L,o.door.w*k,.12,.025,0,false);
   // 비어 있는 바닥
   for(const f of (mode==='stay'?o.floorStay:o.floor))box(car,cGreen,f.x*k,f.y*k,f.w*k,f.h*k,.004,.021,false);
   // 수납 · 머리 위 개인 칸
-  for(const u of o.utils){const b=box(car,cLock,u.x*k,u.y*k,u.w*k,u.h*k,Hc*.96);const n=Math.max(1,Math.round(u.w/560));for(let i=0;i<n;i++)box(car,mat('#1B2A5E',{emissive:'#1B2A5E',emissiveIntensity:.6}),(u.x+u.w*(i+.5)/n)*k-.02,(u.y<o.B.L/2?u.y+u.h:u.y)*k-.005,.04,.01,.04,1.3,false)}
+  const uH=o.lay==='D'?1.1:Hc*.96;for(const u of o.utils){const b=box(car,cLock,u.x*k,u.y*k,u.w*k,u.h*k,uH);const n=Math.max(1,Math.round(u.w/560));for(let i=0;i<n;i++)box(car,mat('#1B2A5E',{emissive:'#1B2A5E',emissiveIntensity:.6}),(u.x+u.w*(i+.5)/n)*k-.02,(u.y<o.B.L/2?u.y+u.h:u.y)*k-.005,.04,.01,.04,1.3,false)}
   // 대형 화면
   const scrT=tex(1260,540,(x,w,h)=>{const g=x.createLinearGradient(0,0,w,h);g.addColorStop(0,'#1B2A5E');g.addColorStop(1,'#26356A');x.fillStyle=g;x.fillRect(0,0,w,h);
     x.fillStyle='#FFFFFF';x.globalAlpha=.9;x.font='300 120px "42dot Sans",sans-serif';x.fillText('16:40',60,190);x.font='700 44px "42dot Sans",sans-serif';x.fillText('ART · 수채화 색 섞기',64,270);x.globalAlpha=1;
     x.fillStyle='#FF2D3D';x.fillRect(64,320,28,28);[['#FF8A1F',0],['#FFB800',1],['#00B84A',2],['#8A1FFF',3]].forEach(([c,i])=>{x.fillStyle=c;x.globalAlpha=.85;x.fillRect(w-520+i*120,h-260,100,160)});x.globalAlpha=1});
   const sm=new T.MeshStandardMaterial({map:scrT,emissive:'#FFFFFF',emissiveMap:scrT,emissiveIntensity:.55,roughness:.3});
-  for(const sc of o.screens){const sw=sc.w*k,sh=sc.side==='l'?sw*3/7:sw*9/16,p=new T.Mesh(new T.PlaneGeometry(sw,sh),sm),yb=Math.max(BELT,Hc-.06-sh);
-    if(sc.side==='l'){p.rotation.y=Math.PI/2;p.position.set(.012,yb+sh/2,(sc.y+sc.w/2)*k)}else if(sc.y===0)p.position.set((sc.x+sc.w/2)*k,yb+sh/2,.012);else{p.rotation.y=Math.PI;p.position.set((sc.x+sc.w/2)*k,yb+sh/2,L-.012)}S.add(p)}
+  const bT=tex(1536,432,(x,w,h)=>{x.fillStyle='#1B2A5E';x.fillRect(0,0,w,h);x.fillStyle='#FFFFFF';x.globalAlpha=.92;x.font='300 150px "42dot Sans",sans-serif';x.fillText('16:40',70,250);
+    x.font='700 52px "42dot Sans",sans-serif';x.fillText('ART · 수채화 색 섞기',470,210);x.globalAlpha=.7;x.font='400 40px "42dot Sans",sans-serif';x.fillText('다 함께 · 빨강 + 노랑 = 주황',472,280);x.globalAlpha=1;
+    x.fillStyle='#FF2D3D';x.fillRect(74,300,30,30);[['#FF8A1F',0],['#FFB800',1],['#00B84A',2],['#8A1FFF',3]].forEach(([c,i])=>{x.fillStyle=c;x.globalAlpha=.9;x.fillRect(w-560+i*130,90,110,250)});x.globalAlpha=1});
+  const smB=new T.MeshStandardMaterial({map:bT,emissive:'#FFFFFF',emissiveMap:bT,emissiveIntensity:.55,roughness:.3});
+  for(const sc of o.screens){const sw=sc.w*k,sh=sc.band?Hc-.05-1.15:sc.side==='l'?sw*3/7:sw*9/16,p=new T.Mesh(new T.PlaneGeometry(sw,sh),sc.band?smB:sm),yb=sc.band?1.15:Math.max(BELT,Hc-.06-sh);
+    const fz=Math.max(0,...o.utils.filter(u=>u.y===0).map(u=>u.y+u.h))*k,rz=Math.min(o.B.L,...o.utils.filter(u=>u.y>0&&u.w>=o.B.W*.9).map(u=>u.y))*k;
+    if(sc.side==='l'){p.rotation.y=Math.PI/2;p.position.set(.012,yb+sh/2,(sc.y+sc.w/2)*k)}else if(sc.y===0)p.position.set((sc.x+sc.w/2)*k,yb+sh/2,(sc.band?fz:0)+.012);else{p.rotation.y=Math.PI;p.position.set((sc.x+sc.w/2)*k,yb+sh/2,(sc.band?rz:L)-.012)}car.add(p)}
   // 좌석 · 팔걸이 · 책상
   const ang={up:0,down:Math.PI,l:Math.PI/2,r:-Math.PI/2};
   const seat=(cx,cz,w,face,col=cSeat)=>{const g=new T.Group();g.position.set(cx,0,cz);g.rotation.y=ang[face];car.add(g);
@@ -839,12 +854,22 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   const dT=tex(512,288,(x,w,h)=>{x.fillStyle='#1B2A5E';x.fillRect(0,0,w,h);x.fillStyle='#2A3B75';x.fillRect(12,12,140,h-50);x.fillStyle='#FF2D3D';x.fillRect(24,24,16,16);
     ['#3A4B86','#8C9BC8','#5C6FA8','#C9D0E0'].forEach((c,i)=>{x.fillStyle=c;x.fillRect(166+(i%2)*168,12+Math.floor(i/2)*118,160,110)});x.fillStyle='#16224D';x.fillRect(0,h-30,w,30)});
   const dm=new T.MeshStandardMaterial({map:dT,emissive:'#FFFFFF',emissiveMap:dT,emissiveIntensity:.7,roughness:.25});
-  o.seats.forEach(s=>{const f=(mode==='stay'&&s.stayFace)?s.stayFace:s.face;seat((s.x+s.w/2)*k,(s.y+s.h/2)*k,s.w*k,f)});
-  for(const a of (o.stow||[])){box(car,cLock,a.x*k,a.y*k,a.w*k,a.h*k,.62);if(mode!=='stay')box(car,cAlu,(a.x+a.w/2)*k-.006,(a.y+40)*k,.012,(a.h-80)*k,.2,.62)}
-  if(mode==='stay')for(const d of o.desks){box(car,cDesk,d.x*k,d.y*k,d.w*k,d.h*k,.022,.57);const sw=Math.min(d.w*k-.04,(d.h*k-.03)*16/9),sh=sw*9/16,p=new T.Mesh(new T.PlaneGeometry(d.w>d.h?sw:sh*1,d.w>d.h?sh:sw),dm);
+  const cBag=mat('#FF8A1F',{roughness:.6}),cDrw=mat('#DDE1E8',{roughness:.6});
+  V3.rig=o.seats.map(s=>{const f=(mode==='stay'&&s.stayFace)?s.stayFace:s.face,w=s.w*k,g=seat((s.x+s.w/2)*k,(s.y+s.h/2)*k,w,f);if(!o.stow)return null;
+    const dr=new T.Group();g.add(dr);box(dr,cDrw,-w/2+.03,-.23,w-.06,.46,.24,.03);box(dr,cNavy,-.05,-.235,.1,.01,.02,.2,false);
+    const bag=new T.Mesh(new T.BoxGeometry(.3,.13,.4),cBag);bag.castShadow=true;S.add(bag);bag.visible=false;
+    const H=(w+.05)/2,leaf=(b)=>{const m=new T.Mesh(new T.BoxGeometry(H,.014,.33),b?[cDesk,cDesk,cDesk,dm,cDesk,cDesk]:[cDesk,cDesk,dm,cDesk,cDesk,cDesk]);m.castShadow=true;g.add(m);return m};
+    return {g,dr,bag,A:leaf(0),Bf:leaf(1),w,H,full:mode!=='board'}});
+  V3.deskP=mode==='stay'?1:0;V3.deskTo=V3.deskP;poseRigs();
+  for(const a of (o.stow||[]))box(car,cLock,a.x*k,a.y*k,a.w*k,a.h*k,.6);
+  if(mode==='stay'&&!o.stow)for(const d of o.desks){box(car,cDesk,d.x*k,d.y*k,d.w*k,d.h*k,.022,.57);const sw=Math.min(d.w*k-.04,(d.h*k-.03)*16/9),sh=sw*9/16,p=new T.Mesh(new T.PlaneGeometry(d.w>d.h?sw:sh*1,d.w>d.h?sh:sw),dm);
     p.rotation.x=-Math.PI/2;if(d.w<=d.h)p.rotation.z=Math.PI/2;p.position.set((d.x+d.w/2)*k,.594,(d.y+d.h/2)*k);car.add(p)}
   // 선생님 좌석
-  const c=o.care;if(mode==='move')seat((c.x+c.w/2)*k,(c.y+c.h/2)*k,c.w*k,c.face,mat('#FFD5D8',{roughness:.95}));else box(car,mat('#FFD5D8',{roughness:.95}),c.x*k,c.y*k,c.fold*k,c.h*k,.9,.3);
+  const c=o.care;box(car,mat('#1B2A5E',{emissive:'#1B2A5E',emissiveIntensity:.5}),.012,(c.y+60)*k,.01,(c.h-120)*k,.34,1.05,false);
+  const lab=(t,x,y,z)=>{const tt=tex(512,128,(g,w,h)=>{g.fillStyle='#FFFFFF';g.fillRect(0,0,w,h);g.fillStyle='#FF2D3D';g.fillRect(24,50,28,28);g.fillStyle='#1B2A5E';g.font='800 56px "42dot Sans",sans-serif';g.textBaseline='middle';g.fillText(t,72,66)});
+    const sp=new T.Sprite(new T.SpriteMaterial({map:tt,depthTest:false}));sp.scale.set(.72,.18,1);sp.position.set(x,y,z);sp.renderOrder=9;S.add(sp)};
+  if(o.lay==='D'){lab('선생님 좌석',(c.x+c.w/2)*k+.25,1.75,(c.y+c.h/2)*k);lab(`문 ${fmt(o.door.w)}`,W+.35,1.75,(o.door.a+o.door.b)/2e3)}
+  const c2=c;if(mode==='move')seat((c.x+c.w/2)*k,(c.y+c.h/2)*k,c.w*k,c.face,mat('#FFD5D8',{roughness:.95}));else box(car,mat('#FFD5D8',{roughness:.95}),c.x*k,c.y*k,c.fold*k,c.h*k,.9,.3);
   // 사람 (Care Yard 마네킹 축약판): 서 있기 / 앉기
   const skin=mat('#E9E4DE',{roughness:.55}),SH=['#FFFFFF','#1B2A5E','#FF8A1F','#C9D0DA','#00B84A','#8A1FFF','#FFB800','#EEF1F5'];
   const person=(H,shirt,sitting,bag)=>{const g=new T.Group(),sh=mat(shirt,{roughness:.7}),pt=mat('#2E3A55',{roughness:.75}),add=(geo,m,x,y,z)=>{const q=new T.Mesh(geo,m);q.position.set(x,y,z);q.castShadow=true;g.add(q);return q};
@@ -855,18 +880,33 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
     add(new T.SphereGeometry(.1*s,18,14),skin,0,hip+.54*s,sitting?.06:0);
     for(const sd of [-1,1]){const ar=add(new T.CylinderGeometry(.03*s,.025*s,.38*s,10),sitting?skin:sh,sd*.16*s,hip+.2*s,sitting?-.04:0);if(sitting)ar.rotation.x=.9}
     if(bag)add(new T.BoxGeometry(.24*s,.3*s,.1*s),mat(bag,{roughness:.6}),0,hip+.25*s,.14*s);return g};
-  V3.kids=o.seats.map((s,i)=>{const f=(mode==='stay'&&s.stayFace)?s.stayFace:s.face,sit=person(1.4,SH[i%SH.length],true),stand=person(1.4,SH[i%SH.length],false,'#FF8A1F');
+  V3.kids=o.seats.map((s,i)=>{const f=(mode==='stay'&&s.stayFace)?s.stayFace:s.face,sit=person(1.4,SH[i%SH.length],true),stand=person(1.4,SH[i%SH.length],false);
     sit.position.set((s.x+s.w/2)*k,0,(s.y+s.h/2)*k);sit.rotation.y=ang[f];car.add(sit);car.add(stand);stand.visible=false;sit.visible=mode!=='board';return {sit,stand}});
   const tSit=person(1.68,'#EEF1F5',true),tStand=person(1.68,'#EEF1F5',false);car.add(tSit);car.add(tStand);
-  tSit.position.set((c.x+c.w/2)*k,0,(c.y+c.h/2)*k);tSit.rotation.y=ang[c.face];const tp=mode==='board'&&o.lay==='D'?{x:420,y:c.y-350}:c.stand;tStand.position.set(tp.x*k,0,tp.y*k);tStand.rotation.y=-Math.PI/2;tSit.visible=mode==='move';tStand.visible=mode!=='move';
+  tSit.position.set((c.x+c.w/2)*k,0,(c.y+c.h/2)*k);tSit.rotation.y=ang[c.face];const tp=mode==='board'&&o.lay==='D'?{x:650,y:c.y+c.h/2}:c.stand;tStand.position.set(tp.x*k,0,tp.y*k);tStand.rotation.y=-Math.PI/2;tSit.visible=mode==='move';tStand.visible=mode!=='move';
   // 빛: 하늘 + 해 (그림자)
   S.add(new T.HemisphereLight('#FFFFFF','#C9D2DD',.62));const sun=new T.DirectionalLight('#FFFFFF',1.05);sun.position.set(W+4,7,L+3);sun.target.position.set(W/2,0,L/2);S.add(sun.target);
   sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-4,right:4,top:4,bottom:-4,near:.5,far:25});sun.shadow.bias=-.0004;sun.shadow.normalBias=.02;S.add(sun);
   const pl=new T.PointLight('#FFFFFF',.35,6);pl.position.set(W/2,Hc-.1,L/2);S.add(pl);
 }
-function tick3D(ag){if(!V3.on||!V3.kids.length)return;const k=.001;ag.forEach(a=>{const K=V3.kids[a.i];if(!K)return;
+// 책상: 세움(상자 속) → 올라오며 앞으로 → 무릎 위로 눕힘 → 반쪽 펼침. p 0~1
+function poseRigs(){const p=V3.deskP;(V3.rig||[]).forEach(r=>{if(!r)return;const {A,Bf,w,H}=r,e=v=>Math.max(0,Math.min(1,v)),up=e(p*3),fl=e(p*3-1),op=e(p*3-2);
+  const ax=w/2+.025,sv={x:ax,y:.36+H/2+.25*up,z:-.015-.19*up},fx=ax-H/2,fold=ax-H,fz=-.215;
+  A.rotation.set(0,0,Math.PI/2*(1-fl));A.position.set(lp(sv.x,fx,fl),lp(sv.y,.58,fl),lp(sv.z,fz,fl));
+  const ph=Math.PI*op;if(op>0){Bf.rotation.set(0,0,ph);Bf.position.set(fold+H/2*Math.cos(ph),.595+H/2*Math.sin(ph)*.9,fz)}else{Bf.rotation.copy(A.rotation);Bf.position.set(A.position.x+.016*(1-fl),A.position.y+.015*fl,A.position.z)}
+  A.visible=Bf.visible=true})}
+function bagAt(r,e,ins){const q=new THREE.Vector3(0,.15,(ins?-.23+.2:0)-.38*e);return r.g.localToWorld(q)}
+function tick3D(ag){if(!V3.on||!V3.kids.length)return;
+  const done=ag.every(a=>a.st==='done'),board=ag.some(a=>a.pts[0]&&a.pts.at(-1)&&a.pts.at(-1).x<a.pts[0].x);
+  V3.deskTo=board?(done?1:0):0;
+  ag.forEach(a=>{const r=V3.rig&&V3.rig[a.i];if(!r)return;let e=0,bv=true,bp;const back=()=>{const K=V3.kids[a.i].stand;return new THREE.Vector3(a.pos.x/1e3-Math.sin(K.rotation.y)*-.2,.85,a.pos.y/1e3-Math.cos(K.rotation.y)*-.2)};
+    if(board){if(a.st==='queue'){bv=false}else if(a.st==='walk'){bp=back()}else if(a.st==='act'){const t=1-a.tm/4;e=t<.25?t/.25:t<.75?1:(1-t)/.25;bp=t<.25?back():t<.75?back().lerp(bagAt(r,1,true),(t-.25)/.5):bagAt(r,e,true)}else{bp=bagAt(r,0,true)}}
+    else{if(a.st==='belt'){bp=bagAt(r,0,true)}else if(a.st==='act'){const t=1-a.tm/Math.max(.5,a.tm0||4);e=1;bp=bagAt(r,1,true)}else if(a.st==='walk'){bp=back()}else bv=false}
+    r.dr.position.z=-.38*e;r.bag.visible=bv&&!!bp;if(bp){r.bag.position.copy(bp)}});
+  tick3Dp(ag)}
+function tick3Dp(ag){if(!V3.on||!V3.kids.length)return;const k=.001;ag.forEach(a=>{const K=V3.kids[a.i];if(!K)return;
   const walking=a.st==='walk'||a.st==='act'||(a.st==='queue'&&false),seated=a.st==='belt'||(a.st==='done'&&!a.out);
   K.stand.visible=walking;K.sit.visible=seated;if(walking){K.stand.position.set(a.pos.x*k,0,a.pos.y*k);const t=a.pts[a.seg]||a.pts[a.pts.length-1];K.stand.rotation.y=Math.atan2(-(t.x-a.pos.x),-(t.y-a.pos.y))}})}
 {const oc=window.onCfg;window.onCfg=o=>{oc(o);if(V3.on)on3D(o,st.mode)};}
-if(new URLSearchParams(location.search).get('view')==='3d'){$('v3d').checked=true;show3D(true)}
+{const q=new URLSearchParams(location.search);if(['board','move','stay'].includes(q.get('mode'))){st.mode=q.get('mode');refresh()}if(q.get('view')==='3d'){$('v3d').checked=true;show3D(true).then(()=>{if(q.get('cam'))camSet(q.get('cam'))})}}
 </script>
