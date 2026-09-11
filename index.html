@@ -801,7 +801,7 @@ function init3D(){const T=THREE,host=$('c3'),r=new T.WebGLRenderer({antialias:tr
   Object.assign(V3,{r,cam,ctl});const loop=()=>{requestAnimationFrame(loop);if(!V3.on||!V3.scene)return;if(V3.deskP!==V3.deskTo){V3.deskP+=Math.sign(V3.deskTo-V3.deskP)*Math.min(Math.abs(V3.deskTo-V3.deskP),.006);poseRigs()}ctl.update();r.render(V3.scene,cam)};loop();
   $('camDoor').onclick=()=>camSet('door');$('camTop').onclick=()=>camSet('top');$('camIn').onclick=()=>camSet('in');$('camDesk').onclick=()=>{st.mode='stay';refresh();camSet('desk')};$('deskTog').onclick=()=>{if(st.mode==='board'){st.mode='stay';refresh()}else V3.deskTo=V3.deskTo>.5?0:1;camSet('desk')}}
 function camSet(k){const o=V3.o,W=o.B.W/1e3,L=o.B.L/1e3,d=o.door,dz=d.side==='r'?(d.a+d.b)/2e3:L;V3.cam.fov=k==='in'?60:35;V3.cam.updateProjectionMatrix();
-  const P={door:[[W+4.2,4.6,dz+3.2],[W/2,.3,dz-.2]],top:[[W/2+.01,L*1.6+3,L/2+1.2],[W/2,0,L/2]],in:[[W-.25,1.2,dz+.3],[0,.95,dz]],desk:[[W-.05,2.05,dz+.9],[W*.45,.5,.75]]}[k];V3.cam.position.set(...P[0]);V3.ctl.target.set(...P[1]);V3.ctl.update()}
+  const P={door:[[W+4.2,4.6,dz+3.2],[W/2,.3,dz-.2]],top:[[W/2+.01,L*1.6+3,L/2+1.2],[W/2,0,L/2]],in:[[W-.25,1.2,dz+.3],[0,.95,dz]],desk:[[W+.35,2.35,dz+1.5],[W*.45,.55,.55]]}[k];V3.cam.position.set(...P[0]);V3.ctl.target.set(...P[1]);V3.ctl.update()}
 function on3D(o,mode){if(!V3.on||!window.THREE)return;if(!V3.r)init3D();const first=!V3.o||V3.o.B!==o.B||V3.o.lay!==o.lay;build3D(o,mode);if(first)camSet('door')}
 function tex(w,h,f){const c=document.createElement('canvas');c.width=w;c.height=h;f(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=8;return t}
 function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=(B.ext[1]-B.W)/2*k;
