@@ -378,6 +378,7 @@ function build(bodyId,lay,n,door){
       o.seats.push(seatD(x,r2,sw,'up',{x:x+sw/2,y:r2-250}));
       o.desks.push({x:x-P/2,y:r1-230,w:sw+P,h:330},{x:x-P/2,y:r2-230,w:sw+P,h:330});
       o.stow=(o.stow||[]).concat([{x:x+sw,y:r1+100,w:P,h:400},{x:x+sw,y:r2+100,w:P,h:400}]);}
+    o.stow.push({x:0,y:r1+100,w:P,h:400,arm:1},{x:0,y:r2+100,w:P,h:400,arm:1});
     o.door={side:'r',a:SC+(F1-door)/2,b:SC+(F1+door)/2,w:door}; o.door2={side:'r',a:r1+SD,b:r1+SD+door,w:door};
     const d1={x:W+600,y:(o.door.a+o.door.b)/2},d2={x:W+600,y:(o.door2.a+o.door2.b)/2};
     o.out=d1; o.paths=o.seats.map((s,i)=>i%2===0?[d1,{x:W-150,y:d1.y},s.stand]:[d2,{x:W-150,y:d2.y},s.stand]);
@@ -396,6 +397,7 @@ function build(bodyId,lay,n,door){
       o.seats.push(seatD(x,m1,sw,'up',{x:x+sw/2,y:m1-250}));
       o.desks.push({x:x-P/2,y:FU+BK+280,w:sw+P,h:330},{x:x-P/2,y:L-RU-BK-610,w:sw+P,h:330});
       o.stow=(o.stow||[]).concat([{x:x+sw,y:FU+BK,w:P,h:400},{x:x+sw,y:m1+SD-BK-400,w:P,h:400}]);}
+    o.stow.push({x:SX,y:FU+BK,w:P,h:400,arm:1},{x:SX,y:m1+SD-BK-400,w:P,h:400,arm:1});
     let da=mc-door/2;const fa=-B.front+1260;if(da-fa<door&&fa+2*door<=Math.min(B.arch[0],m1))da=Math.max(m0,fa+door);
     o.door={side:'r',a:da,b:da+door,w:door};const dc=da+door/2;
     o.out={x:W+600,y:dc}; o.inn={x:W-150,y:dc};
@@ -540,7 +542,7 @@ function draw(svg,o,mode,agents,small){
   else if(mode!=='board')o.seats.forEach((s,i)=>kid({x:s.x+s.w/2,y:s.y+s.h/2},i));
   // 책상: 머묾 = 무릎 위로 펼침 (아이 위에 그림), 그 외 = 팔걸이 상자 속 세움
   if(mode==='stay')for(const k of o.desks){R(k.x,k.y,k.w,k.h,'fill="#8C9BC8" stroke="#1B2A5E" stroke-width="'+sw*.6+'" opacity=".95"');R(k.x+k.w*.18,k.y+k.h*.2,k.w*.64,k.h*.6,'fill="#1B2A5E"')}
-  else for(const k of (o.stow||[]))R(k.x,k.y,k.w,k.h,'fill="#8C9BC8" stroke="#1B2A5E" stroke-width="'+sw*.5+'"');
+  else for(const k of (o.stow||[]).filter(q=>!q.arm))R(k.x,k.y,k.w,k.h,'fill="#8C9BC8" stroke="#1B2A5E" stroke-width="'+sw*.5+'"');
   // 치수 글자
   const f0=(mode==='stay'?o.floorStay:o.floor)[0];
   if(f0&&!small)T(f0.x+f0.w/2,f0.y+f0.h/2+fs/3+(o.lay==='D'?f0.h*.3:0),mode==='stay'?`머묾 바닥 ${fmt(Math.max(0,o.clearStay))}`:o.floorTxt,`text-anchor="middle" fill="#006B2C" font-weight="700"${o.lay==='D'?'':` transform="rotate(-90 ${f0.x+f0.w/2} ${f0.y+f0.h/2})"`}`);
