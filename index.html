@@ -887,18 +887,18 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   const rb=(par,m,x0,z0,w,d,h,y0=0,r=.02,sh=true)=>{const e=new T.Mesh(rgeo(Math.max(w,.004),Math.max(h,.004),Math.max(d,.004),r),m);e.position.set(x0+w/2,y0+h/2,z0+d/2);e.castShadow=sh;e.receiveShadow=true;par.add(e);return e};
   const g0=new T.Mesh(new T.PlaneGeometry(80,80),mat('#E9EDF2'));g0.rotation.x=-Math.PI/2;g0.position.set(W/2,-.42,L/2);g0.receiveShadow=true;S.add(g0);
   const car=new T.Group();S.add(car);
-  const X0=-ew,XW=W+2*ew,Zf=-B.front*k,Zr=L+.15,BL=Zr-Zf,fw=(-B.front+880)*k,rw=(B.arch[0]+B.arch[1])/2e3;
+  const X0=-ew,XW=W+2*ew,Zf=-B.front*k,Zr=L+.15,BL=Zr-Zf,fw=(-B.front+880)*k,rw=(B.arch[0]+B.arch[1])/2e3,zF=Zf+.05,zA=Zf+.85;
   // ── 차체: 하부 · 클래딩 · 앞 · 뒤 · 휠아치 · 바퀴
   rb(car,paint,X0+.3,Zf+.15,XW-.6,BL-.3,.34,-.34,.06);rb(car,clad,X0+.3,Zf+.35,XW-.6,BL-.7,.16,-.4,.05);
   const floorP=new T.Mesh(new T.PlaneGeometry(W,L),floorM);floorP.rotation.x=-Math.PI/2;floorP.position.set(W/2,.002,L/2);floorP.receiveShadow=true;car.add(floorP);
   rb(car,paint,X0,Zf,XW,Math.min(.7,fw-.5-Zf),.84,-.32,.14);rb(car,roofM,X0,Zf,XW,.7,.45,.5,.1);rb(car,clad,X0+.24,Zf-.06,XW-.48,.3,.34,-.3,.06);rb(car,clad,X0+.08,Zf+.02,XW-.16,.12,.16,-.4,.05);
-  rb(car,lock,0,Zf+.7,W,-Zf-.7,1.1,0,.03);for(let i=1;i<4;i++)rb(car,mat('#DDE1E8'),W*i/4-.003,-.004,.006,.008,1.04,.03,.002,false);rb(car,mat('#FF2D3D',{emissive:'#FF2D3D',emissiveIntensity:.5}),W*.12,-.006,.08,.008,.08,.9,.004,false);rb(car,roofM,X0,Zf+.02,XW,.22,.07,Hc,.03);
+  rb(car,lock,0,Zf+.7,W,-Zf-.7,1.1,0,.03);for(let i=1;i<4;i++)rb(car,mat('#DDE1E8'),W*i/4-.003,-.004,.006,.008,1.04,.03,.002,false);rb(car,mat('#FF2D3D',{emissive:'#FF2D3D',emissiveIntensity:.5}),W*.12,-.006,.08,.008,.08,.9,.004,false);rb(car,roofM,X0,zA-.04,XW,.2,.07,Hc,.03);
   const ledT=tex(1024,160,(x,w,h)=>{x.fillStyle='#FF2D3D';x.fillRect(0,0,w,h);x.fillStyle='#FFFFFF';x.font='500 96px "42dot Sans",sans-serif';x.textBaseline='middle';x.fillText('34',70,84);
     [0,1,2,3].forEach(i=>{x.globalAlpha=.45+i*.18;x.fillRect(360+i*46,70,26,26)});x.globalAlpha=1;[[0,2],[1,1],[1,3],[2,0],[2,4],[3,1],[3,2],[3,3],[4,0],[4,4]].forEach(([r,c])=>x.fillRect(820+c*22,40+r*22,20,20))});
   const led=new T.Mesh(new T.PlaneGeometry(XW-.62,.17),new T.MeshStandardMaterial({map:ledT,emissive:'#FFFFFF',emissiveMap:ledT,emissiveIntensity:.9}));led.rotation.y=Math.PI;led.position.set(W/2,.73,Zf-.004);car.add(led);
   for(const sd of [-1,1]){const lx=sd<0?X0+.05:X0+XW-.09;rb(car,lightW,lx,Zf-.012,.04,.04,.42,.52,.012,false);rb(car,lightW,sd<0?lx:lx-.09,Zf-.012,.13,.04,.04,.52,.012,false);
     rb(car,lightR,lx,Zr-.04,.04,.05,.62,.55,.015,false)}
-  rb(car,blackG,X0+.005,Zf+.02,XW-.01,.05,Hc-BELT,BELT,.03,false);
+  {const run=zA-zF,rise=Hc-BELT,ws=new T.Mesh(new T.BoxGeometry(XW-.02,.03,Math.hypot(run,rise)),blackG);ws.rotation.x=-Math.atan2(rise,run);ws.position.set(X0+XW/2,BELT+rise/2,zF+run/2);car.add(ws)}
   rb(car,paint,X0,L,XW,.15,BELT+.3,-.3,.06);rb(car,blackG,X0+.01,L+.03,XW-.02,.1,Hc-BELT,BELT,.03,false);
   const archS=new T.Shape();archS.moveTo(-.5,-.3);archS.lineTo(-.5,.36);archS.quadraticCurveTo(-.5,.54,-.32,.54);archS.lineTo(.32,.54);archS.quadraticCurveTo(.5,.54,.5,.36);archS.lineTo(.5,-.3);archS.lineTo(.36,-.3);
   archS.absarc(0,0,.44,-.75,Math.PI+.75,false);archS.lineTo(-.5,-.3);const archG=new T.ExtrudeGeometry(archS,{depth:.06,bevelEnabled:true,bevelSize:.012,bevelThickness:.012,bevelSegments:2,curveSegments:24});
@@ -911,7 +911,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
     const ar=new T.Mesh(archG,clad);ar.rotation.y=Math.PI/2;ar.position.set(sd<0?X0-.035:X0+XW+.035-.06,-.04,wz);ar.position.x+=sd<0?0:0;ar.castShadow=true;car.add(ar)}
   const aw=(W-B.Wa)/2*k;rb(car,lock,0,B.arch[0]*k,aw+.04,(B.arch[1]-B.arch[0])*k,.42,0,.04);rb(car,lock,W-aw-.04,B.arch[0]*k,aw+.04,(B.arch[1]-B.arch[0])*k,.42,0,.04);
   // 옆면: 흰 아래 + 검은 유리 위 + 벨트라인 크롬
-  const side=(x0,w,z0,d)=>{if(d<=.01)return;const ze=z0+d;let zs=z0;for(const [a,b] of [[fw-.5,fw+.5],[rw-.5,rw+.5]]){if(b<=zs||a>=ze)continue;if(a>zs)rb(car,paint,x0,zs,w,a-zs,.7,-.3,.03);zs=Math.max(zs,b)}if(ze>zs)rb(car,paint,x0,zs,w,ze-zs,.7,-.3,.03);rb(car,paint,x0,z0,w,d,BELT-.4,.4,.03);rb(car,blackG,x0,z0,w,d,Hc-BELT,BELT,.02,false);rb(car,alu,x0+(x0<0?-.004:w-.004),z0,.008,d,.012,BELT-.006,.004,false);rb(car,roofM,x0,z0,w,d,.06,Hc,.02);
+  const side=(x0,w,z0,d)=>{if(d<=.01)return;const ze=z0+d;let zs=z0;for(const [a,b] of [[fw-.5,fw+.5],[rw-.5,rw+.5]]){if(b<=zs||a>=ze)continue;if(a>zs)rb(car,paint,x0,zs,w,a-zs,.7,-.3,.03);zs=Math.max(zs,b)}if(ze>zs)rb(car,paint,x0,zs,w,ze-zs,.7,-.3,.03);rb(car,paint,x0,z0,w,d,BELT-.4,.4,.03);{const g0=Math.max(z0,Math.min(ze,zA));if(ze>g0)rb(car,blackG,x0,g0,w,ze-g0,Hc-BELT,BELT,.02,false);if(z0<zA){const yz=z=>BELT+Math.max(0,z-zF)/(zA-zF)*(Hc-BELT),za=Math.min(ze,zA),sh=new T.Shape();sh.moveTo(z0,BELT);sh.lineTo(za,BELT);sh.lineTo(za,yz(za));sh.lineTo(z0,yz(z0));const tg=new T.Mesh(new T.ExtrudeGeometry(sh,{depth:w,bevelEnabled:false}),blackG);tg.rotation.y=-Math.PI/2;tg.position.x=x0+w;car.add(tg)}}rb(car,alu,x0+(x0<0?-.004:w-.004),z0,.008,d,.012,BELT-.006,.004,false);{const r0=Math.max(z0,zA-.02);if(ze>r0)rb(car,roofM,x0,r0,w,ze-r0,.06,Hc,.02)}
     // 창 기둥: 약 1.1 m마다 가는 기둥. 선생님 쪽 벽은 대표 기둥 2개만(선생님 좌우 ±0.65 m, 가운데 창 1.3 m)
     {const n=Math.max(1,Math.round(d/1.1)),pn=d/n,ps=[],cz=x0<0&&o.care&&!o.noCare?(o.care.y+o.care.h/2)*k:null;if(cz!==null&&cz>z0&&cz<ze){for(const q of [cz-.65,cz+.65])if(q>z0+.2&&q<ze-.2)ps.push(q)}else for(let i=1;i<n;i++)ps.push(z0+pn*i);for(const q of ps)rb(car,paint,x0-.003,q-.04,w+.006,.08,Hc-BELT,BELT,.012)}};
   const bayOn=o.bay&&mode!=='move';
@@ -923,7 +923,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   for(const d of doors){side(W,ew,zc,d.a*k-zc);zc=d.b*k;rb(car,yellow,W-.02,d.a*k,ew+.02,d.w*k,.02,.002,.005,false);
     const fwd=(d.a-(-B.front+1380))>=d.w,pz=fwd?d.a*k-d.w*k:d.b*k,lg=new T.Group();car.add(lg);rb(lg,paint,W+ew,pz,.045,d.w*k,BELT,0,.02);rb(lg,blackG,W+ew,pz,.045,d.w*k,Hc-BELT,BELT,.02,false);V3.leaves.push({g:lg,dz:d.a*k-pz,dx:-ew+.01})}
   side(W,ew,zc,L-zc);if(o.door.side==='rear')rb(car,yellow,o.door.a*k,L,o.door.w*k,.12,.02,.002,.005,false);
-  V3.roofG=new T.Group();car.add(V3.roofG);rb(V3.roofG,roofM,X0,Zf+.1,XW,Zr-Zf-.12,.07,Hc+.02,.05);for(let i=1;i<4;i++)rb(V3.roofG,lightW,W*.15,L*i/4,W*.7,.02,.01,Hc-.005,.004,false);V3.roofG.visible=V3.roofOn||false;if(V3.bayRoof){car.remove(V3.bayRoof);V3.roofG.add(V3.bayRoof);V3.bayRoof=null}
+  V3.roofG=new T.Group();car.add(V3.roofG);rb(V3.roofG,roofM,X0,zA,XW,Zr-zA-.02,.07,Hc+.02,.05);for(let i=1;i<4;i++)rb(V3.roofG,lightW,W*.15,L*i/4,W*.7,.02,.01,Hc-.005,.004,false);V3.roofG.visible=V3.roofOn||false;if(V3.bayRoof){car.remove(V3.bayRoof);V3.roofG.add(V3.bayRoof);V3.bayRoof=null}
   // 비어 있는 바닥 (연하게)
   for(const f of (mode==='stay'?o.floorStay:o.floor)){const p=new T.Mesh(new T.PlaneGeometry(f.w*k,f.h*k),mat('#00B84A',{transparent:true,opacity:.08,roughness:1}));p.rotation.x=-Math.PI/2;p.position.set((f.x+f.w/2)*k,.004,(f.y+f.h/2)*k);car.add(p)}
   // 수납 · 선생님 도구장 (둥근 모서리, 문짝 선)
