@@ -127,9 +127,9 @@ ol.steps li.on{color:var(--navy);font-weight:800}
 .v3cap{position:absolute;right:12px;bottom:10px;display:flex;gap:8px;z-index:1}
 .v3cap button{min-height:40px}
 .v3cap .line,.v3kid button{background:var(--surface)}
-.v3kid{position:absolute;top:60px;left:12px;display:flex;gap:6px;flex-wrap:wrap;z-index:1}
+.v3kid{flex-basis:100%;display:flex;gap:6px;flex-wrap:wrap}
 .v3kid button{min-height:36px;padding:0 14px;font-size:13px}
-.v3bar #deskTog{background:var(--navy);color:#fff}
+.v3bar #deskTog,.v3bar #camB3,.v3bar #camB1{background:var(--navy);color:#fff}
 .v3note{position:absolute;bottom:10px;left:12px;margin:0;font-size:12px;color:var(--faint)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -157,7 +157,7 @@ ol.steps li.on{color:var(--navy);font-weight:800}
         <p id="simMsg"></p>
       </div>
       <svg id="plan" role="img" aria-label="차량 실내 평면도"></svg>
-      <div id="c3" hidden><div class="v3bar"><button class="line" id="camExt">외관</button><button class="line" id="camDoor">문 앞에서</button><button class="line" id="camTop">위에서</button><button class="line" id="camIn">안에서</button><button class="line" id="camDesk">앉아서 책상 편 모습</button><button class="line" id="camRow">필기 자세 (앞줄)</button><button id="deskTog">책상 펴기 · 접기</button></div><div class="v3kid" id="kidCams"></div><div class="v3cap"><button class="line" id="roofT">지붕 덮기</button><button class="line" id="pplT">사람 숨기기</button><button class="line" id="fsBtn">전체화면</button><button class="line" id="labT">치수 켜기</button><button id="cap">이미지 저장</button></div><p class="v3note">끌어서 돌리기 · 휠로 확대</p></div>
+      <div id="c3" hidden><div class="v3bar"><button id="camB3">베스트 · 3인칭</button><button id="camB1">베스트 · 1인칭</button><button class="line" id="camExt">외관</button><button class="line" id="camDoor">문 앞에서</button><button class="line" id="camTop">위에서</button><button class="line" id="camIn">안에서</button><button class="line" id="camDesk">앉아서 책상 편 모습</button><button class="line" id="camRow">필기 자세 (앞줄)</button><button id="deskTog">책상 펴기 · 접기</button><div class="v3kid" id="kidCams"></div></div><div class="v3cap"><button class="line" id="roofT">지붕 덮기</button><button class="line" id="pplT">사람 숨기기</button><button class="line" id="fsBtn">전체화면</button><button class="line" id="labT">치수 켜기</button><button id="cap">이미지 저장</button></div><p class="v3note">끌어서 돌리기 · 휠로 확대</p></div>
       <div class="legend">
         <span><i style="background:#1B2A5E"></i>아이</span>
         <span><i style="background:#FF2D3D"></i>선생님</span>
@@ -824,11 +824,14 @@ function init3D(){const T=THREE,host=$('c3'),r=new T.WebGLRenderer({antialias:tr
   const cam=new T.PerspectiveCamera(35,1,.05,200),ctl=new T.OrbitControls(cam,r.domElement);ctl.enableDamping=true;ctl.maxPolarAngle=Math.PI*.495;
   const size=()=>{const w=host.clientWidth,h=host.clientHeight;if(!w)return;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()};new ResizeObserver(size).observe(host);size();
   Object.assign(V3,{r,cam,ctl});const loop=()=>{requestAnimationFrame(loop);if(!V3.on||!V3.scene)return;if(V3.doorP!==V3.doorTo){V3.doorP+=Math.sign(V3.doorTo-V3.doorP)*Math.min(Math.abs(V3.doorTo-V3.doorP),.008);poseDoors()}if(V3.deskP!==V3.deskTo){V3.deskP+=Math.sign(V3.deskTo-V3.deskP)*Math.min(Math.abs(V3.deskTo-V3.deskP),.006);poseRigs()}ctl.update();r.render(V3.scene,cam)};loop();
-  $('camDoor').onclick=()=>camSet('door');$('camExt').onclick=()=>camSet('ext');$('camRow').onclick=()=>{if(st.mode!=='stay'){st.mode='stay';refresh()}camSet('row')};$('cap').onclick=capture3D;$('labT').onclick=()=>{V3.labOn=V3.labOn===false;(V3.labels||[]).forEach(l=>l.visible=V3.labOn);$('labT').textContent=V3.labOn?'치수 끄기':'치수 켜기'};$('camTop').onclick=()=>camSet('top');$('camIn').onclick=()=>camSet('in');$('camDesk').onclick=()=>{st.mode='stay';refresh();camSet('desk')};$('deskTog').onclick=()=>{if(st.mode==='board'){st.mode='stay';refresh()}else V3.deskTo=V3.deskTo>.5?0:1;camSet('desk')}}
-function camSet(k){(V3.labels||[]).forEach(l=>l.visible=!/^(k\d+|t[12]|row|kdesk|tdesk)$/.test(k)&&V3.labOn!==false);if(V3.tSit){V3.tSit.visible=/^(t[12]|tdesk)$/.test(k)?false:V3.tSitV}setRoof(k==='ext');(V3.kids||[]).forEach((K,i)=>{if(K.sit.userData.v!==undefined)K.sit.visible=K.sit.userData.v;delete K.sit.userData.v});
+  $('camDoor').onclick=()=>camSet('door');for(const k of ['b3','b1'])$('camB'+k[1]).onclick=()=>{if(st.mode!=='stay'){st.mode='stay';refresh()}setPeople(true);camSet(k)};$('camExt').onclick=()=>camSet('ext');$('camRow').onclick=()=>{if(st.mode!=='stay'){st.mode='stay';refresh()}camSet('row')};$('cap').onclick=capture3D;$('labT').onclick=()=>{V3.labOn=V3.labOn===false;(V3.labels||[]).forEach(l=>l.visible=V3.labOn);$('labT').textContent=V3.labOn?'치수 끄기':'치수 켜기'};$('camTop').onclick=()=>camSet('top');$('camIn').onclick=()=>camSet('in');$('camDesk').onclick=()=>{st.mode='stay';refresh();camSet('desk')};$('deskTog').onclick=()=>{if(st.mode==='board'){st.mode='stay';refresh()}else V3.deskTo=V3.deskTo>.5?0:1;camSet('desk')}}
+function camSet(k){(V3.labels||[]).forEach(l=>l.visible=!/^(k\d+|t[12]|row|kdesk|tdesk|b[13])$/.test(k)&&V3.labOn!==false);if(V3.tSit){V3.tSit.visible=/^(t[12]|tdesk)$/.test(k)?false:V3.tSitV}setRoof(k==='ext');(V3.kids||[]).forEach((K,i)=>{if(K.sit.userData.v!==undefined)K.sit.visible=K.sit.userData.v;delete K.sit.userData.v});
   if(k==='kdesk'||k==='tdesk'){const rg=(V3.rig||[]).filter(Boolean),r=k==='tdesk'?rg.find(q=>q.t):rg.filter(q=>!q.t)[1]||rg[0];if(!r)return;V3.deskP=1;poseRigs();
     if(k==='kdesk'){const i=V3.rig.indexOf(r),K=V3.kids[i];if(K){K.sit.userData.v=K.sit.visible;K.sit.visible=false}}else if(V3.tSit)V3.tSit.visible=false;
     V3.scene.updateMatrixWorld(true);const tg=r.g.localToWorld(new THREE.Vector3(0,.59,-.315)),ey=r.g.localToWorld(new THREE.Vector3(0,1.2,.06));V3.cam.fov=38;V3.cam.updateProjectionMatrix();V3.cam.position.copy(ey);V3.ctl.target.copy(tg);V3.ctl.update();return}
+  if(k==='b3'){const o=V3.o,W=o.B.W/1e3,L=o.B.L/1e3;V3.cam.fov=40;V3.cam.updateProjectionMatrix();V3.cam.position.set(W+3.2,5.6,L/2+.15);V3.ctl.target.set(W*.45,.7,L/2);V3.ctl.update();return}
+  if(k==='b1'){const o=V3.o,ys=Math.max(...o.seats.map(s=>s.y)),row=o.seats.filter(s=>s.y===ys).sort((a,b)=>a.x-b.x),s=row[row.length>>1],K=V3.kids[o.seats.indexOf(s)],cx=(s.x+s.w/2)/1e3,cz=(s.y+s.h/2)/1e3;
+    if(K){K.sit.userData.v=K.sit.visible;K.sit.visible=false}V3.cam.fov=72;V3.cam.updateProjectionMatrix();V3.cam.position.set(cx,1.04,cz+.06);V3.ctl.target.set(cx-.3,.6,cz-2.4);V3.ctl.update();return}
   if(/^t[12]$/.test(k)){const o=V3.o,c=(st.mode!=='move'&&o.careBay)?o.careBay:o.care,cx=(c.x+c.w/2)/1e3+.08,cz=(c.y+c.h/2)/1e3,row=o.seats.filter((s,i)=>k==='t1'?s.y<c.y:s.y>c.y),tx=row.reduce((a,s)=>a+s.x+s.w/2,0)/Math.max(1,row.length)/1e3,tz=row.length?(row[0].y+row[0].h/2)/1e3:cz;
     V3.cam.fov=75;V3.cam.updateProjectionMatrix();V3.cam.position.set(cx,1.22,cz);V3.ctl.target.set(tx,.85,tz);V3.ctl.update();return}
   if(/^k\d+$/.test(k)){const o=V3.o,i=+k.slice(1),s=o.seats[i];if(!s)return;const f=(st.mode==='stay'&&s.stayFace)?s.stayFace:s.face,d={up:[0,-1],down:[0,1],l:[-1,0],r:[1,0]}[f],cx=(s.x+s.w/2)/1e3,cz=(s.y+s.h/2)/1e3,K=V3.kids[i];
@@ -841,7 +844,7 @@ async function capture3D(){const r=V3.r,pr=r.getPixelRatio(),lv=(V3.labels||[]).
   if(window.claude&&window.claude.use){const dl=await window.claude.use('downloads');if(!dl){$('simMsg').textContent='이 화면에서는 저장할 수 없음 · 배포 링크에서 저장';return}
     try{await dl.save({filename:name,data:blob});$('simMsg').textContent='이미지 저장됨'}catch(e){if(e&&e.code!=='declined')$('simMsg').textContent='저장 안 됨 · '+(e.code||'')}return}
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
-function setRoof(on){V3.roofOn=on;if(V3.roofG)V3.roofG.visible=on;if(V3.glass)V3.glass.opacity=on?.82:.42;$('roofT').textContent=on?'지붕 벗기기':'지붕 덮기'}
+function setRoof(on){V3.roofOn=on;if(V3.roofG)V3.roofG.visible=on;if(V3.glass)V3.glass.opacity=on?.82:.16;$('roofT').textContent=on?'지붕 벗기기':'지붕 덮기'}
 function setPeople(on){V3.pplOn=on;if(V3.cam)V3.cam.layers[on?'enable':'disable'](1);if(V3.sun)V3.sun.shadow.camera.layers[on?'enable':'disable'](1);$('pplT').textContent=on?'사람 숨기기':'사람 보이기'}
 $('roofT').onclick=()=>setRoof(!V3.roofOn);$('pplT').onclick=()=>setPeople(V3.pplOn===false);
 $('fsBtn').onclick=async()=>{const h=$('c3');if(document.fullscreenElement){document.exitFullscreen();return}if(h.classList.toggle('fs',false)===false&&$('fsBtn').dataset.fs){delete $('fsBtn').dataset.fs;$('fsBtn').textContent='전체화면';return}
