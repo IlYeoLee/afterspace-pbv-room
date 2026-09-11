@@ -288,8 +288,8 @@ ol.steps li.on{color:var(--navy);font-weight:800}
       <li>문 맞은편 벽 가운데 회전 좌석. 멈춰 있을 때(탑승 · 머묾)는 늘 방 쪽을 보고 여섯 명이 모두 시야 안</li>
       <li>달리는 동안에도 방(문) 쪽을 봐서 여섯 명이 늘 시야 안. 옆보기 좌석 규정은 확인이 필요하고, 안 되면 이동 중에만 앞보기로 잠금</li>
       <li>선생님도 아이와 같은 접이 스마트 책상(650 × 330)을 무릎 위로 펴서, 문 쪽을 본 채로 앞뒤 대형 화면 2개와 아이 6명 화면을 조종</li>
-      <li>정차하면 선생님 쪽 옆벽 1.3 m가 밖으로 400 밀려 나오는 확장부(슬라이드아웃). 선생님 좌석이 그 안으로 들어가 벽 쪽 줄 아이 시선에서 빠짐</li>
-      <li>확장부 안 선생님 좌석 양옆 = 실습 도구 수납 (400 × 400, 높이 1,000). 달릴 땐 접혀 원래 폭</li>
+      <li>차체를 양쪽 200씩 넓힌 확폭 전용 차체(겉 폭 약 2,465, 법정 최대 2,500). 실내 왼쪽 400 띠를 따로 둠</li>
+      <li>그 띠 가운데에 선생님 좌석 → 아이들 줄 밖이라 시선을 가리지 않음. 띠 나머지는 아이들 옆 수납(줄 옆 높이 1,100, 선생님 양옆 높이 750)</li>
       <li>좌석과 책상을 한 덩어리로 옆벽 가운데에 모아 양쪽 끝자리 아이와 약 450씩 띄움</li>
       <li>문 쪽을 막지 않음</li>
       <li>Care Yard에서는 문 쪽이 늘 안쪽 데크를 향하게 정차</li></ul></div>
@@ -331,6 +331,7 @@ const BODIES={
   pv5hr:{name:'PV5 롱·하이루프 · 무인',L:3740,W:1565,Wa:1330,H:1700,ext:[4890,1895],front:1000,arch:[2465,3225]},
   pv7:{name:'PV7 콘셉트 · 무인',L:4120,W:1735,Wa:1450,H:1650,ext:[5270,2065],front:1000,arch:[2890,3690]},
   pv7hr:{name:'PV7 하이루프 · 무인 (추정)',L:4120,W:1735,Wa:1450,H:1950,ext:[5270,2065],front:1000,arch:[2890,3690]},
+  pv7w:{name:'PV7 하이루프 · 확폭 전용 차체 (추정)',L:4120,W:2135,Wa:1450,H:1950,ext:[5270,2465],front:1000,arch:[2890,3690],side:400},
   pv7l:{name:'PV7 롱 휠베이스 · 무인 (추정)',L:4750,W:1735,Wa:1450,H:1650,ext:[5900,2065],front:1000,arch:[3520,4320]},
 };
 const LAYS={
@@ -387,9 +388,9 @@ function build(bodyId,lay,n,door){
     o.narrow=(x,y)=>x>W-260; o.swivel=false; o.rearDoor=false; o.screenAll=true; o.faces='none';
     o.archFeet=[r1,r2].filter(y=>y-300<B.arch[1]&&y>B.arch[0]).length*2;
   } else if(lay==='D'){
-    const FU=300,RU=350,sw=(W-(n+1)*P)/n,m0=FU+SD,m1=L-RU-SD,mc=(m0+m1)/2;
+    const SX=B.side||0,FU=300,RU=350,sw=(W-SX-(n+1)*P)/n,m0=FU+SD,m1=L-RU-SD,mc=(m0+m1)/2;
     o.seatW=sw; o.need=FU+SD*2+RU+Math.max(door+200,1000); o.fits=o.need<=L;
-    for(let i=0;i<n;i++){const x=P+i*(sw+P);
+    for(let i=0;i<n;i++){const x=SX+P+i*(sw+P);
       o.seats.push(seatD(x,FU,sw,'down',{x:x+sw/2,y:m0+250}));
       o.seats.push(seatD(x,m1,sw,'up',{x:x+sw/2,y:m1-250}));
       o.desks.push({x:x-P/2,y:FU+BK+280,w:sw+P,h:330},{x:x-P/2,y:L-RU-BK-610,w:sw+P,h:330});
@@ -400,10 +401,12 @@ function build(bodyId,lay,n,door){
     o.paths=o.seats.map(s=>[o.out,o.inn,s.stand]);
     o.care={x:0,y:mc-550,w:450,h:450,face:'r',stayFace:'r',fold:120,stand:{x:720,y:mc-325}};
     o.tdesk={x:400,y:mc-550+225-325,w:330,h:650};
-    o.bay={y:mc-650,h:1300,d:400};o.careBay={...o.care,x:-400,y:mc-225,stand:{x:300,y:mc}};o.tdeskBay={x:0,y:mc-325,w:330,h:650};
-    o.bayUtils=[{x:-400,y:mc-650,w:400,h:400,h3:1,t:''},{x:-400,y:mc+250,w:400,h:400,h3:1,t:''}];
+    if(SX){o.care={x:0,y:mc-225,w:450,h:450,face:'r',stayFace:'r',fold:120,stand:{x:SX+300,y:mc}};o.tdesk={x:400,y:mc-325,w:330,h:650};
+      o.utils.push({x:0,y:FU,w:SX,h:m0+230-FU,h3:1.1,t:''},{x:0,y:m1-230,w:SX,h:L-RU-m1+230,h3:1.1,t:''},{x:0,y:m0+330,w:SX,h:mc-285-m0-330,h3:.75,t:''},{x:0,y:mc+285,w:SX,h:m1-330-mc-285,h3:.75,t:''})}
+    else{o.bay={y:mc-650,h:1300,d:400};o.careBay={...o.care,x:-400,y:mc-225,stand:{x:300,y:mc}};o.tdeskBay={x:0,y:mc-325,w:330,h:650};
+    o.bayUtils=[{x:-400,y:mc-650,w:400,h:400,h3:1,t:''},{x:-400,y:mc+250,w:400,h:400,h3:1,t:''}]}
     o.utils.push({x:0,y:0,w:W,h:FU,t:'공용 수납 · 구급'},{x:0,y:L-RU,w:W,h:RU,t:'체험 장비 · 우비 (뒷문)'});
-    const sh9=Math.max(0,Math.min(B.H-50-1200,W*.92*9/16)),sw9=sh9*16/9;o.screens.push({x:(W-sw9)/2,y:0,w:sw9,h:sh9,band:1,t:'대형 화면 · 뒷줄이 봄'},{x:(W-sw9)/2,y:L,w:sw9,h:sh9,band:1,t:'대형 화면 · 앞줄이 봄'});
+    const sh9=Math.max(0,Math.min(B.H-50-1200,(W-SX)*.92*9/16)),sw9=sh9*16/9,sx9=SX+(W-SX-sw9)/2;o.screens.push({x:sx9,y:0,w:sw9,h:sh9,band:1,t:'대형 화면 · 뒷줄이 봄'},{x:sx9,y:L,w:sw9,h:sh9,band:1,t:'대형 화면 · 앞줄이 봄'});
     o.floor.push({x:0,y:m0,w:W,h:m1-m0}); o.floorStay.push({x:0,y:m0+230,w:W,h:m1-m0-460});
     o.clearBoard=Math.min(m1-m0,W-300); o.clearStay=m1-m0-460; o.floorTxt=`바닥 ${fmt(m1-m0)} × ${fmt(W)}`;
     o.narrow=(x,y)=>x>W-260; o.swivel=false; o.rearDoor=false; o.screenAll=true; o.screenBand=true; o.faces='all';
@@ -559,6 +562,7 @@ function checks(o){
   o.rearDoor?add('fail','뒷문 탑승 · 전진 도킹하면 차량 동선 쪽으로 열림','Care Yard 원칙 PEOPLE INSIDE / VEHICLES OUTSIDE와 충돌'):add('ok','옆문이 아이 쪽 데크로 열림');
   o.faces==='all'?add('ok','토론: 아이끼리 얼굴이 보이고 선생님이 모두의 얼굴을 봄'):o.faces==='some'?add('warn','토론: 머묾 때 회전해야 얼굴이 보임'):add('fail','토론: 앞사람 뒤통수만 보임','교실·자습실 구조');
   o.screenAll?add('ok',o.screenBand?'모든 아이가 맞은편 줄 머리 위 대형 화면을 봄 · 앞뒤 2면':'모든 아이가 앞 대형 화면을 봄',o.screenBand?'고개를 돌리지 않고 친구 얼굴과 화면을 같이 봄 · 두 화면은 같은 내용':''):add('fail','앞줄이 대형 화면을 등짐','공용 화면을 앞뒤 2면으로 나눠야 함 · 한 화면 수업 불가');
+  if(B.side&&o.lay==='D')add('ok',`확폭 차체 · 겉 폭 ${fmt(B.ext[1])} (법정 최대 2,500)`,'왼쪽 400 띠에 선생님 자리와 아이들 옆 수납 · 좁은 골목 회전은 주의');
   if(o.bay)add('ok','선생님 확장부 400 · 정차 때만 펼침','선생님이 벽 쪽 줄 시선 밖으로 빠짐 · 펼친 폭 약 '+fmt(B.ext[1]+o.bay.d)+' (법정 최대 2,500) · 달릴 땐 접힘');
   if(o.care&&(o.care.face==='r'||o.care.face==='l'))add('warn','선생님 좌석은 이동 중에도 방(문) 쪽을 봄 · 옆보기','EU는 이런 차급의 옆보기 좌석을 금지 · 국내 적용 여부 확인 필요 · 안 되면 이동 중에만 앞보기로 잠금');
   if(o.tools)add('ok',`실습 도구장 높이 ${o.tools} · 아이 앉은 눈높이 약 970보다 낮아 시선 안 가림`,'선생님은 무릎 위 접이 책상(650 × 330)으로 앞뒤 화면 2개 제어');
@@ -576,7 +580,7 @@ function checks(o){
 </script>
 <script>
 const $=id=>document.getElementById(id);
-const st={body:'pv7hr',lay:'D',n:3,mode:'board',door:1300};
+const st={body:'pv7w',lay:'D',n:3,mode:'board',door:1300};
 let anim=null;
 const cache={};
 function times(o,k){const key=[o.B.name,o.B.L,o.B.W,o.B.Wa,o.B.arch,o.lay,o.n,st.door].join();return cache[key]||(cache[key]={board:runSim(o,'board'),exit:runSim(o,'exit'),emer:runSim(o,'emer')})}
