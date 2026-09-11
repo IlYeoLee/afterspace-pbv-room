@@ -847,9 +847,9 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
     x.fillStyle='#FFFFFF';x.globalAlpha=.9;x.font='300 120px "42dot Sans",sans-serif';x.fillText('16:40',60,190);x.font='700 44px "42dot Sans",sans-serif';x.fillText('ART · 수채화 색 섞기',64,270);x.globalAlpha=1;
     x.fillStyle='#FF2D3D';x.fillRect(64,320,28,28);[['#FF8A1F',0],['#FFB800',1],['#00B84A',2],['#8A1FFF',3]].forEach(([c,i])=>{x.fillStyle=c;x.globalAlpha=.85;x.fillRect(w-520+i*120,h-260,100,160)});x.globalAlpha=1});
   const sm=new T.MeshStandardMaterial({map:scrT,emissive:'#FFFFFF',emissiveMap:scrT,emissiveIntensity:.55,roughness:.3});
-  const bT=tex(1600,900,(x,w,h)=>{x.fillStyle='#1B2A5E';x.fillRect(0,0,w,h);x.fillStyle='#FFFFFF';x.globalAlpha=.92;x.font='300 150px "42dot Sans",sans-serif';x.fillText('16:40',70,250);
-    x.font='700 52px "42dot Sans",sans-serif';x.fillText('ART · 수채화 색 섞기',470,210);x.globalAlpha=.7;x.font='400 40px "42dot Sans",sans-serif';x.fillText('다 함께 · 빨강 + 노랑 = 주황',472,280);x.globalAlpha=1;
-    x.fillStyle='#FF2D3D';x.fillRect(74,300,30,30);[['#FF8A1F',0],['#FFB800',1],['#00B84A',2],['#8A1FFF',3]].forEach(([c,i])=>{x.fillStyle=c;x.globalAlpha=.9;x.fillRect(w-560+i*130,90,110,250)});x.globalAlpha=1});
+  const bT=tex(1600,900,(x,w,h)=>{x.fillStyle='#1B2A5E';x.fillRect(0,0,w,h);x.fillStyle='#FFFFFF';x.globalAlpha=.92;x.font='300 220px "42dot Sans",sans-serif';x.fillText('16:40',90,300);
+    x.font='700 68px "42dot Sans",sans-serif';x.fillText('ART · 수채화 색 섞기',96,430);x.globalAlpha=.7;x.font='400 48px "42dot Sans",sans-serif';x.fillText('다 함께 · 빨강 + 노랑 = 주황',98,510);x.globalAlpha=1;
+    x.fillStyle='#FF2D3D';x.fillRect(100,570,36,36);[['#FF8A1F',0],['#FFB800',1],['#00B84A',2],['#8A1FFF',3]].forEach(([c,i])=>{x.fillStyle=c;x.globalAlpha=.9;x.fillRect(96+i*230,660,200,160)});x.globalAlpha=1});
   const smB=new T.MeshStandardMaterial({map:bT,emissive:'#FFFFFF',emissiveMap:bT,emissiveIntensity:.55,roughness:.3});
   for(const sc of o.screens){const sw=sc.w*k,sh=sc.band?sc.h*k:sc.side==='l'?sw*3/7:sw*9/16,p=new T.Mesh(new T.PlaneGeometry(sw,sh),sc.band?smB:sm),yb=sc.band?1.12:Math.max(BELT,Hc-.06-sh);
     const fz=Math.max(0,...o.utils.filter(u=>u.y===0).map(u=>u.y+u.h))*k,rz=Math.min(o.B.L,...o.utils.filter(u=>u.y>0&&u.w>=o.B.W*.9).map(u=>u.y))*k;
