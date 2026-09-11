@@ -811,8 +811,11 @@ function camSet(k){(V3.labels||[]).forEach(l=>l.visible=!/^k\d+$/.test(k)&&V3.la
   const o=V3.o,W=o.B.W/1e3,L=o.B.L/1e3,d=o.door,dz=d.side==='r'?(d.a+d.b)/2e3:L;V3.cam.fov=k==='in'?60:35;V3.cam.updateProjectionMatrix();
   const P={door:[[W+4.2,4.6,dz+3.2],[W/2,.3,dz-.2]],top:[[W/2+.01,L*1.6+3,L/2+1.2],[W/2,0,L/2]],in:[[W-.25,1.2,dz+.3],[0,.95,dz]],desk:[[W+.35,2.35,dz+1.5],[W*.45,.55,.55]],ext:[[W+5.4,3.8,-4.6],[W/2,.4,L*.42]]}[k];V3.cam.position.set(...P[0]);V3.ctl.target.set(...P[1]);V3.ctl.update()}
 function on3D(o,mode){if(!V3.on||!window.THREE)return;if(!V3.r)init3D();kidButtons(o);const first=!V3.o||V3.o.B!==o.B||V3.o.lay!==o.lay;build3D(o,mode);if(first)camSet('door')}
-function capture3D(){const r=V3.r,pr=r.getPixelRatio(),lv=(V3.labels||[]).map(l=>l.visible);(V3.labels||[]).forEach(l=>l.visible=false);r.setPixelRatio(3);r.render(V3.scene,V3.cam);
-  const url=r.domElement.toDataURL('image/png');r.setPixelRatio(pr);(V3.labels||[]).forEach((l,i)=>l.visible=lv[i]);const a=document.createElement('a');a.href=url;a.download='afterspace-pbv-3d.png';document.body.appendChild(a);a.click();a.remove()}
+async function capture3D(){const r=V3.r,pr=r.getPixelRatio(),lv=(V3.labels||[]).map(l=>l.visible);(V3.labels||[]).forEach(l=>l.visible=false);r.setPixelRatio(3);r.render(V3.scene,V3.cam);
+  const blob=await new Promise(ok=>r.domElement.toBlob(ok,'image/png'));r.setPixelRatio(pr);(V3.labels||[]).forEach((l,i)=>l.visible=lv[i]);const name='afterspace-pbv-3d.png';
+  if(window.claude&&window.claude.use){const dl=await window.claude.use('downloads');if(!dl){$('simMsg').textContent='이 화면에서는 저장할 수 없음 · 배포 링크에서 저장';return}
+    try{await dl.save({filename:name,data:blob});$('simMsg').textContent='이미지 저장됨'}catch(e){if(e&&e.code!=='declined')$('simMsg').textContent='저장 안 됨 · '+(e.code||'')}return}
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
 function kidButtons(o){$('kidCams').innerHTML=o.seats.map((s,i)=>`<button class="line" data-k="${i}">아이 ${i+1} 눈</button>`).join('');$('kidCams').querySelectorAll('button').forEach(b=>b.onclick=()=>camSet('k'+b.dataset.k))}
 function tex(w,h,f){const c=document.createElement('canvas');c.width=w;c.height=h;f(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=8;return t}
 function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=(B.ext[1]-B.W)/2*k,BELT=.95;
