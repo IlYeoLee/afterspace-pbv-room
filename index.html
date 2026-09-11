@@ -406,7 +406,7 @@ function build(bodyId,lay,n,door){
     else{o.bay={y:mc-650,h:1300,d:400};o.careBay={...o.care,x:-400,y:mc-225,stand:{x:300,y:mc}};o.tdeskBay={x:0,y:mc-325,w:330,h:650};
     o.bayUtils=[{x:-400,y:mc-650,w:400,h:400,h3:1,t:''},{x:-400,y:mc+250,w:400,h:400,h3:1,t:''}]}
     o.utils.push({x:0,y:0,w:W,h:FU,t:'공용 수납 · 구급'},{x:0,y:L-RU,w:W,h:RU,t:'체험 장비 · 우비 (뒷문)'});
-    const sh9=Math.max(0,Math.min(B.H-50-1200,(W-SX)*.92*9/16)),sw9=sh9*16/9,sx9=SX+(W-SX-sw9)/2;o.screens.push({x:sx9,y:0,w:sw9,h:sh9,band:1,t:'대형 화면 · 뒷줄이 봄'},{x:sx9,y:L,w:sw9,h:sh9,band:1,t:'대형 화면 · 앞줄이 봄'});
+    const sh9=Math.max(0,B.H-50-1200),sw9=W-100,sx9=50;o.screens.push({x:sx9,y:0,w:sw9,h:sh9,band:1,t:'대형 화면 · 뒷줄이 봄'},{x:sx9,y:L,w:sw9,h:sh9,band:1,t:'대형 화면 · 앞줄이 봄'});
     o.floor.push({x:0,y:m0,w:W,h:m1-m0}); o.floorStay.push({x:0,y:m0+230,w:W,h:m1-m0-460});
     o.clearBoard=Math.min(m1-m0,W-300); o.clearStay=m1-m0-460; o.floorTxt=`바닥 ${fmt(m1-m0)} × ${fmt(W)}`;
     o.narrow=(x,y)=>x>W-260; o.swivel=false; o.rearDoor=false; o.screenAll=true; o.screenBand=true; o.faces='all';
@@ -805,7 +805,7 @@ function drawDesk(){
 }
 function drawBoards(){const o=cur(),Wd=podSW+P,sH=Math.min(282,(Wd-40)*9/16),sW=sH*16/9,sc=o.screens.find(x=>x.band),bh=sc?sc.h:0;
   $('boards').innerHTML=[['책상 화면 실제 크기',`${fmt(sW)} × ${fmt(sH)} mm · ${Math.round(Math.hypot(sW,sH)/25.4)}″ 16:9`],['책상 피그마 대지','1600 × 900 (16:9) · 가운데 x 800에 접힘선, 좌우 20 px 안전 여백'],
-   ['캐빈 화면 실제 크기 (앞뒤 2면)',sc?`${fmt(sc.w)} × ${fmt(bh)} mm · ${Math.round(Math.hypot(sc.w,bh)/25.4)}″ · 16:9`:'배치 D에서 확인'],['캐빈 피그마 대지','1920 × 1080 (16:9) · 두 면 같은 화면']].map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('')}
+   ['캐빈 화면 실제 크기 (앞뒤 2면)',sc?`${fmt(sc.w)} × ${fmt(bh)} mm · ${Math.round(Math.hypot(sc.w,bh)/25.4)}″ · 약 ${(sc.w/bh).toFixed(1)}:1`:'배치 D에서 확인'],['캐빈 피그마 대지',sc?`3840 × ${Math.round(3840*bh/sc.w/10)*10} · 가운데 1920 × 1080 안에 핵심, 양옆은 배경 연장`:'—']].map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('')}
 {const oc=window.onCfg;window.onCfg=o=>{oc(o);drawDesk();drawBoards()};drawDesk();drawBoards();}
 </script>
 <script>
@@ -917,7 +917,8 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   const bT=tex(1600,900,(x,w,h)=>{x.fillStyle='#1B2A5E';x.fillRect(0,0,w,h);x.fillStyle='#FFFFFF';x.globalAlpha=.92;x.font='300 220px "42dot Sans",sans-serif';x.fillText('16:40',90,300);
     x.font='700 68px "42dot Sans",sans-serif';x.fillText('ART · 수채화 색 섞기',96,430);x.globalAlpha=.7;x.font='400 48px "42dot Sans",sans-serif';x.fillText('다 함께 · 빨강 + 노랑 = 주황',98,510);x.globalAlpha=1;
     x.fillStyle='#FF2D3D';x.fillRect(100,570,36,36);[['#FF8A1F',0],['#FFB800',1],['#00B84A',2],['#8A1FFF',3]].forEach(([c,i])=>{x.fillStyle=c;x.globalAlpha=.9;x.fillRect(96+i*230,660,200,160)});x.globalAlpha=1});
-  const cabT=new T.TextureLoader().load(FIG_CABIN);cabT.encoding=T.sRGBEncoding;cabT.anisotropy=8;const sm=new T.MeshStandardMaterial({map:cabT,emissive:'#FFFFFF',emissiveMap:cabT,emissiveIntensity:.55,roughness:.25});
+  const bs0=o.screens.find(x=>x.band),car0=bs0&&bs0.h?bs0.w/bs0.h:16/9,cw=2048,ch=Math.round(cw/car0),cc=document.createElement('canvas');cc.width=cw;cc.height=ch;const c2d=cc.getContext('2d');c2d.fillStyle='#EEF1F5';c2d.fillRect(0,0,cw,ch);
+  const cabT=new T.CanvasTexture(cc);cabT.encoding=T.sRGBEncoding;cabT.anisotropy=8;{const im=new Image();im.onload=()=>{const iw=Math.min(cw,ch*im.width/im.height),ix=(cw-iw)/2;c2d.drawImage(im,0,0,2,im.height,0,0,ix+2,ch);c2d.drawImage(im,im.width-2,0,2,im.height,ix+iw-2,0,ix+2,ch);c2d.drawImage(im,ix,0,iw,ch);cabT.needsUpdate=true};im.src=FIG_CABIN}const sm=new T.MeshStandardMaterial({map:cabT,emissive:'#FFFFFF',emissiveMap:cabT,emissiveIntensity:.55,roughness:.25});
   const fz=Math.max(0,...o.utils.filter(u=>u.y===0).map(u=>u.y+u.h))*k,rz=Math.min(o.B.L,...o.utils.filter(u=>u.y>0&&u.w>=o.B.W*.9).map(u=>u.y))*k;
   for(const sc of o.screens){const sw=sc.w*k,sh=sc.band?sc.h*k:sc.side==='l'?sw*3/7:sw*9/16,yb=sc.band?1.2:Math.max(BELT,Hc-.06-sh),p=new T.Mesh(new T.PlaneGeometry(sw,sh),sm),g=new T.Group();g.add(p);
     const bz=new T.Mesh(rgeo(sw+.02,sh+.02,.02,.008),darkScr);bz.position.z=-.011;g.add(bz);
@@ -996,7 +997,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
      if(o.stow){const a0=o.stow.find(a=>Math.abs(a.x-(s1.x+s1.w))<2&&Math.abs(a.y-s1.y)<600);if(a0)tag(`칸막이 ${P} · 책상 수납`,(a0.x+a0.w/2)*k,.72,(a0.y+a0.h/2)*k)}
      const dk=o.desks.find(q=>Math.abs(q.x-(s1.x-P/2))<2&&((s1.face==='up'&&q.y<s1.y)||(s1.face==='down'&&q.y>s1.y)));
      if(dk&&mode==='stay')dim([dk.x*k,.62,(s1.face==='up'?dk.y:dk.y+dk.h)*k],[(dk.x+dk.w)*k,.62,(s1.face==='up'?dk.y:dk.y+dk.h)*k],`책상 ${fmt(dk.w)} × ${dk.h} · 높이 580`,[(dk.x+dk.w/2)*k,.72,(s1.face==='up'?dk.y:dk.y+dk.h)*k])}
-   const sc=o.screens.find(x=>x.band);if(sc){const zz=(sc.y===0?fz+.03:rz-.03);dim([sc.x*k,1.18,zz],[(sc.x+sc.w)*k,1.18,zz],`화면 ${fmt(sc.w)} × ${fmt(sc.h)} · 16:9`,[(sc.x+sc.w/2)*k,1.03,zz]);
+   const sc=o.screens.find(x=>x.band);if(sc){const zz=(sc.y===0?fz+.03:rz-.03);dim([sc.x*k,1.18,zz],[(sc.x+sc.w)*k,1.18,zz],`화면 ${fmt(sc.w)} × ${fmt(sc.h)} · 약 ${(sc.w/sc.h).toFixed(1)}:1`,[(sc.x+sc.w/2)*k,1.03,zz]);
      const sc2=o.screens.find(x=>x.band&&x.y>0);if(sc2){const z2=rz-.03;dim([sc2.x*k-.03,0,z2],[sc2.x*k-.03,1.2,z2],'바닥에서 1,200',[sc2.x*k-.03,.75,z2])}}
    const tc=o.utils.find(u=>u.h3);if(B.side&&o.lay==='D')o.utils.filter(u=>u.h3).forEach(u=>tag(`${u.h3>1?'아이 옆 수납':'선생님 수납'} ${fmt(u.h)} × ${u.w} · 높이 ${fmt(u.h3*1000)}`,(u.x+u.w)*k+.14,u.h3+.1,(u.y+u.h/2)*k));else if(tc)tag(`실습 도구장 ${tc.h} × ${tc.w} · 높이 ${Math.round(tc.h3*1000)}`,(tc.x+tc.w)*k+.12,tc.h3+.12,(tc.y+tc.h/2)*k);if(tdk)tag('선생님 책상 650 × 330 · 판 전체 화면',(tdk.x+tdk.w)*k+.1,.72,(tdk.y+tdk.h/2)*k);if(bayOn){tag('선생님 확장부 400 × 1,300 · 정차 때만',-o.bay.d*k,1.75,(o.bay.y+o.bay.h/2)*k);tag('선생님 수납 400 × 400',-o.bay.d*k+.2,1.12,(o.bay.y+200)*k)}
    if(o.lay==='D')tag('앞 수납장',W/2,1.25,Zf/2+.1);
