@@ -954,11 +954,11 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   V3.rig=o.seats.map(s=>{const f=(mode==='stay'&&s.stayFace)?s.stayFace:s.face,w=s.w*k,g=seat((s.x+s.w/2)*k,(s.y+s.h/2)*k,w,f);if(!o.stow)return null;
     const dr=new T.Group();g.add(dr);rb(dr,cDrw,-w/2+.035,-.23,w-.07,.44,.22,.03,.012);rb(dr,navy,-.06,-.235,.12,.012,.02,.19,.004,false);
     const bag=new T.Mesh(rgeo(.3,.13,.4,.04),cBag);bag.castShadow=true;S.add(bag);bag.visible=false;
-    const H=(w+.05)/2,leaf=b=>{const l=new T.Group();g.add(l);const base=new T.Mesh(rgeo(H,.016,.33,.006),deskTop);base.castShadow=true;l.add(base);
+    const H=(w-.03)/2,leaf=b=>{const l=new T.Group();g.add(l);const base=new T.Mesh(rgeo(H,.016,.33,.006),navy);base.castShadow=true;l.add(base);
       const top=new T.Mesh(new T.PlaneGeometry(H-.02,.31),darkScr);top.rotation.x=-Math.PI/2;top.position.y=.0085;l.add(top);
       if(b){const bot=top.clone();bot.rotation.x=Math.PI/2;bot.position.y=-.0085;l.add(bot)}
       const edge=new T.Mesh(new T.BoxGeometry(H-.01,.004,.004),lightW);edge.position.set(0,0,-.166);l.add(edge);return l};
-    const scr=new T.Mesh(new T.PlaneGeometry(2*H-.012,.31),dm);scr.rotation.x=-Math.PI/2;scr.position.set(w/2+.025-H,.5895,-.315);g.add(scr);
+    const scr=new T.Mesh(new T.PlaneGeometry(2*H-.012,.31),dm);scr.rotation.x=-Math.PI/2;scr.position.set(0,.5895,-.315);g.add(scr);
     return {g,dr,bag,A:leaf(0),Bf:leaf(1),scr,w,H}});
   V3.deskP=V3.deskP===undefined?(mode==='stay'?1:0):V3.deskP;V3.deskTo=mode==='stay'?1:0;poseRigs();poseDoors();
   for(const a of (o.stow||[])){rb(car,lock,a.x*k,a.y*k,a.w*k,a.h*k,.6,0,.015);rb(car,navy,a.x*k+.004,a.y*k+.02,a.w*k-.008,a.h*k-.04,.012,.6,.005,false)}
@@ -1029,9 +1029,9 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
 // 책상: 세움(상자 속) → 올라오며 앞으로 → 무릎 위로 눕힘 → 반쪽 펼침. p 0~1
 function poseDoors(){const t=V3.doorP;(V3.leaves||[]).forEach(L=>{const c=1-t,sx=Math.min(1,c/.25),sz=Math.max(0,(c-.25)/.75);L.g.position.set(L.dx*(c<.25?sx*.3:.3+.7*Math.max(0,(c-.85)/.15)),0,L.dz*sz)})}
 function poseRigs(){(V3.rig||[]).forEach(r=>{if(!r)return;const p=r.p!=null?r.p:V3.deskP,{A,Bf,w,H}=r,e=v=>Math.max(0,Math.min(1,v)),up=e(p*3),fl=e(p*3-1),op=e(p*3-2);
-  const ax=w/2+.025,sv={x:ax,y:.36+H/2+.25*up,z:-.015-.3*up},fx=ax-H/2,fold=ax-H,fz=-.315;
-  A.rotation.set(0,0,Math.PI/2*(1-fl));A.position.set(lp(sv.x,fx,fl),lp(sv.y,.58,fl),lp(sv.z,fz,fl));
-  const ph=Math.PI*op;if(op>0){Bf.rotation.set(0,0,ph);Bf.position.set(fold+H/2*Math.cos(ph),.58+.015*(1-op)+H/2*Math.sin(ph),fz)}else{Bf.rotation.copy(A.rotation);Bf.position.set(A.position.x+.016*(1-fl),A.position.y+.015*fl,A.position.z)}
+  const ax=w/2+.025,sv={x:ax,y:.36+H/2+.25*up,z:-.015-.3*up},fx=ax-H/2,fold=ax-H,fz=-.315,c=(ax-H)*fl;
+  A.rotation.set(0,0,Math.PI/2*(1-fl));A.position.set(lp(sv.x,fx,fl)-c,lp(sv.y,.58,fl),lp(sv.z,fz,fl));
+  const ph=Math.PI*op;if(op>0){Bf.rotation.set(0,0,ph);Bf.position.set(fold+H/2*Math.cos(ph)-c,.58+.015*(1-op)+H/2*Math.sin(ph),fz)}else{Bf.rotation.copy(A.rotation);Bf.position.set(A.position.x+.016*(1-fl),A.position.y+.015*fl,A.position.z)}
   r.scr.visible=p>.995})}
 function bagAt(r,e,ins){const q=new THREE.Vector3(0,.15,(ins?-.23+.2:0)-.38*e);return r.g.localToWorld(q)}
 function tick3D(ag){if(!V3.on||!V3.kids.length)return;
