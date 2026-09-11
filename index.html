@@ -875,7 +875,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   const car=new T.Group();S.add(car);
   const X0=-ew,XW=W+2*ew,Zf=-B.front*k,Zr=L+.15,BL=Zr-Zf,fw=(-B.front+880)*k,rw=(B.arch[0]+B.arch[1])/2e3;
   // ── 차체: 하부 · 클래딩 · 앞 · 뒤 · 휠아치 · 바퀴
-  rb(car,paint,X0,Zf+.15,XW,BL-.3,.34,-.34,.06);rb(car,clad,X0-.01,Zf+.35,XW+.02,BL-.7,.16,-.4,.05);
+  rb(car,paint,X0+.3,Zf+.15,XW-.6,BL-.3,.34,-.34,.06);rb(car,clad,X0+.3,Zf+.35,XW-.6,BL-.7,.16,-.4,.05);
   const floorP=new T.Mesh(new T.PlaneGeometry(W,L),floorM);floorP.rotation.x=-Math.PI/2;floorP.position.set(W/2,.002,L/2);floorP.receiveShadow=true;car.add(floorP);
   rb(car,paint,X0,Zf,XW,.7,.84,-.32,.14);rb(car,roofM,X0,Zf,XW,.7,.45,.5,.1);rb(car,clad,X0+.24,Zf-.06,XW-.48,.3,.34,-.3,.06);rb(car,clad,X0+.08,Zf+.02,XW-.16,.12,.16,-.4,.05);
   rb(car,lock,0,Zf+.7,W,-Zf-.7,1.1,0,.03);for(let i=1;i<4;i++)rb(car,mat('#DDE1E8'),W*i/4-.003,-.004,.006,.008,1.04,.03,.002,false);rb(car,mat('#FF2D3D',{emissive:'#FF2D3D',emissiveIntensity:.5}),W*.12,-.006,.08,.008,.08,.9,.004,false);rb(car,roofM,X0,Zf+.02,XW,.22,.07,Hc,.03);
@@ -897,7 +897,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
     const ar=new T.Mesh(archG,clad);ar.rotation.y=Math.PI/2;ar.position.set(sd<0?X0-.035:X0+XW+.035-.06,-.04,wz);ar.position.x+=sd<0?0:0;ar.castShadow=true;car.add(ar)}
   const aw=(W-B.Wa)/2*k;rb(car,lock,0,B.arch[0]*k,aw+.04,(B.arch[1]-B.arch[0])*k,.42,0,.04);rb(car,lock,W-aw-.04,B.arch[0]*k,aw+.04,(B.arch[1]-B.arch[0])*k,.42,0,.04);
   // 옆면: 흰 아래 + 검은 유리 위 + 벨트라인 크롬
-  const side=(x0,w,z0,d)=>{if(d<=.01)return;rb(car,paint,x0,z0,w,d,BELT+.3,-.3,.03);rb(car,blackG,x0,z0,w,d,Hc-BELT,BELT,.02,false);rb(car,alu,x0+(x0<0?-.004:w-.004),z0,.008,d,.012,BELT-.006,.004,false);rb(car,roofM,x0,z0,w,d,.06,Hc,.02)};
+  const side=(x0,w,z0,d)=>{if(d<=.01)return;const ze=z0+d;let zs=z0;for(const [a,b] of [[fw-.5,fw+.5],[rw-.5,rw+.5]]){if(b<=zs||a>=ze)continue;if(a>zs)rb(car,paint,x0,zs,w,a-zs,.7,-.3,.03);zs=Math.max(zs,b)}if(ze>zs)rb(car,paint,x0,zs,w,ze-zs,.7,-.3,.03);rb(car,paint,x0,z0,w,d,BELT-.4,.4,.03);rb(car,blackG,x0,z0,w,d,Hc-BELT,BELT,.02,false);rb(car,alu,x0+(x0<0?-.004:w-.004),z0,.008,d,.012,BELT-.006,.004,false);rb(car,roofM,x0,z0,w,d,.06,Hc,.02)};
   const bayOn=o.bay&&mode!=='move';
   if(bayOn){const by=o.bay.y*k,bh=o.bay.h*k,bd=o.bay.d*k,bx=X0-bd;side(X0,ew,Zf+.06,by-Zf-.06);side(X0,ew,by+bh,L-by-bh);side(bx,ew,by,bh);
     for(const z of [by-.05,by+bh])rb(car,paint,bx,z,bd+ew,.05,BELT+.3,-.3,.02),rb(car,blackG,bx,z,bd+ew,.05,Hc-BELT,BELT,.02,false),rb(car,roofM,bx,z,bd+ew,.05,.06,Hc,.02);
