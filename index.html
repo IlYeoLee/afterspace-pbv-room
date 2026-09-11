@@ -289,7 +289,8 @@ ol.steps li.on{color:var(--navy);font-weight:800}
       <li>달리는 동안에도 방(문) 쪽을 봐서 여섯 명이 늘 시야 안. 옆보기 좌석 규정은 확인이 필요하고, 안 되면 이동 중에만 앞보기로 잠금</li>
       <li>선생님도 아이와 같은 접이 스마트 책상(650 × 330)을 무릎 위로 펴서, 문 쪽을 본 채로 앞뒤 대형 화면 2개와 아이 6명 화면을 조종</li>
       <li>차체를 양쪽 200씩 넓힌 확폭 전용 차체(겉 폭 약 2,465, 법정 최대 2,500). 실내 왼쪽 400 띠를 따로 둠</li>
-      <li>그 띠 가운데에 선생님 좌석 → 아이들 줄 밖이라 시선을 가리지 않음. 띠 나머지는 아이들 옆 수납(줄 옆 높이 1,100, 선생님 양옆 높이 750)</li>
+      <li>그 띠 가운데에 선생님 좌석 → 아이들 줄 밖이라 시선을 가리지 않음. 선생님 양옆은 수납(높이 750)</li>
+      <li>아이 옆 띠는 문이 열릴 자리가 없어서 창 아래(950)까지 올라오는 턱. 윗면은 물병·책 올려두는 창턱 선반, 뚜껑을 위로 열면 칸</li>
       <li>좌석과 책상을 한 덩어리로 옆벽 가운데에 모아 양쪽 끝자리 아이와 약 450씩 띄움</li>
       <li>문 쪽을 막지 않음</li>
       <li>Care Yard에서는 문 쪽이 늘 안쪽 데크를 향하게 정차</li></ul></div>
@@ -402,7 +403,7 @@ function build(bodyId,lay,n,door){
     o.care={x:0,y:mc-550,w:450,h:450,face:'r',stayFace:'r',fold:120,stand:{x:720,y:mc-325}};
     o.tdesk={x:400,y:mc-550+225-325,w:330,h:650};
     if(SX){o.care={x:0,y:mc-225,w:450,h:450,face:'r',stayFace:'r',fold:120,stand:{x:SX+300,y:mc}};o.tdesk={x:400,y:mc-325,w:330,h:650};
-      o.utils.push({x:0,y:FU,w:SX,h:m0+230-FU,h3:1.1,t:''},{x:0,y:m1-230,w:SX,h:L-RU-m1+230,h3:1.1,t:''},{x:0,y:m0+330,w:SX,h:mc-285-m0-330,h3:.75,t:''},{x:0,y:mc+285,w:SX,h:m1-330-mc-285,h3:.75,t:''})}
+      o.utils.push({x:0,y:FU,w:SX,h:m0+230-FU,h3:.95,ledge:1,t:''},{x:0,y:m1-230,w:SX,h:L-RU-m1+230,h3:.95,ledge:1,t:''},{x:0,y:m0+330,w:SX,h:mc-285-m0-330,h3:.75,t:''},{x:0,y:mc+285,w:SX,h:m1-330-mc-285,h3:.75,t:''})}
     else{o.bay={y:mc-650,h:1300,d:400};o.careBay={...o.care,x:-400,y:mc-225,stand:{x:300,y:mc}};o.tdeskBay={x:0,y:mc-325,w:330,h:650};
     o.bayUtils=[{x:-400,y:mc-650,w:400,h:400,h3:1,t:''},{x:-400,y:mc+250,w:400,h:400,h3:1,t:''}]}
     o.utils.push({x:0,y:0,w:W,h:FU,t:'공용 수납 · 구급'},{x:0,y:L-RU,w:W,h:RU,t:'체험 장비 · 우비 (뒷문)'});
@@ -911,7 +912,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
       x.fillStyle='#3A4B86';x.fillRect(40,96,450,254);x.fillRect(530,96,450,254);x.fillStyle='#8C9BC8';x.fillRect(64,120,180,40);x.fillRect(554,120,180,40);
       for(let i=0;i<6;i++){x.fillStyle=['#FF8A1F','#FFB800','#00B84A','#8A1FFF','#FF2D3D','#C9D0E0'][i];x.fillRect(40+i*160,400,130,110)}x.fillStyle='#16224D';x.fillRect(0,h-40,w,40)});
       const tp=new T.Mesh(new T.PlaneGeometry(u.w*k-.04,u.h*k-.04),new T.MeshStandardMaterial({map:tt,emissive:'#FFFFFF',emissiveMap:tt,emissiveIntensity:.6,roughness:.2}));tp.rotation.set(-Math.PI/2,0,-Math.PI/2);tp.position.set((u.x+u.w/2)*k,hh+.027,(u.y+u.h/2)*k);car.add(tp);
-      rb(car,lightW,(u.x+u.w)*k+.02,u.y*k+.01,.006,u.h*k-.02,.006,hh+.01,.002,false)}for(let j=1;j<3;j++)rb(car,navy,u.w*k+.001,u.y*k+.08,.006,u.h*k-.16,.014,j*hh/3,.003,false);continue}
+      rb(car,lightW,(u.x+u.w)*k+.02,u.y*k+.01,.006,u.h*k-.02,.006,hh+.01,.002,false)}if(u.ledge){rb(car,navy,u.x*k+.03,u.y*k+.03,u.w*k-.06,.008,.004,hh+.026,.002,false);rb(car,navy,u.x*k+.03,(u.y+u.h)*k-.038,u.w*k-.06,.008,.004,hh+.026,.002,false)}else for(let j=1;j<3;j++)rb(car,navy,u.w*k+.001,u.y*k+.08,.006,u.h*k-.16,.014,j*hh/3,.003,false);continue}
     const n=Math.max(1,Math.round(u.w/560));for(let i=1;i<n;i++)rb(car,mat('#DDE1E8'),(u.x+u.w*i/n)*k-.003,(u.y<o.B.L/2?u.y+u.h:u.y)*k-.004,.006,.008,hh-.06,.03,.002,false)}
   // 대형 화면 (테 없는 16:9)
   const bT=tex(1600,900,(x,w,h)=>{x.fillStyle='#1B2A5E';x.fillRect(0,0,w,h);x.fillStyle='#FFFFFF';x.globalAlpha=.92;x.font='300 220px "42dot Sans",sans-serif';x.fillText('16:40',90,300);
@@ -999,7 +1000,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
      if(dk&&mode==='stay')dim([dk.x*k,.62,(s1.face==='up'?dk.y:dk.y+dk.h)*k],[(dk.x+dk.w)*k,.62,(s1.face==='up'?dk.y:dk.y+dk.h)*k],`책상 ${fmt(dk.w)} × ${dk.h} · 높이 580`,[(dk.x+dk.w/2)*k,.72,(s1.face==='up'?dk.y:dk.y+dk.h)*k])}
    const sc=o.screens.find(x=>x.band);if(sc){const zz=(sc.y===0?fz+.03:rz-.03);dim([sc.x*k,1.18,zz],[(sc.x+sc.w)*k,1.18,zz],`화면 ${fmt(sc.w)} × ${fmt(sc.h)} · 약 ${(sc.w/sc.h).toFixed(1)}:1`,[(sc.x+sc.w/2)*k,1.03,zz]);
      const sc2=o.screens.find(x=>x.band&&x.y>0);if(sc2){const z2=rz-.03;dim([sc2.x*k-.03,0,z2],[sc2.x*k-.03,1.2,z2],'바닥에서 1,200',[sc2.x*k-.03,.75,z2])}}
-   const tc=o.utils.find(u=>u.h3);if(B.side&&o.lay==='D')o.utils.filter(u=>u.h3).forEach(u=>tag(`${u.h3>1?'아이 옆 수납':'선생님 수납'} ${fmt(u.h)} × ${u.w} · 높이 ${fmt(u.h3*1000)}`,(u.x+u.w)*k+.14,u.h3+.1,(u.y+u.h/2)*k));else if(tc)tag(`실습 도구장 ${tc.h} × ${tc.w} · 높이 ${Math.round(tc.h3*1000)}`,(tc.x+tc.w)*k+.12,tc.h3+.12,(tc.y+tc.h/2)*k);if(tdk)tag('선생님 책상 650 × 330 · 판 전체 화면',(tdk.x+tdk.w)*k+.1,.72,(tdk.y+tdk.h/2)*k);if(bayOn){tag('선생님 확장부 400 × 1,300 · 정차 때만',-o.bay.d*k,1.75,(o.bay.y+o.bay.h/2)*k);tag('선생님 수납 400 × 400',-o.bay.d*k+.2,1.12,(o.bay.y+200)*k)}
+   const tc=o.utils.find(u=>u.h3);if(B.side&&o.lay==='D')o.utils.filter(u=>u.h3).forEach(u=>tag(`${u.ledge?'창턱 선반 · 위로 여는 칸':'선생님 수납'} ${fmt(u.h)} × ${u.w} · 높이 ${fmt(u.h3*1000)}`,(u.x+u.w)*k+.14,u.h3+.1,(u.y+u.h/2)*k));else if(tc)tag(`실습 도구장 ${tc.h} × ${tc.w} · 높이 ${Math.round(tc.h3*1000)}`,(tc.x+tc.w)*k+.12,tc.h3+.12,(tc.y+tc.h/2)*k);if(tdk)tag('선생님 책상 650 × 330 · 판 전체 화면',(tdk.x+tdk.w)*k+.1,.72,(tdk.y+tdk.h/2)*k);if(bayOn){tag('선생님 확장부 400 × 1,300 · 정차 때만',-o.bay.d*k,1.75,(o.bay.y+o.bay.h/2)*k);tag('선생님 수납 400 × 400',-o.bay.d*k+.2,1.12,(o.bay.y+200)*k)}
    if(o.lay==='D')tag('앞 수납장',W/2,1.25,Zf/2+.1);
    tag('선생님 회전 좌석',(c.x+c.w/2)*k+.15,1.55,(c.y+c.h/2)*k);
   }
