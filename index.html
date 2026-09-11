@@ -737,7 +737,7 @@ function drawPod(){
 }
 function podPlay(dir){cancelAnimationFrame(podRaf);podDir=dir;podT=dir>0?0:PTOT;let last=performance.now();
   if(matchMedia('(prefers-reduced-motion: reduce)').matches){podT=dir>0?PTOT:0;drawPod();return}
-  const f=now=>{podT=Math.max(0,Math.min(PTOT,podT+dir*(now-last)/1000));last=now;drawPod();if(podT>0&&podT<PTOT)podRaf=requestAnimationFrame(f)};podRaf=requestAnimationFrame(f)}
+  const f=now=>{podT=Math.max(0,Math.min(PTOT,podT+dir*Math.max(0,now-last)/1000));last=now;drawPod();if(dir>0?podT<PTOT:podT>0)podRaf=requestAnimationFrame(f)};podRaf=requestAnimationFrame(f)}
 $('podR').max=PTOT;$('podIn').onclick=()=>podPlay(1);$('podOut').onclick=()=>podPlay(-1);
 $('podR').oninput=e=>{cancelAnimationFrame(podRaf);podT=+e.target.value;drawPod()};
 
