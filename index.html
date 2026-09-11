@@ -877,7 +877,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   // ── 차체: 하부 · 클래딩 · 앞 · 뒤 · 휠아치 · 바퀴
   rb(car,paint,X0+.3,Zf+.15,XW-.6,BL-.3,.34,-.34,.06);rb(car,clad,X0+.3,Zf+.35,XW-.6,BL-.7,.16,-.4,.05);
   const floorP=new T.Mesh(new T.PlaneGeometry(W,L),floorM);floorP.rotation.x=-Math.PI/2;floorP.position.set(W/2,.002,L/2);floorP.receiveShadow=true;car.add(floorP);
-  rb(car,paint,X0,Zf,XW,.7,.84,-.32,.14);rb(car,roofM,X0,Zf,XW,.7,.45,.5,.1);rb(car,clad,X0+.24,Zf-.06,XW-.48,.3,.34,-.3,.06);rb(car,clad,X0+.08,Zf+.02,XW-.16,.12,.16,-.4,.05);
+  rb(car,paint,X0,Zf,XW,Math.min(.7,fw-.5-Zf),.84,-.32,.14);rb(car,roofM,X0,Zf,XW,.7,.45,.5,.1);rb(car,clad,X0+.24,Zf-.06,XW-.48,.3,.34,-.3,.06);rb(car,clad,X0+.08,Zf+.02,XW-.16,.12,.16,-.4,.05);
   rb(car,lock,0,Zf+.7,W,-Zf-.7,1.1,0,.03);for(let i=1;i<4;i++)rb(car,mat('#DDE1E8'),W*i/4-.003,-.004,.006,.008,1.04,.03,.002,false);rb(car,mat('#FF2D3D',{emissive:'#FF2D3D',emissiveIntensity:.5}),W*.12,-.006,.08,.008,.08,.9,.004,false);rb(car,roofM,X0,Zf+.02,XW,.22,.07,Hc,.03);
   const ledT=tex(1024,160,(x,w,h)=>{x.fillStyle='#FF2D3D';x.fillRect(0,0,w,h);x.fillStyle='#FFFFFF';x.font='500 96px "42dot Sans",sans-serif';x.textBaseline='middle';x.fillText('34',70,84);
     [0,1,2,3].forEach(i=>{x.globalAlpha=.45+i*.18;x.fillRect(360+i*46,70,26,26)});x.globalAlpha=1;[[0,2],[1,1],[1,3],[2,0],[2,4],[3,1],[3,2],[3,3],[4,0],[4,4]].forEach(([r,c])=>x.fillRect(820+c*22,40+r*22,20,20))});
