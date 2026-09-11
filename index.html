@@ -943,7 +943,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
       const edge=new T.Mesh(new T.BoxGeometry(H-.01,.004,.004),lightW);edge.position.set(0,0,-.166);l.add(edge);return l};
     const sh2=Math.min(.3,(2*H-.04)*9/16),scr=new T.Mesh(new T.PlaneGeometry(sh2*16/9,sh2),dm);scr.rotation.x=-Math.PI/2;scr.position.set(w/2+.025-H,.5895,-.315);g.add(scr);
     return {g,dr,bag,A:leaf(0),Bf:leaf(1),scr,w,H}});
-  V3.deskP=V3.deskP||0;V3.deskTo=mode==='stay'?1:0;poseRigs();poseDoors();
+  V3.deskP=V3.deskP===undefined?(mode==='stay'?1:0):V3.deskP;V3.deskTo=mode==='stay'?1:0;poseRigs();poseDoors();
   for(const a of (o.stow||[])){rb(car,lock,a.x*k,a.y*k,a.w*k,a.h*k,.6,0,.015);rb(car,navy,a.x*k+.004,a.y*k+.02,a.w*k-.008,a.h*k-.04,.012,.6,.005,false)}
   if(mode==='stay'&&!o.stow)for(const d of o.desks){rb(car,deskTop,d.x*k,d.y*k,d.w*k,d.h*k,.02,.57,.006)}
   // ── 사람 (Care Yard 마네킹, 앉은 자세 포함). 만들 때는 +z를 보고, 끝에 돌림
