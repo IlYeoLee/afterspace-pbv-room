@@ -89,6 +89,24 @@ tbody tr:hover td{background:var(--subtle)}
 .src td:first-child{min-width:180px}
 .tag{display:inline-block;font:600 11px/1 "42dot Sans",sans-serif;letter-spacing:.06em;padding:4px 8px;border-radius:999px;background:var(--muted-s);color:var(--soft);vertical-align:1px}
 .tag.est{background:#FFF3D1;color:#7A5A00}
+.podgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:700px){.podgrid{grid-template-columns:1fr}}
+.podgrid figure{margin:0;display:grid;gap:6px}
+.podgrid figcaption{font-size:12px;color:var(--faint)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.row input[type=range]{flex:1;min-width:160px}
+ol.steps{margin:0;padding-left:22px;display:grid;gap:4px;font-size:14px;color:var(--soft)}
+ol.steps li.on{color:var(--navy);font-weight:800}
+.sels{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}
+.res{margin:0;font-size:14px;font-weight:700;color:var(--navy)}
+.res.bad{color:var(--art)}
+.cin[hidden]{display:none}
+.cin{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cin label{display:grid;gap:2px;font-size:12px;color:var(--soft)}
+.cin input{font:400 14px "42dot Sans",sans-serif;min-height:40px;padding:0 12px;border:1px solid var(--line2);border-radius:999px;width:100%}
+.st{display:inline-block;font:700 11px/1 "42dot Sans",sans-serif;padding:4px 8px;border-radius:999px;margin-right:6px;vertical-align:1px;background:var(--navy);color:#fff}
+.st.c{background:var(--navy-s);color:var(--navy)}
+.st.w{background:#FFF3D1;color:#7A5A00}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -96,8 +114,8 @@ tbody tr:hover td{background:var(--subtle)}
 
 <header style="display:grid;gap:14px">
   <div class="eyebrow">AFTERSPACE PBV · 실내 패키징 검증 · 완전자율주행</div>
-  <h1>벽에 붙이면 버스가 되고, <em>마주 앉히면</em> 방이 된다</h1>
-  <p class="lede">아이 좌석을 두 줄로 마주 보게 놓고, 넓은 문을 두 줄 사이 바닥으로 열면 모든 아이가 문에서 두세 걸음 안에 자기 자리에 앉습니다. 이동 중에는 앞보기·뒤보기만 쓰니 옆보기 좌석 문제가 없고, 책상은 팔걸이 속으로, 가방과 외투는 좌석 밑 서랍으로 들어갑니다. 아래 평면은 전부 mm 단위로 계산됩니다.</p>
+  <h1>한 화면을 다 같이 보려면, <em>줄마다 문 하나</em></h1>
+  <p class="lede">아이 좌석을 앞 대형 화면을 향해 두 줄로 놓고, 줄마다 앞에 바닥과 옆문을 하나씩 둡니다. 문을 열면 곧장 자기 자리 앞이라 남의 무릎을 지나갈 일이 없고, 이동 중에도 모두 앞보기라 회전 좌석도 뒤보기 멀미도 없습니다. 케어러는 화면 옆 앞 모서리에서 모든 얼굴을 보고, 책상은 팔걸이 속으로, 가방과 외투는 좌석 밑 서랍으로 들어갑니다. 아래 평면은 전부 mm 단위로 계산됩니다.</p>
   <div class="kpis" id="kpis"></div>
 </header>
 
@@ -128,6 +146,14 @@ tbody tr:hover td{background:var(--subtle)}
       <div class="box">
         <div class="ctl"><div class="lab">차체 <span class="tag est">실내 치수 일부 추정</span></div>
           <select id="body"></select></div>
+        <div class="cin" id="custom" hidden>
+          <label for="cL">실내 길이<input id="cL" type="number" step="10" value="3720"></label>
+          <label for="cW">실내 폭<input id="cW" type="number" step="5" value="1735"></label>
+          <label for="cWa">휠하우스 사이<input id="cWa" type="number" step="5" value="1450"></label>
+          <label for="cH">실내 높이<input id="cH" type="number" step="10" value="1650"></label>
+          <label for="cA0">뒤 휠하우스 시작<input id="cA0" type="number" step="10" value="2490"></label>
+          <label for="cA1">뒤 휠하우스 끝<input id="cA1" type="number" step="10" value="3290"></label>
+        </div>
         <div class="ctl"><div class="lab">배치</div>
           <select id="lay"></select>
           <small id="layNote"></small></div>
@@ -137,7 +163,7 @@ tbody tr:hover td{background:var(--subtle)}
           <div class="seg"><input type="radio" name="mode" id="mB" value="board" checked><label for="mB">탑승</label><input type="radio" name="mode" id="mM" value="move"><label for="mM">이동</label><input type="radio" name="mode" id="mS" value="stay"><label for="mS">머묾</label></div>
           <small id="modeNote"></small></div>
         <div class="ctl"><div class="lab">문 폭 <output id="doorO"></output></div>
-          <input type="range" id="door" min="700" max="1400" step="25" value="1000">
+          <input type="range" id="door" min="700" max="1400" step="25" value="900">
           <small>PV5 순정 775. 전용 차체면 넓힐 수 있음</small></div>
       </div>
       <div class="box"><h3>수치</h3><dl class="stats" id="stats"></dl></div>
@@ -148,14 +174,14 @@ tbody tr:hover td{background:var(--subtle)}
 
 <section>
   <div class="eyebrow">같은 차체 네 가지 배치</div>
-  <h2>A·B·C는 기획서의 후보, D가 이 페이지의 제안</h2>
+  <h2>A·B·C는 기획서의 후보, D는 마주보기, F가 제안</h2>
   <p class="lede">표의 탑승·하차 시간은 위 시뮬레이터를 같은 조건으로 돌린 결과입니다. 행을 누르면 평면이 그 조합으로 바뀝니다.</p>
   <div class="tbl"><table id="cmp"></table></div>
   <p class="note">아이 걸음 0.7 m/s(차 안, 가방 멘 상태), 도착 간격 2초, 가방 벗기 4초 + 앉고 벨트 8초, 하차 시 벨트 풀기 3초 + 가방 꺼내기 4초(비상 하차는 가방 두고 나감). 폭 900 mm 미만 통로는 한 줄 통행으로 계산.</p>
 </section>
 
 <section>
-  <div class="eyebrow">배치 D · 세 가지 상태</div>
+  <div class="eyebrow">배치 F · 세 가지 상태</div>
   <h2>가구는 그대로, 공간이 열린다</h2>
   <div class="cards" id="modes"></div>
 </section>
@@ -164,30 +190,69 @@ tbody tr:hover td{background:var(--subtle)}
   <div class="eyebrow">키드 포드 한 세트</div>
   <h2>좌석 · 책상 · 화면 · 수납이 한 덩어리</h2>
   <div class="two">
-    <div class="card"><svg id="pod" viewBox="0 0 640 420" role="img" aria-label="키드 포드 옆 단면"></svg>
-      <p class="note">옆 단면. 치수 mm. 좌석 폭은 한 줄 3명일 때 약 490, 4명일 때 약 370 (PV7 기준)</p></div>
+    <div class="card">
+      <div class="row"><button id="podIn">타기 → 수업</button><button id="podOut" class="line">수업 → 내리기</button></div>
+      <div class="row"><input type="range" id="podR" min="0" max="13" step="0.05" value="0" aria-label="시간"><output id="podO" class="lbl"></output></div>
+      <p class="res" id="podMsg"></p>
+      <div class="podgrid">
+        <figure><svg id="podTop" role="img" aria-label="위에서 본 좌석 한 칸"></svg><figcaption>위에서 · 양옆은 이웃 자리 · 오른쪽이 문</figcaption></figure>
+        <figure><svg id="podSide" role="img" aria-label="옆에서 본 좌석 단면"></svg><figcaption>옆에서 · 왼쪽이 자리 앞 바닥 · 치수 mm</figcaption></figure>
+      </div>
+      <ol class="steps" id="podSteps"></ol>
+    </div>
     <div class="card">
       <h3>좌석</h3>
       <ul class="px">
-        <li>차체 고정, 회전 없음. 앞줄은 뒤를 보고, 뒷줄은 앞을 봄</li>
+        <li>차체 고정, 회전 없음. 두 줄 모두 대형 화면을 향해 앞보기</li>
+        <li>뒷줄은 바닥에서 150 높은 단 위. 앞줄 머리 너머로 화면이 보임</li>
         <li>좌석 일체형 3점식 벨트. B필러가 없는 자리라 벨트 고정점을 좌석 안에 넣음</li>
         <li>방석 높이 350. 초등 고학년 오금 높이(약 36~40 cm)에 맞춤</li>
         <li>등받이 높이 720 이상. 법 기준 71 cm</li>
       </ul>
       <h3>책상</h3>
       <ul class="px">
-        <li>다리 없는 두 번 접는 판, 팔걸이 상자(폭 50, 길이 400) 속에 세로로 수납</li>
-        <li>펼치면 무릎 위로 돌아 나와 폭 = 좌석 폭 + 50, 깊이 330</li>
+        <li>다리 없는 판을 반으로 접어 팔걸이 상자(폭 50, 길이 400) 속에 세워 둠. 탈 때와 내릴 때는 바닥에 아무것도 없음</li>
+        <li>펴는 순서: 올라오며 앞으로 190 나옴 → 무릎 위로 눕혀짐 → 반쪽이 펼쳐짐. 높이 580, 폭 = 좌석 폭 + 50, 깊이 330</li>
+        <li>접는 건 그 반대. 하차 버튼을 누르면 책상부터 자동으로 접힘</li>
         <li>판 하나에 13인치 4:3 터치 화면 (800×600 책상 UI 그대로)</li>
         <li>이동 중에는 잠김. 이름·도착 시각은 팔걸이 끝 작은 화면에</li>
       </ul>
       <h3>수납</h3>
       <ul class="px">
-        <li>좌석 밑 서랍 400×400×260 = 약 41 L. 책가방(15~25 L)을 눕히고 그 위에 외투</li>
-        <li>서랍은 두 줄 사이 바닥 쪽으로 빠짐. 문을 등지고 서서 넣고 뺄 수 있음</li>
+        <li>좌석 밑 서랍 안쪽 = 폭 (좌석 폭 + 10) · 깊이 460 · 높이 240. 등받이 밑까지 파고들어 깊이를 확보. 아래 목업에서 가방 크기별로 확인</li>
+        <li>서랍은 자리 앞 바닥 쪽으로 빠짐. 줄마다 바닥이 따로라 서로 막지 않음</li>
+        <li>뒤 사물함 트렁크 = 외투 · 준비물. 칸마다 이름 화면 (무드보드의 사물함형 트렁크)</li>
         <li>팔걸이 상자 윗면 = 물병 · 필통 칸</li>
         <li>체험 장비 · 우비 · 구급함은 앞뒤 벽 공용 수납으로 (개인 포드에 넣지 않음)</li>
       </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">검증 · 서랍과 화면</div>
+  <h2>가방은 들어가는가, 뒷줄은 화면이 보이는가</h2>
+  <div class="two">
+    <div class="card">
+      <h3>좌석 밑 서랍 목업</h3>
+      <div class="sels">
+        <select id="dBag" aria-label="책가방"><option value="350,250,100">작은 책가방 35×25×10</option><option value="400,300,130" selected>보통 책가방 40×30×13</option><option value="450,350,150">큰 책가방 45×35×15</option></select>
+        <select id="dCoat" aria-label="외투"><option value="">외투 없음</option><option value="300,250,50">바람막이 (접어서)</option><option value="380,320,110" selected>겨울 패딩 (눌러서)</option></select>
+        <select id="dExtra" aria-label="추가 짐"><option value="" selected>추가 없음</option><option value="300,250,80">체육복 주머니</option><option value="220,160,100">물통 · 도시락</option></select>
+      </div>
+      <div class="podgrid">
+        <figure><svg id="dTop" role="img" aria-label="서랍 위에서"></svg><figcaption>위에서 · 아래쪽이 바닥 쪽(서랍 손잡이)</figcaption></figure>
+        <figure><svg id="dFront" role="img" aria-label="서랍 정면"></svg><figcaption>정면 단면 · 쌓인 높이</figcaption></figure>
+      </div>
+      <p class="res" id="dRes"></p>
+      <p class="note">좌석 폭은 위 시뮬레이터 설정을 따름. 가방·외투 치수는 업계 가이드 기준 추정, 실물 목업으로 한 번 더 확인 필요</p>
+    </div>
+    <div class="card">
+      <h3>뒷줄에서 대형 화면 보기 (배치 F)</h3>
+      <div class="ctl"><div class="lab">뒷줄 단 높이 <output id="riserO"></output></div><input type="range" id="riser" min="0" max="300" step="10" value="200"></div>
+      <svg id="sight" role="img" aria-label="화면 시선 옆 단면"></svg>
+      <dl class="stats" id="sightRes"></dl>
+      <p class="note">145 cm 아이 앉은 머리 높이 1,100, 눈 높이 = 방석 + 620 가정. 앞줄 머리 너머로 화면 아래 끝이 보이는 선이 한계</p>
     </div>
   </div>
 </section>
@@ -198,20 +263,22 @@ tbody tr:hover td{background:var(--subtle)}
   <div class="two">
     <div class="card">
       <ul class="px">
-        <li>문 반대편 벽 가운데에 접이식 케어러 좌석. 이동 중 앞을 보고 앉음</li>
-        <li>모든 아이가 팔을 뻗으면 닿는 거리(약 1~1.5 m). 벨트 확인, 비상 대응이 앉은 채로 가능</li>
-        <li>입구를 막지 않음. 문은 반대쪽 벽</li>
-        <li>머묾·탑승 상태에서는 벽으로 접혀 두께 120만 남음. 케어러는 바닥 한가운데로</li>
+        <li>화면 옆 앞 왼쪽 모서리에 접이식 케어러 좌석. 이동 중 뒤를 보고 앉아 8명 얼굴을 다 봄</li>
+        <li>입구를 막지 않음. 문은 오른쪽 벽</li>
+        <li>머묾에서는 좌석을 벽으로 접고(두께 120) 화면 앞 선생님 자리에 섬. 스케치의 선생님 자리 그대로</li>
+        <li>뒷줄 아이는 뒤 바닥으로 걸어가 앞에서 도움. 두 바닥 모두 머묾 때 770 남음</li>
         <li>좌석 옆 벽 = 운영 화면 · 구급함 · 비상 정지</li>
       </ul>
     </div>
     <div class="card">
-      <h3>자율형이어도 이동 중엔 사람이 탄다</h3>
+      <h3>AFTERSPACE가 어린이통학버스인가</h3>
       <ul class="px">
-        <li class="bad">현행 도로교통법 제53조는 어린이통학버스에 아이를 태우면 보호자 동승을 요구</li>
-        <li class="bad">같은 법 제52조는 어린이통학버스를 승차정원 9인승 이상으로 한정 (아이 1명 = 1석)</li>
-        <li>운전석이 없는 완전자율주행이면 9석을 아이와 케어러만으로 채워야 함 → 아이 8 + 케어러 1</li>
-        <li class="mid">SELF CARE의 100% 무인은 머묾 상태에서만 성립. 이동 구간 무인은 규제 특례가 필요한 미결 과제</li>
+        <li>도로교통법 제2조 23호: 13세 미만을 가르치거나 돌보는 시설(유치원·초등학교·어린이집·학원·체육시설·아동복지시설 등)이 아이 통학과 체험 이동에 쓰는 차, 또는 한정면허를 받아 어린이를 태우는 운송사업 차</li>
+        <li class="bad">AFTERSPACE는 방과후 수업(학원 성격) + 돌봄(아동복지시설 성격) + 학교 픽업을 함께 함 → 지금 법으로 운영 신고를 하면 어린이통학버스가 될 가능성이 높음</li>
+        <li class="mid">다만 차 자체가 교실인 “움직이는 시설”은 현행 분류에 없음. 학원·돌봄시설 기준은 건물을 전제로 함</li>
+        <li class="mid">무인 운행은 자율주행자동차법 제9조(시범운행지구 유상운송 특례)로 시작하는 게 현실적인 경로. 그때 차 기준은 개별 협의</li>
+        <li>그래서 이 페이지는 9인승 요건은 “분류될 경우”의 주의 사항으로 두고, 보호자 동승 · 벨트 · 발판 · 좌석 기준은 안전선으로 그대로 지킴</li>
+        <li>보호자 동승(제53조) 때문에 SELF CARE의 완전 무인은 머묾 상태에서만 성립</li>
       </ul>
     </div>
   </div>
@@ -235,26 +302,31 @@ tbody tr:hover td{background:var(--subtle)}
       <tr><td>스쿨버스 1인 폭</td><td>13인치(330 mm), 5백분위 여성 엉덩이 폭보다 조금 넓은 값</td><td>좌석 폭 주의선</td><td><a href="https://www.nhtsa.gov/interpretations/1691y">NHTSA 해석 1691y (FMVSS 222)</a></td></tr>
       <tr><td>뒤보기 좌석</td><td>정면 충돌에서 상해 위험이 가장 낮게 나옴 · 대신 멀미와 불안감 증가 보고</td><td>앞줄 뒤보기 채택 + 멀미 대책을 미결로</td><td><a href="https://www.sciencedirect.com/science/article/abs/pii/S0022437521000931">J. Safety Research 2021</a> · <a href="https://www.mdpi.com/2076-3417/15/22/12027">Applied Sciences 2025</a></td></tr>
       <tr><td>초등 책가방</td><td>15~25 L · 높이 35~45 · 폭 25~35 · 두께 10~15 cm</td><td>서랍 41 L 산정</td><td><a href="https://initibag.com/kids-backpack-size/">업계 사이즈 가이드</a> <span class="tag est">실측 필요</span></td></tr>
+      <tr><td>어린이통학버스 정의</td><td>13세 미만 교육·돌봄 시설이 통학·체험 이동에 쓰는 차</td><td>AFTERSPACE 분류 판단</td><td><a href="https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=631&ccfNo=2&cciNo=2&cnpClsNo=5">찾기쉬운 생활법령 · 통학 시 안전관리</a></td></tr>
+      <tr><td>자율주행 유상운송 특례</td><td>시범운행지구에서 자율주행차 유상 여객운송 허가 · 한정운수면허</td><td>무인 운행의 출발 경로</td><td><a href="https://casenote.kr/%EB%B2%95%EB%A0%B9/%EC%9E%90%EC%9C%A8%EC%A3%BC%ED%96%89%EC%9E%90%EB%8F%99%EC%B0%A8_%EC%83%81%EC%9A%A9%ED%99%94_%EC%B4%89%EC%A7%84_%EB%B0%8F_%EC%A7%80%EC%9B%90%EC%97%90_%EA%B4%80%ED%95%9C_%EB%B2%95%EB%A5%A0/%EC%A0%9C9%EC%A1%B0">자율주행자동차법 제9조</a></td></tr>
+      <tr><td>기아 Flexible Body System</td><td>문·테일게이트·뒤 모듈·지붕 높이를 바꿔 끼움, 앞 1열 구조는 공통</td><td>전용 문 배치의 근거</td><td><a href="https://www.hyundaimotorgroup.com/en/story/flexible-body-system-custom-built-pbv">현대차그룹</a></td></tr>
+      <tr><td>부스터 적용 범위</td><td>UN R129 부스터 100~150 cm</td><td>135 cm 미만 접이 부스터</td><td><a href="https://www.multimac.com/blog/r129-car-seat-regulations-uk-guide/">R129 가이드</a></td></tr>
+      <tr><td>좌석 동적 시험</td><td>항공기 좌석 16 g</td><td>책상 잠금 하중 참고</td><td><a href="https://www.ecfr.gov/current/title-14/chapter-I/subchapter-C/part-25/subpart-C/subject-group-ECFR4bfb9f4ea2b6e0d/section-25.562">14 CFR 25.562</a></td></tr>
       <tr><td>9~11세 키</td><td>약 135~145 cm</td><td>아이 서기 가능 실내 높이 1,450</td><td><a href="https://www.kdca.go.kr/kdca/5458/subview.do">질병관리청 성장도표</a></td></tr>
     </tbody></table></div>
 </section>
 
 <section>
-  <div class="eyebrow">아직 남은 것</div>
-  <h2>다음에 검증할 것</h2>
+  <div class="eyebrow">검증 결과</div>
+  <h2>남아 있던 아홉 가지</h2>
   <div class="cards">
     <div class="card"><h3>차체</h3><ul class="px">
-      <li>PV7 양산형 실내 치수·도어 위치로 교체 (9월 14일)</li>
-      <li>문을 두 줄 사이로 옮기는 전용 상부 차체 가능 여부</li>
-      <li>Care Yard 2대 1 부두에서 문 방향 (오른쪽 문 1개 기준으로 재배치)</li></ul></div>
+      <li><span class="st w">대기</span>PV7 양산형 치수: 9월 14일 공개 전. 차체 목록의 “직접 입력”에 넣으면 모든 검사와 표가 다시 계산됨</li>
+      <li><span class="st c">조건부</span>문 위치: F는 오른쪽 옆문 2개(앞문은 앞으로, 뒷문은 뒤로 열림). 두 문 모두 뒤 휠하우스 앞이라 PV7은 문 폭 900까지 성립, PV5는 뒷문이 휠하우스에 걸려 불가. 기아 Flexible Body System이 문·테일게이트·뒤 모듈을 바꿔 끼우는 구조라 전용 차체 경로는 있음. 단 앞 1열 구조는 공통이라 무인 실내화는 별도 협의</li>
+      <li><span class="st">해결</span>Care Yard 문 방향: 시계방향 일방통행이면 차 오른쪽이 항상 안쪽 데크를 향함 → 오른쪽 문만으로 충분. 2대 1 부두는 부두 양옆 마주보기 대신 앞뒤 일렬 정차로</li></ul></div>
     <div class="card"><h3>안전</h3><ul class="px">
-      <li>좌석 일체형 벨트 + 아이 체격 조절 범위</li>
-      <li>책상 팔 잠금의 충돌 하중</li>
-      <li>뒤보기 앞줄 멀미 대책 (창·지평선 화면·자리 교대)</li></ul></div>
+      <li><span class="st c">시험 필요</span>벨트: 좌석 일체형 3점식 + 어깨 높이 조절 가이드. 135 cm 미만은 방석 속 접이 부스터를 꺼내 씀 (UN R129 부스터 적용 범위 100~150 cm)</li>
+      <li><span class="st c">시험 필요</span>책상 잠금: 이동 중엔 책상이 상자 속에 잠겨야만 출발(연동). 판+화면 약 2.5 kg × 20 g ≈ 490 N → 잠금 목표 1,000 N 이상. 항공기 좌석 동적 시험 16 g 참고</li>
+      <li><span class="st">해결</span>뒤보기 멀미: F는 전원 앞보기라 문제 자체가 없어짐</li></ul></div>
     <div class="card"><h3>경험</h3><ul class="px">
-      <li>공용 화면 앞뒤 2면 미러링 vs 천장 화면</li>
-      <li>바닥 활동용 접이 매트 · 임시 공용 판</li>
-      <li>실제 책가방 6~8개 서랍 넣기 목업</li></ul></div>
+      <li><span class="st">해결</span>공용 화면: 앞 화면 1개. 뒷줄 단 200이면 약 50인치까지 앞줄 머리에 안 가림 (위 시선 카드)</li>
+      <li><span class="st">해결</span>공용 판: 한 줄 책상 4개가 맞붙어 1,735 × 330 긴 테이블. 바닥 활동은 화면 앞 바닥 + 접이 매트(트렁크 보관)</li>
+      <li><span class="st c">목업 필요</span>가방 서랍: 보통 가방 + 겨울 패딩은 딱 맞음, 큰 가방 + 패딩은 초과 → 패딩은 뒤 사물함 트렁크로 (위 서랍 목업)</li></ul></div>
   </div>
 </section>
 
@@ -266,7 +338,8 @@ const BODIES={
   pv7:{name:'PV7 콘셉트 · 무인',L:3720,W:1735,Wa:1450,H:1650,ext:[5270,2065],front:1400,arch:[2490,3290]},
 };
 const LAYS={
-  D:{name:'D · 마주보는 두 줄 (제안)',note:'앞줄은 뒤를, 뒷줄은 앞을 봄. 넓은 문이 두 줄 사이 바닥으로 열림. 회전 좌석 없음'},
+  F:{name:'F · 앞 화면 극장식 (제안)',note:'두 줄 모두 앞 대형 화면을 봄. 줄마다 앞에 바닥과 옆문이 하나씩. 뒷줄은 150 높은 단. 회전 좌석 없음'},
+  D:{name:'D · 마주보는 두 줄',note:'앞줄이 대형 화면을 등짐(화면 2면 필요). 앞줄은 뒤를, 뒷줄은 앞을 봄. 넓은 문이 두 줄 사이 바닥으로 열림. 회전 좌석 없음'},
   A:{name:'A · 벽 포드 (기획서 07 평면)',note:'양쪽 벽을 따라 앞보기 포드. 머묾에서 안쪽으로 90° 회전. 뒤 넓은 문으로 탑승'},
   B:{name:'B · 지그재그 벽 포드',note:'A에서 한쪽을 반 칸 밀어 머묾 때 책상이 엇갈리게 함. 길이가 반 칸 더 필요'},
   C:{name:'C · 소프트 U',note:'앞쪽 옆문으로 탑승. 옆벽 포드 + 뒷줄 2석, 모두 앞 공용 화면을 봄. 머묾에서 옆 포드 45° 회전'},
@@ -277,7 +350,25 @@ const MODE_NOTE={board:'책상 수납 · 케어러 좌석 접힘 · 바닥을 �
 function seatD(x,y,w,face,stand){return {x,y,w,h:SD,face,stand}}
 function build(bodyId,lay,n,door){
   const B=BODIES[bodyId],L=B.L,W=B.W,o={B,lay,n,seats:[],desks:[],utils:[],screens:[],floor:[],floorStay:[],notes:[]};
-  if(lay==='D'){
+  if(lay==='F'){
+    const SC=150,F1=Math.max(door,900),F2=Math.max(door,900),sw=(W-(n+1)*P)/n,r1=SC+F1,r2=r1+SD+F2,te=r2+SD;
+    o.seatW=sw; o.need=te+250; o.fits=o.need<=L;
+    for(let i=0;i<n;i++){const x=P+i*(sw+P);
+      o.seats.push(seatD(x,r1,sw,'up',{x:x+sw/2,y:r1-250}));
+      o.seats.push(seatD(x,r2,sw,'up',{x:x+sw/2,y:r2-250}));
+      o.desks.push({x:x-P/2,y:r1-130,w:sw+P,h:330},{x:x-P/2,y:r2-130,w:sw+P,h:330});
+      o.stow=(o.stow||[]).concat([{x:x+sw,y:r1+100,w:P,h:400},{x:x+sw,y:r2+100,w:P,h:400}]);}
+    o.door={side:'r',a:SC+(F1-door)/2,b:SC+(F1+door)/2,w:door}; o.door2={side:'r',a:r1+SD,b:r1+SD+door,w:door};
+    const d1={x:W+600,y:(o.door.a+o.door.b)/2},d2={x:W+600,y:(o.door2.a+o.door2.b)/2};
+    o.out=d1; o.paths=o.seats.map((s,i)=>i%2===0?[d1,{x:W-150,y:d1.y},s.stand]:[d2,{x:W-150,y:d2.y},s.stand]);
+    o.care={x:0,y:SC+60,w:450,h:SD,face:'down',fold:120,stand:{x:W/2,y:SC+260}};
+    o.utils.push({x:0,y:te,w:W,h:L-te,t:'사물함 트렁크 · 칸마다 이름 화면 (뒷문)'});
+    o.screens.push({x:W*.1,y:0,w:W*.8,t:'대형 공용 화면'});
+    o.floor.push({x:0,y:SC,w:W,h:F1},{x:0,y:r1+SD,w:W,h:F2}); o.floorStay.push({x:450,y:SC,w:W-450,h:F1-130},{x:0,y:r1+SD,w:W,h:F2-130});
+    o.clearBoard=Math.min(F1,F2); o.clearStay=Math.min(F1,F2)-130; o.floorTxt=`바닥 ${fmt(F2)} × ${fmt(W)}`;
+    o.narrow=(x,y)=>x>W-260; o.swivel=false; o.rearDoor=false; o.screenAll=true;
+    o.archFeet=[r1,r2].filter(y=>y-300<B.arch[1]&&y>B.arch[0]).length*2;
+  } else if(lay==='D'){
     const FU=300,RU=350,sw=(W-(n+1)*P)/n,m0=FU+SD,m1=L-RU-SD,mc=(m0+m1)/2;
     o.seatW=sw; o.need=FU+SD*2+RU+Math.max(door+200,1000); o.fits=o.need<=L;
     for(let i=0;i<n;i++){const x=P+i*(sw+P);
@@ -293,7 +384,7 @@ function build(bodyId,lay,n,door){
     o.screens.push({x:W*.2,y:0,w:W*.6,t:'공용 화면 (뒷줄용)'},{x:W*.2,y:L,w:W*.6,t:'공용 화면 (앞줄용)'});
     o.floor.push({x:0,y:m0,w:W,h:m1-m0}); o.floorStay.push({x:0,y:m0+130,w:W,h:m1-m0-260});
     o.clearBoard=Math.min(m1-m0,W-120); o.clearStay=m1-m0-260; o.floorTxt=`바닥 ${fmt(m1-m0)} × ${fmt(W)}`;
-    o.narrow=(x,y)=>x>W-260; o.swivel=false; o.rearDoor=false;
+    o.narrow=(x,y)=>x>W-260; o.swivel=false; o.rearDoor=false; o.screenAll=false;
     o.archFeet=(m1-300<B.arch[1]&&m1>B.arch[0])?2:0;
   } else {
     // A·B·C: 벽 포드. 앞보기(MOVE), 머묾에서 회전
@@ -328,9 +419,10 @@ function build(bodyId,lay,n,door){
     o.floorStay=[{x:PW+(lay==='B'?0:dd),y:FB,w:Math.max(0,o.clearStay),h:m*PIT+off}];
     o.floorTxt=`통로 ${fmt(aisle)}`;
     o.narrow=(x,y)=>aisle<900&&Math.abs(x-cx)<aisle/2+40&&y>FB-100&&y<podEnd+100;
-    o.swivel=true; o.rearDoor=doorSide==='rear';
+    o.swivel=true; o.rearDoor=doorSide==='rear'; o.screenAll=true;
     o.archFeet=o.seats.filter(s=>s.side&&s.y-250<B.arch[1]&&s.y>B.arch[0]).length;
   }
+  o.doorArch=[o.door,o.door2].filter(d=>d&&d.side==='r'&&d.a<B.arch[1]&&d.b>B.arch[0]).length;
   o.kids=o.seats.length;
   const len=p=>p.slice(1).reduce((a,q,i)=>a+Math.hypot(q.x-p[i].x,q.y-p[i].y),0);
   o.walk=Math.max(...o.paths.map(p=>len(p.slice(1))));
@@ -351,7 +443,7 @@ function makeSim(o,kind){
   let ag;
   if(kind==='board'){
     const ord=o.paths.map((p,i)=>i).sort((a,b)=>plen(o.paths[b])-plen(o.paths[a]));
-    ag=ord.map((i,k)=>({i,pts:o.paths[i],seg:1,pos:{...o.paths[i][0]},st:'queue',tm:k*2,w:0}));
+    const cnt=new Map();ag=ord.map(i=>{const q=o.paths[i][0],k=cnt.get(q)||0;cnt.set(q,k+1);return {i,pts:o.paths[i],seg:1,pos:{...q},st:'queue',tm:k*2,w:0}});
   } else ag=o.paths.map((p,i)=>({i,pts:[...p].reverse(),seg:1,pos:ctr(o.seats[i]),st:'belt',tm:3,w:0}));
   const S={t:0,ag,done:false};
   S.step=dt=>{
@@ -367,7 +459,7 @@ function makeSim(o,kind){
       const nx=a.pos.x+dx/d*m,ny=a.pos.y+dy/d*m;
       if(o.narrow(nx,ny)&&a.w<6&&ag.some(b=>b!==a&&(b.st==='walk'||(b.st==='act'&&o.narrow(b.pos.x,b.pos.y)))&&Math.hypot(b.pos.x-nx,b.pos.y-ny)<GAP&&((b.pos.x-a.pos.x)*dx+(b.pos.y-a.pos.y)*dy)/d>50)){a.w+=dt;continue}
       a.w=0;a.pos={x:nx,y:ny};
-      if(m>=d-1){a.seg++;if(a.seg>=a.pts.length){if(kind==='board'){a.st='act';a.tm=4}else a.st='done'}}
+      if(m>=d-1){a.seg++;if(a.seg>=a.pts.length){if(kind==='board'){a.st='act';a.tm=4}else{a.st='done';a.out=true}}}
     }
     S.done=ag.every(a=>a.st==='done');
   };
@@ -379,7 +471,7 @@ function runSim(o,kind){const S=makeSim(o,kind);while(!S.done&&S.t<600)S.step(.1
 // ── 평면 그리기
 function draw(svg,o,mode,agents,small){
   const B=o.B,L=B.L,W=B.W,ew=(B.ext[1]-W)/2,fs=small?120:78,sw=small?10:6;
-  const x0=-ew-160,x1=W+ew+(o.door.side==='r'?800:260),y0=-B.front-160,y1=Math.max(L,o.need)+(o.door.side==='rear'?820:260);
+  const x0=-ew-160,x1=W+ew+(o.door.side==='r'?900:260),y0=-B.front-160,y1=Math.max(L,o.need)+(o.door.side==='rear'?820:260);
   svg.setAttribute('viewBox',`${x0} ${y0} ${x1-x0} ${y1-y0}`);
   const h=[],R=(x,y,w,hh,a='')=>h.push(`<rect x="${x}" y="${y}" width="${Math.max(0,w)}" height="${Math.max(0,hh)}" ${a}/>`),
     T=(x,y,s,a='')=>h.push(`<text x="${x}" y="${y}" font-size="${fs}" ${a}>${s}</text>`);
@@ -396,7 +488,7 @@ function draw(svg,o,mode,agents,small){
   for(const u of o.utils){R(u.x,u.y,u.w,u.h,`fill="#E2E5EC" stroke="#8A93A8" stroke-dasharray="30 24" stroke-width="${sw*.6}"`);if(!small&&u.h>200&&u.w>900)T(u.x+u.w/2,u.y+u.h/2+fs/3,u.t,'text-anchor="middle" fill="#525C74"')}
   for(const s of o.screens){R(s.x,s.y===0?-10:L-60,s.w,70,'fill="#1B2A5E"');if(!small)T(s.x+s.w/2,s.y===0?-40:L+fs+20,s.t,'text-anchor="middle" fill="#1B2A5E" font-weight="700"')}
   // 문
-  const d=o.door;
+  for(const d of [o.door,o.door2].filter(Boolean))
   if(d.side==='r'){R(W-40,d.a,120,d.w,'fill="#FFB800"');T(W+140,(d.a+d.b)/2+fs/3,`문 ${fmt(d.w)}`,'fill="#7A5A00" font-weight="700"')}
   else{R(d.a,L-40,d.w,120,'fill="#FFB800"');T(W/2,L+140+fs,`뒷문 ${fmt(d.w)}`,'text-anchor="middle" fill="#7A5A00" font-weight="700"')}
   // 좌석 · 책상
@@ -412,7 +504,7 @@ function draw(svg,o,mode,agents,small){
   R(cp.x-190,cp.y-190,380,380,'fill="#FF2D3D"');
   // 아이
   const kid=(p,i,a)=>{R(p.x-150,p.y-150,300,300,`fill="#1B2A5E"${a?` opacity="${a}"`:''}`);if(!small)T(p.x,p.y+fs/3,i+1,'text-anchor="middle" fill="#fff" font-weight="800" font-size="'+fs*.9+'"')};
-  if(agents)agents.forEach(a=>{if(a.st!=='queue'&&!(a.st==='done'&&a.pts.at(-1)===o.out))kid(a.pos,a.i,a.st==='walk'?null:.85)});
+  if(agents)agents.forEach(a=>{if(a.st!=='queue'&&!a.out)kid(a.pos,a.i,a.st==='walk'?null:.85)});
   else if(mode!=='board')o.seats.forEach((s,i)=>kid({x:s.x+s.w/2,y:s.y+s.h/2},i));
   // 책상: 머묾 = 무릎 위로 펼침 (아이 위에 그림), 그 외 = 팔걸이 상자 속 세움
   if(mode==='stay')for(const k of o.desks){R(k.x,k.y,k.w,k.h,'fill="#8C9BC8" stroke="#1B2A5E" stroke-width="'+sw*.6+'" opacity=".95"');R(k.x+k.w*.18,k.y+k.h*.2,k.w*.64,k.h*.6,'fill="#1B2A5E"')}
@@ -433,9 +525,11 @@ function checks(o){
   const sw=o.seatW;
   sw>=430?add('ok',`좌석 폭 ${fmt(sw)} · 여유`):sw>=330?add('warn',`좌석 폭 ${fmt(sw)} · 스쿨버스 330 통과, 권장 430 미달`,'고학년 둘이 나란히면 어깨가 닿는 폭'):add('fail',`좌석 폭 ${fmt(sw)} · 스쿨버스 1인 330 미만`);
   const seats=o.kids+1;
-  seats>=9?add('ok',`승차정원 ${seats}석 · 9인승 요건 충족`,'운전석 없이 아이 + 케어러로 계산'):add('fail',`승차정원 ${seats}석 · 어린이통학버스 9인승 미만`,'한 줄 4명으로 늘리거나 예비석 필요');
+  seats>=9?add('ok',`승차정원 ${seats}석 · 9인승 요건 충족`,'운전석 없이 아이 + 케어러로 계산'):add('warn',`승차정원 ${seats}석 · 9인승 미만`,'어린이통학버스로 분류될 때만 문제 · 한 줄 4명이면 해결');
   o.swivel?add('warn','이동 중 앞보기 잠금이 필요한 회전 좌석','옆보기 상태로 달리면 안 됨 · 회전 기구 6~8개 원가와 고장 지점'):add('ok','회전 좌석 없음 · 앞보기와 뒤보기만');
   o.rearDoor?add('fail','뒷문 탑승 · 전진 도킹하면 차량 동선 쪽으로 열림','Care Yard 원칙 PEOPLE INSIDE / VEHICLES OUTSIDE와 충돌'):add('ok','옆문이 아이 쪽 데크로 열림');
+  o.screenAll?add('ok','모든 아이가 앞 대형 화면을 봄'):add('fail','앞줄이 대형 화면을 등짐','공용 화면을 앞뒤 2면으로 나눠야 함 · 한 화면 수업 불가');
+  o.doorArch?add('fail','옆문이 휠하우스 위에 걸림','문을 앞으로 당기거나 문 폭을 줄여야 함'):null;
   o.pass===0?add('ok','좁은 통로에서 남의 자리 앞 통과 0회'):add('warn',`좁은 통로에서 남의 자리 앞 통과 ${o.pass}회`,'가방 벗는 아이 뒤에서 줄이 멈춤');
   const cs=o.clearStay;
   cs>=550?add('ok',`머묾 바닥 ${fmt(cs)} · 어른이 지나감`):cs>=350?add('warn',`머묾 바닥 ${fmt(cs)} · 아이만 지나감`):add('fail',`머묾 바닥 ${fmt(Math.max(0,cs))} · 책상끼리 막힘`);
@@ -448,10 +542,10 @@ function checks(o){
 </script>
 <script>
 const $=id=>document.getElementById(id);
-const st={body:'pv7',lay:'D',n:4,mode:'board',door:1000};
+const st={body:'pv7',lay:'F',n:4,mode:'board',door:900};
 let anim=null;
 const cache={};
-function times(o,k){const key=[o.B.name,o.lay,o.n,st.door].join();return cache[key]||(cache[key]={board:runSim(o,'board'),exit:runSim(o,'exit'),emer:runSim(o,'emer')})}
+function times(o,k){const key=[o.B.name,o.B.L,o.B.W,o.B.Wa,o.B.arch,o.lay,o.n,st.door].join();return cache[key]||(cache[key]={board:runSim(o,'board'),exit:runSim(o,'exit'),emer:runSim(o,'emer')})}
 
 for(const [k,b] of Object.entries(BODIES))$('body').add(new Option(b.name,k));
 for(const [k,l] of Object.entries(LAYS))$('lay').add(new Option(l.name,k));
@@ -471,6 +565,7 @@ function refresh(){
     ['탑승 전원 착석',t?t.board+'초':'—'],['하차 (가방 챙김)',t?t.exit+'초':'—'],['비상 하차',t?t.emer+'초':'—'],
   ].map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('');
   $('checks').innerHTML=checks(o).map(c=>`<li class="${c.lv}"><span>${c.t}${c.s?`<small>${c.s}</small>`:''}</span></li>`).join('');
+  if(window.onCfg)onCfg(o);
   $('simMsg').textContent=o.fits?'탑승 시뮬을 누르면 아이들이 문으로 들어와 앉습니다':'이 조합은 차에 들어가지 않습니다. 시뮬은 참고용';
   document.querySelectorAll('#cmp tbody tr').forEach(tr=>tr.classList.toggle('pick',tr.dataset.k===[st.body,st.lay,st.n].join()));
 }
@@ -496,7 +591,7 @@ $('door').oninput=e=>{st.door=+e.target.value;refresh();buildTable()};
 
 function buildTable(){
   const rows=[];
-  for(const b of Object.keys(BODIES))for(const l of ['D','A','B','C'])for(const n of [3,4]){
+  for(const b of Object.keys(BODIES).filter(k=>k!=='custom'))for(const l of ['F','D','A','B','C'])for(const n of [3,4]){
     const o=build(b,l,n,st.door);o.n=n;const t=o.fits?times(o):null,f=checks(o).filter(c=>c.lv==='fail').length;
     rows.push(`<tr data-k="${b},${l},${n}" tabindex="0"><td>${BODIES[b].name}</td><td>${LAYS[l].name.split(' (')[0]}</td><td>${n}</td><td>${o.kids}</td>
       <td class="${o.fits?'ok':'no'}">${o.fits?'들어감':'길이 부족'}</td><td>${fmt(o.seatW)}</td><td class="${o.clearStay<350?'no':''}">${fmt(Math.max(0,o.clearStay))}</td>
@@ -505,32 +600,147 @@ function buildTable(){
   $('cmp').querySelectorAll('tbody tr').forEach(tr=>{const go=()=>{const [b,l,n]=tr.dataset.k.split(',');Object.assign(st,{body:b,lay:l,n:+n});refresh();$('plan').scrollIntoView({behavior:'smooth',block:'center'})};tr.onclick=go;tr.onkeydown=e=>{if(e.key==='Enter')go()}});
 }
 
-// 세 가지 상태 카드 (PV7 · D · 4명)
-const modeCards=[['board','탑승','문 폭 전체가 두 줄 사이 바닥으로 이어짐. 책상은 팔걸이 속, 케어러 좌석은 벽에 접힘. 아이는 문에서 곧장 자기 자리 앞에 서서 가방을 서랍에 넣고 앉음'],
- ['move','이동','앞줄 뒤보기 · 뒷줄 앞보기로 벨트 착용. 케어러는 문 반대편 벽 좌석에서 모두를 1.5 m 안에서 봄. 공용 화면 앞뒤 2면 = 경로와 도착 시각'],
- ['stay','머묾','책상이 무릎 위로 돌아 나오고 두 줄 사이에 바닥이 남음. 케어러는 좌석을 접고 바닥 한가운데로. 원래 콘셉트의 둘러앉은 책상이 여기서 살아남']];
+// 세 가지 상태 카드 (PV7 · F · 4명)
+const modeCards=[['board','탑승','문이 두 개라 앞줄은 앞문, 뒷줄은 뒷문으로 동시에 탐. 문을 열면 바로 자기 자리 앞 바닥. 책상은 팔걸이 속, 케어러 좌석은 벽에 접힘'],
+ ['move','이동','모두 앞을 보고 벨트 착용. 뒤보기 멀미 없음. 케어러는 화면 옆 앞 모서리에서 뒤를 보고 앉아 8명 얼굴을 다 봄. 대형 화면 = 경로와 도착 시각'],
+ ['stay','머묾','책상이 무릎 위로 펼쳐지고 모두 대형 화면을 향함. 케어러는 좌석을 접고 화면 앞 선생님 자리로. 뒷줄은 150 높은 단이라 앞줄 머리 너머로 화면이 보임']];
 $('modes').innerHTML=modeCards.map(([m,t,p])=>`<div class="card"><div class="lbl">${t}</div><svg data-m="${m}" role="img" aria-label="${t} 상태 평면"></svg><p>${p}</p></div>`).join('');
-{const o=build('pv7','D',4,1000);document.querySelectorAll('#modes svg').forEach(s=>{draw(s,o,s.dataset.m,null,true);s.style.aspectRatio='0.62';})}
+{const o=build('pv7','F',4,900);document.querySelectorAll('#modes svg').forEach(s=>{draw(s,o,s.dataset.m,null,true);s.style.aspectRatio='0.62';})}
 
-// 키드 포드 옆 단면 (1 mm = 0.32 px)
-{const s=.32,X=v=>70+v*s,Y=v=>390-v*s,h=[],R=(x,y,w,hh,a)=>h.push(`<rect x="${X(x)}" y="${Y(y+hh)}" width="${w*s}" height="${hh*s}" ${a}/>`),
-  T=(x,y,t,a='')=>h.push(`<text x="${X(x)}" y="${Y(y)}" font-size="13" ${a}>${t}</text>`),
-  Dm=(x1,y1,x2,y2,t)=>{h.push(`<line x1="${X(x1)}" y1="${Y(y1)}" x2="${X(x2)}" y2="${Y(y2)}" stroke="#8A93A8" stroke-width="1"/>`);T((x1+x2)/2+(x1===x2?40:0),(y1+y2)/2+(x1===x2?0:30),t,'fill="#525C74" font-weight="700"'+(x1===x2?'':' text-anchor="middle"'))};
-  h.push(`<line x1="20" y1="${Y(0)}" x2="620" y2="${Y(0)}" stroke="#525C74" stroke-width="2"/>`);
-  R(0,0,120,1070,'fill="#3A4B86" opacity=".55"');R(120,300,380,50,'fill="#C9D0E0"');R(120,0,40,300,'fill="#C9D0E0"');
-  R(130,20,400,260,'fill="#E2E5EC" stroke="#8A93A8" stroke-dasharray="6 5"');T(230,140,'서랍 41 L','fill="#525C74"');
-  R(180,355,120,90,'fill="#1B2A5E"');R(140,350,90,380,'fill="#1B2A5E"');R(150,760,110,110,'fill="#1B2A5E"');R(300,355,80,60,'fill="#1B2A5E"');R(330,60,60,295,'fill="#1B2A5E"');
-  R(300,560,330,24,'fill="#8C9BC8" stroke="#1B2A5E" stroke-width="1.5"');T(640,560,'책상 · 13″ 화면','fill="#1B2A5E" font-weight="700"');
-  R(120,350,400,200,'fill="none" stroke="#1B2A5E" stroke-dasharray="4 4"');T(530,470,'팔걸이 상자 (책상 수납)','fill="#525C74"');
-  Dm(-40,0,-40,350,'350');Dm(-40,350,-40,1070,'720');Dm(300,630,630,630,'330');Dm(130,-110,530,-110,'400');
-  h.push(`<text x="${X(900)}" y="${Y(900)}" font-size="13" fill="#8A93A8">바닥 쪽 →</text>`);
-  $('pod').innerHTML=`<g font-family="42dot Sans, system-ui, sans-serif">${h.join('')}</g>`;$('pod').setAttribute('viewBox','0 0 640 440');}
 
 // 머리 숫자
-{const a=build('pv7','D',4,1000),b=build('pv5','D',3,1000),ta=times(Object.assign(a,{n:4})),tb=times(Object.assign(b,{n:3}));
- $('kpis').innerHTML=[[`8<small>+ 케어러 1</small>`,'PV7 · 9인승 요건을 딱 채움'],[`6<small>+ 케어러 1</small>`,'PV5 표준 차체에도 들어감'],
+{const a=build('pv7','F',4,900),b=build('pv5','D',3,900),ta=times(Object.assign(a,{n:4})),tb=times(Object.assign(b,{n:3}));
+ $('kpis').innerHTML=[[`8<small>+ 케어러 1</small>`,'PV7 · 9인승 요건을 딱 채움'],[`1<small>화면</small>`,'8명이 같은 대형 화면을 봄'],
   [`${(a.walk/1000).toFixed(1)}<small>m</small>`,'문에서 가장 먼 자리까지'],[`${ta.board}<small>초</small>`,'8명 전원 착석 (시뮬)'],[`${ta.emer}<small>초</small>`,'8명 비상 하차 (시뮬)']]
   .map(([v,l])=>`<div class="kpi"><b>${v}</b><span>${l}</span></div>`).join('');}
 buildTable();refresh();
 </script>
 </div>
+<script>
+// ── 직접 입력 차체 (양산형 제원 공개 후)
+BODIES.custom={name:'직접 입력 · 양산형 제원',L:3720,W:1735,Wa:1450,H:1650,ext:[5270,2065],front:1400,arch:[2490,3290]};
+$('body').add(new Option(BODIES.custom.name,'custom'));
+for(const id of ['cL','cW','cWa','cH','cA0','cA1'])$(id).oninput=()=>{const c=BODIES.custom,v=i=>+$(i).value||0;
+  Object.assign(c,{L:v('cL'),W:v('cW'),Wa:v('cWa'),H:v('cH'),arch:[v('cA0'),v('cA1')],ext:[v('cL')+1550,v('cW')+330]});refresh()};
+
+// ── 키드 포드: 타고 내리기
+const PH=[['walk',2.5,'문으로 들어와 자기 자리 앞 바닥에 섬','바닥을 지나 문으로 나감'],
+ ['dOut',1,'좌석 밑 서랍이 바닥 쪽으로 나옴','서랍을 닫음'],
+ ['bag',2,'가방을 눕혀 넣고 외투를 위에 얹음','가방과 외투를 꺼내 멤'],
+ ['dIn',1,'서랍이 들어가 잠김','서랍이 바닥 쪽으로 나옴'],
+ ['sit',1.5,'돌아서 앉음 · 발은 바닥에','일어섬'],
+ ['belt',1.5,'벨트 착용 · 이 상태로 이동 (책상은 팔걸이 상자 속)','벨트를 풂'],
+ ['rise',1.2,'도착 · 책상 판이 상자에서 올라오며 앞으로 190 나옴','판이 상자 속으로 내려감'],
+ ['flop',1.2,'판이 무릎 위로 눕혀짐 (반 폭)','판이 세워짐'],
+ ['open',1.2,'접힌 반쪽이 펼쳐져 전체 폭 · 화면 켜짐','화면 꺼짐 · 반쪽이 접힘']];
+const PTOT=PH.reduce((a,p)=>a+p[1],0);
+let podT=12.1,podDir=1,podRaf=0,podSW=371;
+const cl=v=>Math.max(0,Math.min(1,v)),ez=v=>v<.5?2*v*v:1-2*(1-v)*(1-v),lp=(a,b,t)=>a+(b-a)*t;
+function podState(t){const v={};let s=0;PH.forEach(([k,d],i)=>{v[k]=ez(cl((t-s)/d));if(t>=s&&t<s+d)v.cur=i;s+=d});if(v.cur===undefined)v.cur=t<=0?0:PH.length-1;return v}
+const rc=(x,y,w,h,a='')=>`<rect x="${x}" y="${y}" width="${Math.max(0,w)}" height="${Math.max(0,h)}" ${a}/>`,
+  tx=(x,y,t,a='')=>`<text x="${x}" y="${y}" ${a}>${t}</text>`;
+function drawPod(){
+  const sw=podSW,v=podState(podT),H=(sw+P)/2,px=sw+P*.6,e=cl(v.dOut-v.dIn),dw=sw+P-20,dxl=(sw+P)/2-dw/2-P/2,dy=20-380*e;
+  const S={x:sw/2,y:-300},C={x:sw/2,y:230},A={x:sw+1150,y:-560};
+  const kp=v.sit>0?{x:lp(S.x,C.x,v.sit),y:lp(S.y,C.y,v.sit)}:{x:lp(A.x,S.x,v.walk),y:lp(A.y,S.y,v.walk)};
+  // 위에서 (mm)
+  let h=[];const X0=-P-sw-80,X1=2*sw+P+1250;
+  h.push(rc(X0,-1100,X1-X0,1100,'fill="#00B84A1A"'),tx(sw+700,-980,'자리 앞 바닥','fill="#006B2C" font-size="62" font-weight="700"'));
+  h.push(rc(X1-60,-1000,60,900,'fill="#FFB800"'),tx(X1-90,-1040,'문 →','fill="#7A5A00" font-size="62" font-weight="700" text-anchor="end"'));
+  for(const [ox,op] of [[-P-sw,.45],[0,1],[sw+P,.45]]){h.push(`<g opacity="${op}">`+rc(ox,0,sw,500,'fill="#C9D0E0"')+rc(ox,380,sw,120,'fill="#3A4B86" opacity=".55"')+rc(ox+sw,20,P,400,'fill="none" stroke="#1B2A5E" stroke-dasharray="14 10" stroke-width="5"')+rc(ox+sw+19,60,12,330,'fill="#8C9BC8"')+'</g>')}
+  h.push(rc(-P/2-sw,20,sw,400,'fill="none"'));
+  h.push(rc(dxl,dy,dw,460,`fill="#E2E5EC" fill-opacity="${e>0?.95:.5}" stroke="#525C74" stroke-dasharray="18 12" stroke-width="5"`));
+  const bin=v.bag>=1?{x:dxl+dw/2-150,y:dy+30,w:300,h:400}:null;
+  const bb=bin||{x:lp(kp.x-150,dxl+dw/2-150,v.bag),y:lp(kp.y-250,dy+30,v.bag),w:300,h:lp(130,400,v.bag)};
+  if(v.bag<1||e>0)h.push(rc(bb.x,bb.y,bb.w,bb.h,'fill="#FF8A1F" stroke="#7A3D00" stroke-width="4"'));
+  if(v.bag>=.5&&e>0)h.push(rc(dxl+dw/2-170,dy+20,340,300,'fill="#8A1FFF" opacity=".55"'));
+  h.push(rc(kp.x-165,kp.y-110,330,220,'fill="#1B2A5E"'));
+  if(v.belt>0)h.push(`<line x1="${kp.x+150}" y1="${kp.y-100}" x2="${lp(kp.x+150,kp.x-150,v.belt)}" y2="${lp(kp.y-100,kp.y+100,v.belt)}" stroke="#fff" stroke-width="26"/>`);
+  // 책상: 세움 → 앞으로 나오며 올라옴 → 눕혀짐 → 펼침
+  const y0=60-190*v.rise,wd=12+(H-12)*v.flop,wt=wd+H*v.open,xr=px+6;
+  if(v.rise>0||v.flop>0){h.push(rc(xr-wt,y0,wt,330,`fill="#8C9BC8" stroke="#1B2A5E" stroke-width="5"`));
+    if(v.open>0&&v.open<1)h.push(`<line x1="${xr-H}" y1="${y0}" x2="${xr-H}" y2="${y0+330}" stroke="#1B2A5E" stroke-width="5" stroke-dasharray="12 8"/>`);
+    if(v.open>.6)h.push(rc(xr-wt/2-132,y0+66,264,198,`fill="#1B2A5E" opacity="${(v.open-.6)/.4}"`));}
+  h.push(tx(sw/2,580,'등받이','fill="#525C74" font-size="56" text-anchor="middle"'),tx(sw+P/2,-40,'팔걸이 상자','fill="#1B2A5E" font-size="52" text-anchor="middle" font-weight="700"'));
+  $('podTop').setAttribute('viewBox',`${X0} -1120 ${X1-X0} 1760`);
+  $('podTop').innerHTML=`<g font-family="42dot Sans, system-ui, sans-serif">${h.join('')}</g>`;
+  // 옆에서: 가로 = 앞뒤(mm, 왼쪽이 바닥), 세로 = 높이
+  h=[];const Z=z=>1500-z;
+  h.push(`<line x1="-1000" y1="${Z(0)}" x2="620" y2="${Z(0)}" stroke="#525C74" stroke-width="8"/>`);
+  h.push(rc(0,Z(300),380,300,'fill="none" stroke="#8A93A8" stroke-width="5"'),rc(-380*e+20,Z(280),460,260,'fill="#E2E5EC" stroke="#525C74" stroke-dasharray="18 12" stroke-width="5"'));
+  if(v.bag>=1)h.push(rc(-380*e+50,Z(170),400,150,'fill="#FF8A1F"'),rc(-380*e+40,Z(270),380,100,'fill="#8A1FFF" opacity=".55"'));
+  h.push(rc(0,Z(350),380,50,'fill="#C9D0E0"'),rc(380,Z(1070),120,1070,'fill="#3A4B86" opacity=".55"'),rc(20,Z(600),400,250,'fill="none" stroke="#1B2A5E" stroke-dasharray="14 10" stroke-width="5"'));
+  const sa=1-v.sit,ky=v.sit>0?S.y:Math.max(-1000,lp(-1000,S.y,v.walk));
+  if(sa>0){h.push(`<g opacity="${sa}">`+rc(ky-60,Z(650),120,650,'fill="#1B2A5E"')+rc(ky-100,Z(1130),200,480,'fill="#1B2A5E"')+rc(ky-90,Z(1380),180,220,'fill="#1B2A5E"')+'</g>');
+    if(v.bag<1)h.push(rc(lp(ky-240,-380*e+50,v.bag),lp(Z(1150),Z(170),v.bag),lp(140,400,v.bag),lp(400,150,v.bag),`fill="#FF8A1F" opacity="${sa}"`));}
+  if(v.sit>0){h.push(`<g opacity="${v.sit}">`+rc(-20,Z(480),420,130,'fill="#1B2A5E"')+rc(-50,Z(350),110,350,'fill="#1B2A5E"')+rc(250,Z(880),130,530,'fill="#1B2A5E"')+rc(240,Z(1070),150,180,'fill="#1B2A5E"')+'</g>');
+    if(v.belt>0)h.push(`<line x1="330" y1="${Z(840)}" x2="${lp(330,220,v.belt)}" y2="${lp(Z(840),Z(470),v.belt)}" stroke="#fff" stroke-width="24"/>`);}
+  const dz=lp(370+260*v.rise,580,v.flop),dh=lp(210,24,v.flop);
+  h.push(rc(60-190*v.rise,Z(dz+dh),330,dh,'fill="#8C9BC8" stroke="#1B2A5E" stroke-width="5"'));
+  h.push(tx(-980,Z(1420),`책상 높이 ${Math.round(dz)}`,'fill="#1B2A5E" font-size="60" font-weight="700"'),tx(-980,Z(1330),`서랍 ${Math.round(380*e)} 나옴`,'fill="#525C74" font-size="56"'));
+  $('podSide').setAttribute('viewBox','-1000 0 1620 1560');
+  $('podSide').innerHTML=`<g font-family="42dot Sans, system-ui, sans-serif">${h.join('')}</g>`;
+  $('podR').value=podT;$('podO').textContent=`${podT.toFixed(1)}초 / ${PTOT.toFixed(1)}`;
+  const k=v.cur;$('podMsg').textContent=(podDir>0?PH[k][2]:PH[k][3]);
+  $('podSteps').innerHTML=(podDir>0?PH:[...PH].reverse()).map((p,i)=>`<li class="${(podDir>0?i:PH.length-1-i)===k?'on':''}">${podDir>0?p[2]:p[3]}</li>`).join('');
+}
+function podPlay(dir){cancelAnimationFrame(podRaf);podDir=dir;podT=dir>0?0:PTOT;let last=performance.now();
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){podT=dir>0?PTOT:0;drawPod();return}
+  const f=now=>{podT=Math.max(0,Math.min(PTOT,podT+dir*(now-last)/1000));last=now;drawPod();if(podT>0&&podT<PTOT)podRaf=requestAnimationFrame(f)};podRaf=requestAnimationFrame(f)}
+$('podR').max=PTOT;$('podIn').onclick=()=>podPlay(1);$('podOut').onclick=()=>podPlay(-1);
+$('podR').oninput=e=>{cancelAnimationFrame(podRaf);podT=+e.target.value;drawPod()};
+
+// ── 서랍 목업: 눕혀서 쌓기, 추가 짐은 옆자리가 남으면 옆에
+function drawDrawer(){
+  const w=podSW+P-40,d=460,hh=240,it=id=>{const v=$(id).value;return v?v.split(',').map(Number):null};
+  const bag=it('dBag'),coat=it('dCoat'),ex=it('dExtra');
+  const fit=a=>a&&((a[0]<=d&&a[1]<=w)||(a[0]<=w&&a[1]<=d));
+  let side=false,stack=[bag];if(coat)stack.push(coat);
+  if(ex){const rw=w-bag[1];side=(ex[1]<=rw&&ex[0]<=d)||(ex[0]<=rw&&ex[1]<=d);if(!side)stack.push(ex)}
+  const H=stack.reduce((a,x)=>a+x[2],0)+(side?0:0),ok=[bag,coat,ex].every(a=>!a||fit(a))&&H<=hh&&(!side||ex[2]<=hh);
+  const vol=[bag,coat,ex].filter(Boolean).reduce((a,x)=>a+x[0]*x[1]*x[2]/1e6,0);
+  const col=['#FF8A1F','#8A1FFF','#00B84A'];
+  // 위에서
+  let h=[rc(0,0,w,d,'fill="#F7F7F9" stroke="#525C74" stroke-width="6"')];
+  const place=(a,x,y,c)=>{const [l,b]=a[0]<=d&&a[1]<=w?[a[1],a[0]]:[a[0],a[1]];h.push(rc(x,y,Math.min(l,w*1.3),Math.min(b,d*1.3),`fill="${c}" opacity=".6" stroke="${fit(a)?c:'#FF2D3D'}" stroke-width="6"`))};
+  place(bag,6,6,col[0]);if(coat)place(coat,10,14,col[1]);if(ex)place(ex,side?bag[1]+10:20,side?6:24,col[2]);
+  h.push(rc(w/2-60,d-10,120,24,'fill="#525C74"'));
+  $('dTop').setAttribute('viewBox',`-40 -40 ${w+80} ${d+100}`);$('dTop').innerHTML=h.join('');
+  // 정면
+  h=[rc(0,0,w,hh,'fill="#F7F7F9" stroke="#525C74" stroke-width="6"')];let z=hh;
+  stack.forEach((a,i)=>{const wd=Math.min(a[0]<=d&&a[1]<=w?a[1]:a[0],w+80);z-=a[2];h.push(rc(4,z,wd-8,a[2]-4,`fill="${col[i===2?2:i]}" opacity=".6"`))});
+  if(side)h.push(rc(bag[1]+8,hh-ex[2],Math.min(ex[1],w-bag[1]-12),ex[2]-4,`fill="${col[2]}" opacity=".6"`));
+  if(H>hh)h.push(rc(0,z,w,hh-hh+(H-hh),'fill="#FF2D3D" opacity=".25"'));
+  h.push(`<line x1="-30" y1="0" x2="${w+30}" y2="0" stroke="#FF2D3D" stroke-width="5" stroke-dasharray="14 10"/>`);
+  $('dFront').setAttribute('viewBox',`-40 ${Math.min(-40,z-40)} ${w+80} ${hh-Math.min(-40,z-40)+40}`);$('dFront').innerHTML=h.join('');
+  const R=$('dRes');R.className='res'+(ok?'':' bad');
+  R.textContent=`서랍 안쪽 ${fmt(w)} × ${d} × ${hh} = ${(w*d*hh/1e6).toFixed(0)} L · 짐 ${vol.toFixed(0)} L · 쌓인 높이 ${H} / ${hh} · `+(ok?'들어감':(!fit(bag)?'가방이 바닥에 안 누움 · 좌석 폭이 좁음':'높이 초과 · 외투는 뒤 사물함 트렁크로'));
+}
+['dBag','dCoat','dExtra'].forEach(id=>$(id).onchange=drawDrawer);
+
+// ── 화면 시선 (배치 F 기준 옆 단면)
+function drawSight(){
+  const B=BODIES[st.body],L=B.L,Hc=B.H,rz=+$('riser').value,Fl=Math.max(st.door,900);
+  const r1=150+Fl,r2=r1+SD+Fl,y1=r1+280,y2=r2+280,z1=350+620,z2=z1+rz,hT=1100;
+  const zb=Math.max(700,z2-(z2-hT)*y2/(y2-y1)),zt=Hc-60,sh=Math.max(0,zt-zb),swd=Math.min(sh*16/9,B.W*.9),shh=swd*9/16,zc=zb+shh/2;
+  const inch=Math.hypot(swd,shh)/25.4;
+  $('riserO').textContent=rz;
+  let h=[];const Z=z=>Hc+100-z;
+  h.push(`<line x1="0" y1="${Z(0)}" x2="${L}" y2="${Z(0)}" stroke="#525C74" stroke-width="12"/>`,`<line x1="0" y1="${Z(Hc)}" x2="${L}" y2="${Z(Hc)}" stroke="#8A93A8" stroke-width="8" stroke-dasharray="30 20"/>`);
+  h.push(rc(0,Z(zb+shh),70,shh,'fill="#1B2A5E"'));
+  const row=(y,base)=>rc(y,Z(base+350),380,50,'fill="#C9D0E0"')+rc(y+380,Z(base+1070),120,1070,'fill="#3A4B86" opacity=".55"')+rc(y+250,Z(base+880),130,530,'fill="#1B2A5E"')+rc(y+240,Z(base+1100),150,210,'fill="#1B2A5E"')+rc(y-20,Z(base+480),300,130,'fill="#1B2A5E"');
+  if(rz)h.push(rc(r2-300,Z(rz),800+300,rz,'fill="#E2E5EC" stroke="#8A93A8" stroke-width="6"'));
+  h.push(row(r1,0),row(r2,rz));
+  h.push(`<line x1="${y2}" y1="${Z(z2)}" x2="0" y2="${Z(zb)}" stroke="#FF2D3D" stroke-width="8" stroke-dasharray="30 18"/>`,`<line x1="${y2}" y1="${Z(z2)}" x2="0" y2="${Z(zb+shh)}" stroke="#1B2A5E" stroke-width="6"/>`,`<line x1="${y1}" y1="${Z(z1)}" x2="0" y2="${Z(zc)}" stroke="#1B2A5E" stroke-width="6"/>`);
+  h.push(rc(y1-35,Z(z1)-35,70,70,'fill="#FFB800"'),rc(y2-35,Z(z2)-35,70,70,'fill="#FFB800"'));
+  h.push(tx(120,Z(zb+shh)+90,`화면 ${inch.toFixed(0)}″`,'fill="#1B2A5E" font-size="90" font-weight="800"'),tx(L-40,Z(Hc)-30,`천장 ${fmt(Hc)}`,'fill="#8A93A8" font-size="70" text-anchor="end"'));
+  $('sight').setAttribute('viewBox',`-60 0 ${L+120} ${Hc+220}`);$('sight').innerHTML=`<g font-family="42dot Sans, system-ui, sans-serif">${h.join('')}</g>`;
+  const up=Math.atan((zc-z1)/y1)*180/Math.PI;
+  $('sightRes').innerHTML=[['가림 없는 최대 화면',`${inch.toFixed(0)}인치 · ${fmt(swd)} × ${fmt(shh)}`],['화면 높이 (바닥에서)',`${fmt(zb)} ~ ${fmt(zb+shh)}`],
+    ['앞줄 거리 · 올려보는 각',`${(y1/1000).toFixed(1)} m · ${up.toFixed(0)}°`],['뒷줄 거리',`${(y2/1000).toFixed(1)} m`],['뒷줄 단 위 서면 머리 공간',`${fmt(Hc-rz)}`]].map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('');
+}
+$('riser').oninput=drawSight;
+
+window.onCfg=o=>{$('custom').hidden=st.body!=='custom';podSW=(o.lay==='F'||o.lay==='D')?Math.round(o.seatW):450;drawPod();drawDrawer();drawSight()};
+onCfg(cur());
+</script>
