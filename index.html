@@ -870,8 +870,8 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   const M={},mat=(c,x={},ph)=>{const key=c+JSON.stringify(x)+(ph?1:0);if(M[key])return M[key];const P=ph?T.MeshPhysicalMaterial:T.MeshStandardMaterial;
     return M[key]=new P({roughness:.8,envMapIntensity:.55,...x,color:new T.Color(c).convertSRGBToLinear(),...(x.emissive?{emissive:new T.Color(x.emissive).convertSRGBToLinear()}:{})})};
   const paint=mat('#F7F8FA',{roughness:.3,clearcoat:1,clearcoatRoughness:.12,envMapIntensity:.9},1),clad=mat('#3A3D45',{roughness:.78}),blackG=mat('#0E1014',{roughness:.04,metalness:.3,transparent:true,opacity:V3.roofOn?.82:.42,depthWrite:false,envMapIntensity:1.3},1),
-    roofM=mat('#0D0F13',{roughness:.12,clearcoat:1,envMapIntensity:1},1),fab=mat('#E4E2DD',{roughness:.96}),fabD=mat('#D2CFC9',{roughness:.96}),navy=mat('#1B2A5E',{roughness:.6}),lock=mat('#F3F4F7',{roughness:.45}),
-    tire=mat('#1B1C20',{roughness:.9}),alu=mat('#C9CDD4',{roughness:.22,metalness:.85}),strap=mat('#2A2D36',{roughness:.7}),deskTop=mat('#F2F3F6',{roughness:.28}),darkScr=mat('#14161C',{roughness:.12,envMapIntensity:1.1}),
+    roofM=mat('#0D0F13',{roughness:.12,clearcoat:1,envMapIntensity:1},1),fab=mat('#98A0AB',{roughness:.96}),fabD=mat('#3A4766',{roughness:.9}),navy=mat('#1B2A5E',{roughness:.6}),lock=mat('#F3F4F7',{roughness:.45}),
+    tire=mat('#1B1C20',{roughness:.9}),alu=mat('#C9CDD4',{roughness:.22,metalness:.85}),strap=mat('#1B2A5E',{roughness:.7}),deskTop=mat('#F2F3F6',{roughness:.28}),darkScr=mat('#14161C',{roughness:.12,envMapIntensity:1.1}),
     yellow=mat('#FFB800',{roughness:.4}),lightW=mat('#FFFFFF',{emissive:'#FFFFFF',emissiveIntensity:1.4}),lightR=mat('#FF2D3D',{emissive:'#FF2D3D',emissiveIntensity:1.2}),floorM=new T.MeshStandardMaterial({roughness:.7,envMapIntensity:.4,
       map:tex(512,512,(x,w,h)=>{x.fillStyle='#E7E9ED';x.fillRect(0,0,w,h);x.strokeStyle='#D8DBE1';x.lineWidth=3;for(let i=0;i<=4;i++){x.beginPath();x.moveTo(0,i*128);x.lineTo(w,i*128);x.stroke()}})});
   floorM.map.wrapS=floorM.map.wrapT=T.RepeatWrapping;floorM.map.repeat.set(W/.6,L/.6);
@@ -950,10 +950,10 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
     return g};
   const dT=tex(1024,576,(x,w,h)=>{x.fillStyle='#14161C';x.fillRect(0,0,w,h)});{const di=new Image();di.onload=()=>{const c=dT.image,x=c.getContext('2d');const iw=Math.min(c.width,c.height*di.width/di.height),ix=(c.width-iw)/2;x.drawImage(di,0,0,2,di.height,0,0,ix+2,c.height);x.drawImage(di,di.width-2,0,2,di.height,ix+iw-2,0,ix+2,c.height);x.drawImage(di,ix,0,iw,c.height);dT.needsUpdate=true};di.src=FIG_DESK}
   const dm=new T.MeshStandardMaterial({map:dT,emissive:'#FFFFFF',emissiveMap:dT,emissiveIntensity:.65,roughness:.2});
-  const cBag=mat('#FF8A1F',{roughness:.6}),cDrw=mat('#DDE1E8',{roughness:.55});
+  const cBag=mat('#FF8A1F',{roughness:.6}),cPkt=mat('#E86F0A',{roughness:.6}),cDrw=mat('#DDE1E8',{roughness:.55});
   V3.rig=o.seats.map(s=>{const f=(mode==='stay'&&s.stayFace)?s.stayFace:s.face,w=s.w*k,g=seat((s.x+s.w/2)*k,(s.y+s.h/2)*k,w,f);if(!o.stow)return null;
     const dr=new T.Group();g.add(dr);rb(dr,cDrw,-w/2+.035,-.23,w-.07,.44,.22,.03,.012);rb(dr,navy,-.06,-.235,.12,.012,.02,.19,.004,false);
-    const bag=new T.Mesh(rgeo(.3,.13,.4,.04),cBag);bag.castShadow=true;S.add(bag);bag.visible=false;
+    const bag=new T.Group(),bm=(geo,m,x,y,z)=>{const q=new T.Mesh(geo,m);q.position.set(x,y,z);q.castShadow=true;bag.add(q)};bag.rotation.order='YXZ';bm(rgeo(.26,.32,.11,.045),cBag,0,0,0);bm(rgeo(.19,.13,.035,.02),cPkt,0,-.06,-.07);bm(new T.BoxGeometry(.07,.025,.02),navy,0,.17,0);for(const sx of [-.07,.07])bm(new T.BoxGeometry(.035,.28,.012),navy,sx,.01,.062);S.add(bag);bag.visible=false;
     const H=(w-.03)/2,leaf=b=>{const l=new T.Group();g.add(l);const base=new T.Mesh(rgeo(H,.016,.33,.006),navy);base.castShadow=true;l.add(base);
       const top=new T.Mesh(new T.PlaneGeometry(H-.02,.31),darkScr);top.rotation.x=-Math.PI/2;top.position.y=.0085;l.add(top);
       if(b){const bot=top.clone();bot.rotation.x=Math.PI/2;bot.position.y=-.0085;l.add(bot)}
@@ -1038,10 +1038,10 @@ function tick3D(ag){if(!V3.on||!V3.kids.length)return;
   const done=ag.every(a=>a.st==='done'),board=ag.some(a=>a.pts[0]&&a.pts.at(-1)&&a.pts.at(-1).x<a.pts[0].x);
   V3.deskTo=board?(done?1:0):0;V3.doorTo=board?(done?0:1):1;
   if(V3.tSit&&V3.tStand&&V3.o.care.stayFace){V3.tSit.visible=board&&done;V3.tStand.visible=!V3.tSit.visible;const dd=V3.o.door;V3.tStand.position.set((V3.o.B.W-450)/1e3,0,(dd.a+dd.b)/2e3);V3.tStand.rotation.y=-Math.PI/2}
-  ag.forEach(a=>{const r=V3.rig&&V3.rig[a.i];if(!r)return;let e=0,bv=true,bp;const back=()=>{const K=V3.kids[a.i].stand;return new THREE.Vector3(a.pos.x/1e3-Math.sin(K.rotation.y)*-.2,.85,a.pos.y/1e3-Math.cos(K.rotation.y)*-.2)};
+  ag.forEach(a=>{const r=V3.rig&&V3.rig[a.i];if(!r)return;let e=0,bv=true,bp;const back=()=>{const K=V3.kids[a.i].stand;return new THREE.Vector3(a.pos.x/1e3-Math.sin(K.rotation.y)*.15,.78,a.pos.y/1e3-Math.cos(K.rotation.y)*.15)};
     if(board){if(a.st==='queue'){bv=false}else if(a.st==='walk'){bp=back()}else if(a.st==='act'){const t=1-a.tm/4;e=t<.25?t/.25:t<.75?1:(1-t)/.25;bp=t<.25?back():t<.75?back().lerp(bagAt(r,1,true),(t-.25)/.5):bagAt(r,e,true)}else{bp=bagAt(r,0,true)}}
     else{if(a.st==='belt'){bp=bagAt(r,0,true)}else if(a.st==='act'){const t=1-a.tm/Math.max(.5,a.tm0||4);e=1;bp=bagAt(r,1,true)}else if(a.st==='walk'){bp=back()}else bv=false}
-    r.dr.position.z=-.38*e;r.bag.visible=bv&&!!bp;if(bp){r.bag.position.copy(bp)}});
+    r.dr.position.z=-.38*e;r.bag.visible=bv&&!!bp;if(bp){r.bag.position.copy(bp);const worn=a.st==='walk'||(board&&a.st==='act'&&a.tm>3);if(worn)r.bag.rotation.set(0,V3.kids[a.i].stand.rotation.y,0);else r.bag.rotation.set(-Math.PI/2,r.g.rotation.y,0)}});
   tick3Dp(ag)}
 function tick3Dp(ag){if(!V3.on||!V3.kids.length)return;const k=.001;ag.forEach(a=>{const K=V3.kids[a.i];if(!K)return;
   const walking=a.st==='walk'||a.st==='act'||(a.st==='queue'&&false),seated=a.st==='belt'||(a.st==='done'&&!a.out);
