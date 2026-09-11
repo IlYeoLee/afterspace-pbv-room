@@ -934,8 +934,8 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   const seat=(cx,cz,w,face,accent=navy)=>{const g=new T.Group();g.position.set(cx,0,cz);g.rotation.y=ang[face];car.add(g);
     for(const sd of [-1,1])rb(g,fabD,sd*(w/2-.02)-.015,-.2,.03,.4,.28,0,.01);rb(g,fabD,-w/2+.02,.14,w-.04,.06,.28,0,.01);rb(g,accent,-w/2+.03,-.21,w-.06,.02,.05,.0,.008);
     rb(g,fab,-w/2+.003,-.26,w-.006,.41,.09,.27,.04);
-    const bk=new T.Group();bk.position.set(0,.34,.19);bk.rotation.x=-.1;g.add(bk);rb(bk,fab,-w/2+.003,-.06,w-.006,.12,.82,0,.06);
-    rb(bk,accent,-w*.08,-.052,w*.16,.012,.1,.68,.004,false);
+    const bk=new T.Group();bk.position.set(0,.34,.19);bk.rotation.x=-.1;g.add(bk);rb(bk,fab,-w/2+.003,-.06,w-.006,.12,.64,0,.06);for(const sx of [-.06,.06])rb(bk,alu,sx-.009,-.012,.018,.018,.1,.62,.008);{const hr=new T.Group();hr.position.set(0,.8,-.01);hr.rotation.x=.12;bk.add(hr);rb(hr,fab,-w*.31,-.05,w*.62,.1,.17,-.085,.05);rb(hr,fabD,-.003,-.052,.006,.004,.11,-.055,.002,false)}
+    rb(bk,accent,-w*.08,-.052,w*.16,.012,.1,.5,.004,false);
     const st=new T.Mesh(new T.BoxGeometry(.045,.6,.006),strap);st.position.set(w*.12,.34,-.07);st.rotation.set(-.1,0,.5);bk.add(st);const lp2=new T.Mesh(new T.BoxGeometry(w*.7,.045,.006),strap);lp2.position.set(0,.06,-.07);bk.add(lp2);
     return g};
   const dT=tex(1024,576,(x,w,h)=>{x.fillStyle='#14161C';x.fillRect(0,0,w,h)});{const di=new Image();di.onload=()=>{const c=dT.image,x=c.getContext('2d');const iw=c.height*4/3,ix=(c.width-iw)/2;x.drawImage(di,0,0,2,di.height,0,0,ix+2,c.height);x.drawImage(di,di.width-2,0,2,di.height,ix+iw-2,0,ix+2,c.height);x.drawImage(di,ix,0,iw,c.height);dT.needsUpdate=true};di.src=FIG_DESK}
