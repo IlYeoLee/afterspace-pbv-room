@@ -129,7 +129,7 @@ ol.steps li.on{color:var(--navy);font-weight:800}
 .v3cap .line,.v3kid button{background:var(--surface)}
 .v3kid{flex-basis:100%;display:flex;gap:6px;flex-wrap:wrap}
 .v3kid button{min-height:36px;padding:0 14px;font-size:13px}
-.v3bar #deskTog,.v3bar #camB3,.v3bar #camB1{background:var(--navy);color:#fff}
+.v3bar #deskTog,.v3bar #camB3,.v3bar #camB1,.v3bar #camBf,.v3bar #camBb{background:var(--navy);color:#fff}
 .v3note{position:absolute;bottom:10px;left:12px;margin:0;font-size:12px;color:var(--faint)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -157,7 +157,7 @@ ol.steps li.on{color:var(--navy);font-weight:800}
         <p id="simMsg"></p>
       </div>
       <svg id="plan" role="img" aria-label="차량 실내 평면도"></svg>
-      <div id="c3" hidden><div class="v3bar"><button id="camB3">베스트 · 3인칭</button><button id="camB1">베스트 · 1인칭</button><button class="line" id="camExt">외관</button><button class="line" id="camDoor">문 앞에서</button><button class="line" id="camTop">위에서</button><button class="line" id="camIn">안에서</button><button class="line" id="camDesk">앉아서 책상 편 모습</button><button class="line" id="camRow">필기 자세 (앞줄)</button><button id="deskTog">책상 펴기 · 접기</button><div class="v3kid" id="kidCams"></div></div><div class="v3cap"><button class="line" id="roofT">지붕 덮기</button><button class="line" id="pplT">사람 숨기기</button><button class="line" id="fsBtn">전체화면</button><button class="line" id="labT">치수 켜기</button><button id="cap">이미지 저장</button></div><p class="v3note">끌어서 돌리기 · 휠로 확대</p></div>
+      <div id="c3" hidden><div class="v3bar"><button id="camB3">베스트 · 3인칭</button><button id="camB1">베스트 · 1인칭</button><button id="camBf">베스트 · 책상 접기</button><button id="camBb">베스트 · 탑승</button><button class="line" id="camExt">외관</button><button class="line" id="camDoor">문 앞에서</button><button class="line" id="camTop">위에서</button><button class="line" id="camIn">안에서</button><button class="line" id="camDesk">앉아서 책상 편 모습</button><button class="line" id="camRow">필기 자세 (앞줄)</button><button id="deskTog">책상 펴기 · 접기</button><div class="v3kid" id="kidCams"></div></div><div class="v3cap"><button class="line" id="roofT">지붕 덮기</button><button class="line" id="pplT">사람 숨기기</button><button class="line" id="fsBtn">전체화면</button><button class="line" id="labT">치수 켜기</button><button id="cap">이미지 저장</button></div><p class="v3note">끌어서 돌리기 · 휠로 확대</p></div>
       <div class="legend">
         <span><i style="background:#1B2A5E"></i>아이</span>
         <span><i style="background:#FF2D3D"></i>선생님</span>
@@ -824,11 +824,14 @@ function init3D(){const T=THREE,host=$('c3'),r=new T.WebGLRenderer({antialias:tr
   const cam=new T.PerspectiveCamera(35,1,.05,200),ctl=new T.OrbitControls(cam,r.domElement);ctl.enableDamping=true;ctl.maxPolarAngle=Math.PI*.495;
   const size=()=>{const w=host.clientWidth,h=host.clientHeight;if(!w)return;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()};new ResizeObserver(size).observe(host);size();
   Object.assign(V3,{r,cam,ctl});const loop=()=>{requestAnimationFrame(loop);if(!V3.on||!V3.scene)return;if(V3.doorP!==V3.doorTo){V3.doorP+=Math.sign(V3.doorTo-V3.doorP)*Math.min(Math.abs(V3.doorTo-V3.doorP),.008);poseDoors()}if(V3.deskP!==V3.deskTo){V3.deskP+=Math.sign(V3.deskTo-V3.deskP)*Math.min(Math.abs(V3.deskTo-V3.deskP),.006);poseRigs()}ctl.update();r.render(V3.scene,cam)};loop();
-  $('camDoor').onclick=()=>camSet('door');for(const k of ['b3','b1'])$('camB'+k[1]).onclick=()=>{if(st.mode!=='stay'){st.mode='stay';refresh()}setPeople(true);camSet(k)};$('camExt').onclick=()=>camSet('ext');$('camRow').onclick=()=>{if(st.mode!=='stay'){st.mode='stay';refresh()}camSet('row')};$('cap').onclick=capture3D;$('labT').onclick=()=>{V3.labOn=V3.labOn===false;(V3.labels||[]).forEach(l=>l.visible=V3.labOn);$('labT').textContent=V3.labOn?'치수 끄기':'치수 켜기'};$('camTop').onclick=()=>camSet('top');$('camIn').onclick=()=>camSet('in');$('camDesk').onclick=()=>{st.mode='stay';refresh();camSet('desk')};$('deskTog').onclick=()=>{if(st.mode==='board'){st.mode='stay';refresh()}else V3.deskTo=V3.deskTo>.5?0:1;camSet('desk')}}
-function camSet(k){(V3.labels||[]).forEach(l=>l.visible=!/^(k\d+|t[12]|row|kdesk|tdesk|b[13])$/.test(k)&&V3.labOn!==false);if(V3.tSit){V3.tSit.visible=/^(t[12]|tdesk)$/.test(k)?false:V3.tSitV}setRoof(k==='ext');(V3.kids||[]).forEach((K,i)=>{if(K.sit.userData.v!==undefined)K.sit.visible=K.sit.userData.v;delete K.sit.userData.v});
+  $('camDoor').onclick=()=>camSet('door');$('camBb').onclick=boardStill;for(const k of ['b3','b1','bf'])$('camB'+k[1]).onclick=()=>{if(st.mode!=='stay'){st.mode='stay';refresh()}setPeople(true);camSet(k)};$('camExt').onclick=()=>camSet('ext');$('camRow').onclick=()=>{if(st.mode!=='stay'){st.mode='stay';refresh()}camSet('row')};$('cap').onclick=capture3D;$('labT').onclick=()=>{V3.labOn=V3.labOn===false;(V3.labels||[]).forEach(l=>l.visible=V3.labOn);$('labT').textContent=V3.labOn?'치수 끄기':'치수 켜기'};$('camTop').onclick=()=>camSet('top');$('camIn').onclick=()=>camSet('in');$('camDesk').onclick=()=>{st.mode='stay';refresh();camSet('desk')};$('deskTog').onclick=()=>{if(st.mode==='board'){st.mode='stay';refresh()}else V3.deskTo=V3.deskTo>.5?0:1;camSet('desk')}}
+function camSet(k){(V3.rig||[]).forEach(r=>{if(r)delete r.p});if(V3.rig)poseRigs();(V3.labels||[]).forEach(l=>l.visible=!/^(k\d+|t[12]|row|kdesk|tdesk|b[13fb])$/.test(k)&&V3.labOn!==false);if(V3.tSit){V3.tSit.visible=/^(t[12]|tdesk)$/.test(k)?false:V3.tSitV}setRoof(k==='ext');(V3.kids||[]).forEach((K,i)=>{if(K.sit.userData.v!==undefined)K.sit.visible=K.sit.userData.v;delete K.sit.userData.v});
   if(k==='kdesk'||k==='tdesk'){const rg=(V3.rig||[]).filter(Boolean),r=k==='tdesk'?rg.find(q=>q.t):rg.filter(q=>!q.t)[1]||rg[0];if(!r)return;V3.deskP=1;poseRigs();
     if(k==='kdesk'){const i=V3.rig.indexOf(r),K=V3.kids[i];if(K){K.sit.userData.v=K.sit.visible;K.sit.visible=false}}else if(V3.tSit)V3.tSit.visible=false;
     V3.scene.updateMatrixWorld(true);const tg=r.g.localToWorld(new THREE.Vector3(0,.59,-.315)),ey=r.g.localToWorld(new THREE.Vector3(0,1.2,.06));V3.cam.fov=38;V3.cam.updateProjectionMatrix();V3.cam.position.copy(ey);V3.ctl.target.copy(tg);V3.ctl.update();return}
+  if(k==='bb'){const o=V3.o,W=o.B.W/1e3,d=o.door,dz=(d.a+d.b)/2e3;V3.cam.fov=40;V3.cam.updateProjectionMatrix();V3.cam.position.set(W+3,2.6,dz+2.4);V3.ctl.target.set(W-.4,.8,dz-.3);V3.ctl.update();return}
+  if(k==='bf'){const o=V3.o,W=o.B.W/1e3,ys=Math.max(...o.seats.map(s=>s.y)),row=o.seats.filter(s=>s.y===ys).sort((a,b)=>b.x-a.x),rz=(row[0].y+row[0].h/2)/1e3,r=V3.rig[o.seats.indexOf(row[1]||row[0])];
+    const dz={up:-1,down:1}[(st.mode==='stay'&&row[0].stayFace)||row[0].face]||1;V3.deskP=V3.deskTo=1;if(r)r.p=.5;poseRigs();V3.cam.fov=50;V3.cam.updateProjectionMatrix();V3.cam.position.set(W-.3,1.9,rz+dz*1.0);V3.ctl.target.set(.4,.45,rz+dz*.1);V3.ctl.update();return}
   if(k==='b3'){const o=V3.o,W=o.B.W/1e3,L=o.B.L/1e3;V3.cam.fov=40;V3.cam.updateProjectionMatrix();V3.cam.position.set(W+3.2,5.6,L/2+.15);V3.ctl.target.set(W*.45,.7,L/2);V3.ctl.update();return}
   if(k==='b1'){const o=V3.o,ys=Math.max(...o.seats.map(s=>s.y)),row=o.seats.filter(s=>s.y===ys).sort((a,b)=>a.x-b.x),s=row[row.length>>1],K=V3.kids[o.seats.indexOf(s)],cx=(s.x+s.w/2)/1e3,cz=(s.y+s.h/2)/1e3;
     if(K){K.sit.userData.v=K.sit.visible;K.sit.visible=false}V3.cam.fov=72;V3.cam.updateProjectionMatrix();V3.cam.position.set(cx,1.04,cz+.06);V3.ctl.target.set(cx-.3,.6,cz-2.4);V3.ctl.update();return}
@@ -838,6 +841,10 @@ function camSet(k){(V3.labels||[]).forEach(l=>l.visible=!/^(k\d+|t[12]|row|kdesk
     if(K){K.sit.userData.v=K.sit.visible;K.sit.visible=false}V3.cam.fov=62;V3.cam.updateProjectionMatrix();V3.cam.position.set(cx+d[0]*.04,.98,cz+d[1]*.04);V3.ctl.target.set(cx+d[0]*2,.92,cz+d[1]*2);V3.ctl.update();return}
   const o=V3.o,W=o.B.W/1e3,L=o.B.L/1e3,d=o.door,dz=d.side==='r'?(d.a+d.b)/2e3:L;V3.cam.fov=k==='in'?60:35;V3.cam.updateProjectionMatrix();
   const P={door:[[W+4.2,4.6,dz+3.2],[W/2,.3,dz-.2]],top:[[W/2+.01,L*1.6+3,L/2+1.2],[W/2,0,L/2]],in:[[W-.25,1.2,dz+.3],[0,.95,dz]],desk:[[W+.35,2.35,dz+1.5],[W*.45,.55,.55]],ext:[[W+5.4,3.8,-4.6],[W/2,.4,L*.42]],row:[[W/2,1.4,2.75],[W/2,.62,.5]]}[k];V3.cam.fov=k==='row'?50:k==='in'?60:35;V3.cam.updateProjectionMatrix();V3.cam.position.set(...P[0]);V3.ctl.target.set(...P[1]);V3.ctl.update()}
+// 탑승 정지 샷: 두 명 이상 앉고 한 명 이상 걸어 들어오는 순간에서 멈춤
+function boardStill(){const o=cur();o.n=st.n;if(anim){cancelAnimationFrame(anim.raf);anim=null}st.mode='board';$('mB').checked=true;$('modeNote').textContent=MODE_NOTE.board;on3D(o,'board');
+  const S=makeSim(o,'board'),n=f=>S.ag.filter(f).length;while(!S.done&&S.t<600&&!(n(a=>a.st==='done'||a.st==='act')>=2&&n(a=>a.st==='walk')>=1))S.step(.1);
+  draw($('plan'),o,'board',S.ag);tick3D(S.ag);V3.doorP=V3.doorTo;V3.deskP=V3.deskTo;poseDoors();poseRigs();camSet('bb');$('simMsg').textContent='탑승 '+Math.round(S.t)+'초 · 정지'}
 function on3D(o,mode){if(!V3.on||!window.THREE)return;if(!V3.r)init3D();kidButtons(o);const first=!V3.o||V3.o.B!==o.B||V3.o.lay!==o.lay;build3D(o,mode);if(first)camSet('door')}
 async function capture3D(){const r=V3.r,pr=r.getPixelRatio(),lv=(V3.labels||[]).map(l=>l.visible);(V3.labels||[]).forEach(l=>l.visible=false);r.setPixelRatio(3);r.render(V3.scene,V3.cam);
   const blob=await new Promise(ok=>r.domElement.toBlob(ok,'image/png'));r.setPixelRatio(pr);(V3.labels||[]).forEach((l,i)=>l.visible=lv[i]);const name='afterspace-pbv-3d.png';
@@ -1021,11 +1028,11 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
 }
 // 책상: 세움(상자 속) → 올라오며 앞으로 → 무릎 위로 눕힘 → 반쪽 펼침. p 0~1
 function poseDoors(){const t=V3.doorP;(V3.leaves||[]).forEach(L=>{const c=1-t,sx=Math.min(1,c/.25),sz=Math.max(0,(c-.25)/.75);L.g.position.set(L.dx*(c<.25?sx*.3:.3+.7*Math.max(0,(c-.85)/.15)),0,L.dz*sz)})}
-function poseRigs(){(V3.rig||[]).forEach(r=>{if(!r)return;const p=V3.deskP,{A,Bf,w,H}=r,e=v=>Math.max(0,Math.min(1,v)),up=e(p*3),fl=e(p*3-1),op=e(p*3-2);
+function poseRigs(){(V3.rig||[]).forEach(r=>{if(!r)return;const p=r.p!=null?r.p:V3.deskP,{A,Bf,w,H}=r,e=v=>Math.max(0,Math.min(1,v)),up=e(p*3),fl=e(p*3-1),op=e(p*3-2);
   const ax=w/2+.025,sv={x:ax,y:.36+H/2+.25*up,z:-.015-.3*up},fx=ax-H/2,fold=ax-H,fz=-.315;
   A.rotation.set(0,0,Math.PI/2*(1-fl));A.position.set(lp(sv.x,fx,fl),lp(sv.y,.58,fl),lp(sv.z,fz,fl));
   const ph=Math.PI*op;if(op>0){Bf.rotation.set(0,0,ph);Bf.position.set(fold+H/2*Math.cos(ph),.58+.015*(1-op)+H/2*Math.sin(ph),fz)}else{Bf.rotation.copy(A.rotation);Bf.position.set(A.position.x+.016*(1-fl),A.position.y+.015*fl,A.position.z)}
-  r.scr.visible=V3.deskP>.995})}
+  r.scr.visible=p>.995})}
 function bagAt(r,e,ins){const q=new THREE.Vector3(0,.15,(ins?-.23+.2:0)-.38*e);return r.g.localToWorld(q)}
 function tick3D(ag){if(!V3.on||!V3.kids.length)return;
   const done=ag.every(a=>a.st==='done'),board=ag.some(a=>a.pts[0]&&a.pts.at(-1)&&a.pts.at(-1).x<a.pts[0].x);
@@ -1040,5 +1047,5 @@ function tick3Dp(ag){if(!V3.on||!V3.kids.length)return;const k=.001;ag.forEach(a
   const walking=a.st==='walk'||a.st==='act'||(a.st==='queue'&&false),seated=a.st==='belt'||(a.st==='done'&&!a.out);
   K.stand.visible=walking;K.sit.visible=seated;if(walking){K.stand.position.set(a.pos.x*k,0,a.pos.y*k);const t=a.pts[a.seg]||a.pts[a.pts.length-1];K.stand.rotation.y=Math.atan2(-(t.x-a.pos.x),-(t.y-a.pos.y))}})}
 {const oc=window.onCfg;window.onCfg=o=>{oc(o);if(V3.on)on3D(o,st.mode)};}
-{const q=new URLSearchParams(location.search);if(['board','move','stay'].includes(q.get('mode'))){st.mode=q.get('mode');refresh()}if(q.get('view')==='3d'){$('v3d').checked=true;show3D(true).then(()=>{if(q.get('cam'))camSet(q.get('cam'))})}}
+{const q=new URLSearchParams(location.search);if(['board','move','stay'].includes(q.get('mode'))){st.mode=q.get('mode');refresh()}if(q.get('view')==='3d'){$('v3d').checked=true;show3D(true).then(()=>{if(q.get('cam'))q.get('cam')==='bb'?boardStill():camSet(q.get('cam'))})}}
 </script>
