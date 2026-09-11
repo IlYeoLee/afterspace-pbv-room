@@ -892,8 +892,8 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   const hubT=tex(256,256,(x,w,h)=>{x.fillStyle='#DADDE2';x.beginPath();x.arc(128,128,126,0,7);x.fill();x.fillStyle='#23252B';x.fillRect(92,14,72,228);x.fillRect(14,92,228,72);x.fillStyle='#F4F5F7';x.fillRect(108,108,40,40)});
   const hubM=new T.MeshStandardMaterial({map:hubT,roughness:.3,metalness:.6,envMapIntensity:1});
   for(const wz of [fw,rw])for(const sd of [-1,1]){const wx=sd<0?X0:X0+XW,t=new T.Mesh(tireG,tire);t.rotation.z=Math.PI/2;t.position.set(wx-sd*.1,-.04,wz);t.castShadow=true;car.add(t);
-    const hx=wx-sd*.1,hub=new T.Mesh(new T.CylinderGeometry(.255,.255,.02,40),alu);hub.rotation.z=Math.PI/2;hub.position.set(hx+sd*.112,-.04,wz);car.add(hub);
-    for(const [bz,by] of [[.06,.44],[.44,.06]]){const bar=new T.Mesh(new T.BoxGeometry(.014,by,bz),clad);bar.position.set(hx+sd*.124,-.04,wz);car.add(bar)}
+    const hx=wx-sd*.1,hub=new T.Mesh(new T.CylinderGeometry(.255,.255,.02,40),clad);hub.rotation.z=Math.PI/2;hub.position.set(hx+sd*.112,-.04,wz);car.add(hub);
+    for(const [bz,by] of [[.06,.44],[.44,.06]]){const bar=new T.Mesh(new T.BoxGeometry(.014,by,bz),alu);bar.position.set(hx+sd*.124,-.04,wz);car.add(bar)}
     const ar=new T.Mesh(archG,clad);ar.rotation.y=Math.PI/2;ar.position.set(sd<0?X0-.035:X0+XW+.035-.06,-.04,wz);ar.position.x+=sd<0?0:0;ar.castShadow=true;car.add(ar)}
   const aw=(W-B.Wa)/2*k;rb(car,lock,0,B.arch[0]*k,aw+.04,(B.arch[1]-B.arch[0])*k,.42,0,.04);rb(car,lock,W-aw-.04,B.arch[0]*k,aw+.04,(B.arch[1]-B.arch[0])*k,.42,0,.04);
   // 옆면: 흰 아래 + 검은 유리 위 + 벨트라인 크롬
