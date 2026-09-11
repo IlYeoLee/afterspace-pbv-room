@@ -497,7 +497,7 @@ function draw(svg,o,mode,agents,small){
   for(const wy of [fw,rw])for(const wx of [-ew-40,W+ew-200])R(wx,wy-340,240,680,'fill="#525C74"');
   R(-ew,-B.front,B.ext[1],B.ext[0],`rx="260" fill="#FFFFFF" stroke="#D2D6DE" stroke-width="${sw}"`);
   R(0,-B.front+260,W,B.front-300,'fill="#EEF0F4"');
-  T(W/2,-B.front/2+fs/3,'앞 · 모터와 충돌 구조 (운전석 없음)','text-anchor="middle" fill="#8A93A8"');
+  T(W/2,-B.front/2+fs/3,'앞 수납장 (아래는 모터 · 충돌 구조)','text-anchor="middle" fill="#8A93A8"');
   R(0,0,W,L,`fill="#F7F7F9" stroke="#525C74" stroke-width="${sw*1.4}"`);
   if(o.need>L)R(0,L,W,o.need-L,`fill="#FF2D3D14" stroke="#FF2D3D" stroke-dasharray="40 30" stroke-width="${sw}"`);
   const aw=(W-B.Wa)/2;R(0,B.arch[0],aw,B.arch[1]-B.arch[0],'fill="#FFB80055"');R(W-aw,B.arch[0],aw,B.arch[1]-B.arch[0],'fill="#FFB80055"');
@@ -847,7 +847,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   rb(car,paint,X0,Zf+.15,XW,BL-.3,.34,-.34,.06);rb(car,clad,X0-.01,Zf+.35,XW+.02,BL-.7,.16,-.4,.05);
   const floorP=new T.Mesh(new T.PlaneGeometry(W,L),floorM);floorP.rotation.x=-Math.PI/2;floorP.position.set(W/2,.002,L/2);floorP.receiveShadow=true;car.add(floorP);
   rb(car,paint,X0,Zf,XW,.7,.84,-.32,.14);rb(car,roofM,X0,Zf,XW,.7,.45,.5,.1);rb(car,clad,X0+.24,Zf-.06,XW-.48,.3,.34,-.3,.06);rb(car,clad,X0+.08,Zf+.02,XW-.16,.12,.16,-.4,.05);
-  rb(car,lock,0,Zf+.7,W,-Zf-.7,.4,0,.03);rb(car,roofM,X0,Zf+.02,XW,.22,.07,Hc,.03);
+  rb(car,lock,0,Zf+.7,W,-Zf-.7,1.1,0,.03);for(let i=1;i<4;i++)rb(car,mat('#DDE1E8'),W*i/4-.003,-.004,.006,.008,1.04,.03,.002,false);rb(car,mat('#FF2D3D',{emissive:'#FF2D3D',emissiveIntensity:.5}),W*.12,-.006,.08,.008,.08,.9,.004,false);rb(car,roofM,X0,Zf+.02,XW,.22,.07,Hc,.03);
   const ledT=tex(1024,160,(x,w,h)=>{x.fillStyle='#FF2D3D';x.fillRect(0,0,w,h);x.fillStyle='#FFFFFF';x.font='500 96px "42dot Sans",sans-serif';x.textBaseline='middle';x.fillText('34',70,84);
     [0,1,2,3].forEach(i=>{x.globalAlpha=.45+i*.18;x.fillRect(360+i*46,70,26,26)});x.globalAlpha=1;[[0,2],[1,1],[1,3],[2,0],[2,4],[3,1],[3,2],[3,3],[4,0],[4,4]].forEach(([r,c])=>x.fillRect(820+c*22,40+r*22,20,20))});
   const led=new T.Mesh(new T.PlaneGeometry(XW-.62,.17),new T.MeshStandardMaterial({map:ledT,emissive:'#FFFFFF',emissiveMap:ledT,emissiveIntensity:.9}));led.rotation.y=Math.PI;led.position.set(W/2,.73,Zf-.004);car.add(led);
