@@ -508,7 +508,7 @@ function draw(svg,o,mode,agents,small){
   for(const wy of [fw,rw])for(const wx of [-ew-40,W+ew-200])R(wx,wy-340,240,680,'fill="#525C74"');
   R(-ew,-B.front,B.ext[1],B.ext[0],`rx="260" fill="#FFFFFF" stroke="#D2D6DE" stroke-width="${sw}"`);
   R(0,-B.front+260,W,B.front-300,'fill="#EEF0F4"');
-  T(W/2,-B.front/2+fs/3,'앞 트렁크 · 밖에서 여는 칸 (아래는 모터)','text-anchor="middle" fill="#8A93A8"');
+  T(W/2,-B.front/2+fs/3,'앞 · 모터 · 공조 · 자율주행 컴퓨터 (수납 아님)','text-anchor="middle" fill="#8A93A8"');
   R(0,0,W,L,`fill="#F7F7F9" stroke="#525C74" stroke-width="${sw*1.4}"`);
   if(o.need>L)R(0,L,W,o.need-L,`fill="#FF2D3D14" stroke="#FF2D3D" stroke-dasharray="40 30" stroke-width="${sw}"`);
   const aw=(W-B.Wa)/2;R(0,B.arch[0],aw,B.arch[1]-B.arch[0],'fill="#FFB80055"');R(W-aw,B.arch[0],aw,B.arch[1]-B.arch[0],'fill="#FFB80055"');
@@ -873,7 +873,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   rb(car,paint,X0,Zf+.15,XW,BL-.3,.34,-.34,.06);rb(car,clad,X0-.01,Zf+.35,XW+.02,BL-.7,.16,-.4,.05);
   const floorP=new T.Mesh(new T.PlaneGeometry(W,L),floorM);floorP.rotation.x=-Math.PI/2;floorP.position.set(W/2,.002,L/2);floorP.receiveShadow=true;car.add(floorP);
   rb(car,paint,X0,Zf,XW,.7,.84,-.32,.14);rb(car,roofM,X0,Zf,XW,.7,.45,.5,.1);rb(car,clad,X0+.24,Zf-.06,XW-.48,.3,.34,-.3,.06);rb(car,clad,X0+.08,Zf+.02,XW-.16,.12,.16,-.4,.05);
-  rb(car,lock,0,Zf+.7,W,-Zf-.7,1.1,0,.03);{const fx0=X0+.3,fw2=XW-.6;for(const [x1,y1,w1,h1] of [[fx0,.02,fw2,.008],[fx0,.44,fw2,.008],[fx0,.02,.008,.43],[fx0+fw2-.008,.02,.008,.43]])rb(car,mat('#C9CDD4'),x1,Zf-.006,w1,.006,h1,y1,.002,false);rb(car,clad,W/2-.1,Zf-.012,.2,.012,.03,.36,.01,false)}for(let i=1;i<4;i++)rb(car,mat('#DDE1E8'),W*i/4-.003,-.004,.006,.008,1.04,.03,.002,false);rb(car,mat('#FF2D3D',{emissive:'#FF2D3D',emissiveIntensity:.5}),W*.12,-.006,.08,.008,.08,.9,.004,false);rb(car,roofM,X0,Zf+.02,XW,.22,.07,Hc,.03);
+  rb(car,lock,0,Zf+.7,W,-Zf-.7,1.1,0,.03);for(let i=1;i<4;i++)rb(car,mat('#DDE1E8'),W*i/4-.003,-.004,.006,.008,1.04,.03,.002,false);rb(car,mat('#FF2D3D',{emissive:'#FF2D3D',emissiveIntensity:.5}),W*.12,-.006,.08,.008,.08,.9,.004,false);rb(car,roofM,X0,Zf+.02,XW,.22,.07,Hc,.03);
   const ledT=tex(1024,160,(x,w,h)=>{x.fillStyle='#FF2D3D';x.fillRect(0,0,w,h);x.fillStyle='#FFFFFF';x.font='500 96px "42dot Sans",sans-serif';x.textBaseline='middle';x.fillText('34',70,84);
     [0,1,2,3].forEach(i=>{x.globalAlpha=.45+i*.18;x.fillRect(360+i*46,70,26,26)});x.globalAlpha=1;[[0,2],[1,1],[1,3],[2,0],[2,4],[3,1],[3,2],[3,3],[4,0],[4,4]].forEach(([r,c])=>x.fillRect(820+c*22,40+r*22,20,20))});
   const led=new T.Mesh(new T.PlaneGeometry(XW-.62,.17),new T.MeshStandardMaterial({map:ledT,emissive:'#FFFFFF',emissiveMap:ledT,emissiveIntensity:.9}));led.rotation.y=Math.PI;led.position.set(W/2,.73,Zf-.004);car.add(led);
@@ -989,7 +989,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
    dim([0,.03,L+.02],[W,.03,L+.02],`실내 폭 ${fmt(B.W)}`,[W/2,.16,L+.02]);
    dim([-.02,.03,0],[-.02,.03,L],`실내 길이 ${fmt(B.L)}`,[-.02,.16,L*.72]);
    dim([W-.04,0,L-.04],[W-.04,Hc,L-.04],`실내 높이 ${fmt(B.H)}`,[W-.04,Hc*.62,L-.04]);
-   dim([W/2,.93,Zf+.02],[W/2,.93,0],`앞 ${fmt(B.front)} (충돌 구조 · 모터)`,[W/2,1.05,Zf/2]);
+   dim([W/2,.93,Zf+.02],[W/2,.93,0],`앞 ${fmt(B.front)} · 모터 · 공조 · 자율주행 컴퓨터`,[W/2,1.05,Zf/2]);
    const f0=o.floor.find(f=>f.w>=B.W*.9)||o.floor[0];if(f0)tag(`바닥 ${fmt(f0.h)} × ${fmt(f0.w)}`,(f0.x+f0.w/2)*k,.08,(f0.y+f0.h*.62)*k);
    const d=o.door;if(d.side==='r')dim([W+ew+.06,.05,d.a*k],[W+ew+.06,.05,d.b*k],`문 ${fmt(d.w)}`,[W+ew+.06,.2,(d.a+d.b)/2e3]);
    const s1=o.seats[1]||o.seats[0];if(s1){const fz1=s1.face==='up'?s1.y*k:(s1.y+s1.h)*k;
@@ -1001,7 +1001,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
    const sc=o.screens.find(x=>x.band);if(sc){const zz=(sc.y===0?fz+.03:rz-.03);dim([sc.x*k,1.18,zz],[(sc.x+sc.w)*k,1.18,zz],`화면 ${fmt(sc.w)} × ${fmt(sc.h)} · 약 ${(sc.w/sc.h).toFixed(1)}:1`,[(sc.x+sc.w/2)*k,1.03,zz]);
      const sc2=o.screens.find(x=>x.band&&x.y>0);if(sc2){const z2=rz-.03;dim([sc2.x*k-.03,0,z2],[sc2.x*k-.03,1.2,z2],'바닥에서 1,200',[sc2.x*k-.03,.75,z2])}}
    const tc=o.utils.find(u=>u.h3);if(B.side&&o.lay==='D')o.utils.filter(u=>u.h3).forEach(u=>tag(`${u.ledge?'창턱 선반 · 위로 여는 칸':'선생님 수납'} ${fmt(u.h)} × ${u.w} · 높이 ${fmt(u.h3*1000)}`,(u.x+u.w)*k+.14,u.h3+.1,(u.y+u.h/2)*k));else if(tc)tag(`실습 도구장 ${tc.h} × ${tc.w} · 높이 ${Math.round(tc.h3*1000)}`,(tc.x+tc.w)*k+.12,tc.h3+.12,(tc.y+tc.h/2)*k);if(tdk)tag('선생님 책상 650 × 330 · 판 전체 화면',(tdk.x+tdk.w)*k+.1,.72,(tdk.y+tdk.h/2)*k);if(bayOn){tag('선생님 확장부 400 × 1,300 · 정차 때만',-o.bay.d*k,1.75,(o.bay.y+o.bay.h/2)*k);tag('선생님 수납 400 × 400',-o.bay.d*k+.2,1.12,(o.bay.y+200)*k)}
-   tag('앞 트렁크 · 밖에서 엶 (체험 장비 · 우비 · 구급 비축)',W/2,.3,Zf-.25);
+
    tag('선생님 회전 좌석',(c.x+c.w/2)*k+.15,1.55,(c.y+c.h/2)*k);
   }
   V3.labels.forEach(l=>l.visible=V3.labOn!==false);
