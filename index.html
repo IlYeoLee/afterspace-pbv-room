@@ -932,8 +932,8 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
   const seat=(cx,cz,w,face,accent=navy)=>{const g=new T.Group();g.position.set(cx,0,cz);g.rotation.y=ang[face];car.add(g);
     for(const sd of [-1,1])rb(g,fabD,sd*(w/2-.02)-.015,-.2,.03,.4,.28,0,.01);rb(g,fabD,-w/2+.02,.14,w-.04,.06,.28,0,.01);rb(g,accent,-w/2+.03,-.21,w-.06,.02,.05,.0,.008);
     rb(g,fab,-w/2+.003,-.26,w-.006,.41,.09,.27,.04);
-    const bk=new T.Group();bk.position.set(0,.34,.19);bk.rotation.x=-.1;g.add(bk);rb(bk,fab,-w/2+.003,-.06,w-.006,.12,.62,0,.05);
-    for(const sd of [-1,1])rb(bk,fab,sd*(w/2-.025)-.025,-.09,.05,.08,.4,.08,.025);rb(bk,fab,-w*.3,-.05,w*.6,.1,.17,.66,.04);rb(bk,accent,-w*.08,-.052,w*.16,.012,.12,.69,.004,false);
+    const bk=new T.Group();bk.position.set(0,.34,.19);bk.rotation.x=-.1;g.add(bk);rb(bk,fab,-w/2+.003,-.06,w-.006,.12,.82,0,.06);
+    rb(bk,accent,-w*.08,-.052,w*.16,.012,.1,.68,.004,false);
     const st=new T.Mesh(new T.BoxGeometry(.045,.6,.006),strap);st.position.set(w*.12,.34,-.07);st.rotation.set(-.1,0,.5);bk.add(st);const lp2=new T.Mesh(new T.BoxGeometry(w*.7,.045,.006),strap);lp2.position.set(0,.06,-.07);bk.add(lp2);
     return g};
   const dT=tex(1024,576,(x,w,h)=>{x.fillStyle='#14161C';x.fillRect(0,0,w,h)});{const di=new Image();di.onload=()=>{const c=dT.image,x=c.getContext('2d');const iw=c.height*4/3,ix=(c.width-iw)/2;x.drawImage(di,0,0,2,di.height,0,0,ix+2,c.height);x.drawImage(di,di.width-2,0,2,di.height,ix+iw-2,0,ix+2,c.height);x.drawImage(di,ix,0,iw,c.height);dT.needsUpdate=true};di.src=FIG_DESK}
@@ -975,7 +975,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
         x.fillStyle='#3A4B86';x.fillRect(40,96,450,254);x.fillRect(530,96,450,254);for(let i=0;i<6;i++){x.fillStyle=['#FF8A1F','#FFB800','#00B84A','#8A1FFF','#FF2D3D','#C9D0E0'][i];x.fillRect(40+i*160,400,130,110)}x.fillStyle='#16224D';x.fillRect(0,h-40,w2,40)});
       const scr=new T.Mesh(new T.PlaneGeometry(.58,.3),dm);scr.rotation.x=-Math.PI/2;scr.position.set(0,.5895,-.315);tg.add(scr);
       V3.rig.push({g:tg,A:leaf(0),Bf:leaf(1),scr,w,H,t:1});poseRigs()}}else rb(car,fab,c.x*k,c.y*k,c.fold*k,c.h*k,.9,.3,.03);
-  rb(car,darkScr,(bayOn?-o.bay.d*k:0)+.015,(c.y+80)*k,.012,(c.h-160)*k,.3,1.05,.01);
+  
   const toL1=g=>g.traverse(q=>q.layers.set(1));
   const tSit=person(1.68,'#EEF1F5',true,'#22222A'),tStand=person(1.68,'#EEF1F5',false,'#22222A');car.add(tSit);car.add(tStand);
   tSit.position.set((c.x+c.w/2)*k,.42,(c.y+c.h/2)*k);tSit.rotation.y=ang[mode==='move'?c.face:(c.stayFace||c.face)];tSit.translateZ(.03);tStand.position.set(c.stand.x*k,0,c.stand.y*k);tStand.rotation.y=-Math.PI/2;
