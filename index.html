@@ -174,10 +174,10 @@ tbody tr:hover td{background:var(--subtle)}
   <h2>책상과 좌석</h2>
   <div class="cards">
     <div class="card"><h3>책상</h3><ul class="px">
-      <li>평소엔 팔걸이 상자 속에 세워 둠</li>
+      <li>자리마다 하나, 팔걸이 상자에서 꺼내 폄</li>
       <li>펴면 무릎 위, 배에서 10 cm 띄워 드나들기 편함</li>
       <li>판 전체가 화면, 반쪽은 종이로 바꿔 필기</li>
-      <li>상자에 다 들어가야 차가 출발</li></ul></div>
+      <li>달릴 때도 편 채로 수업</li></ul></div>
     <div class="card"><h3>좌석</h3><ul class="px">
       <li>자리마다 3점식 벨트</li>
       <li>머리받침은 아이 목 높이</li>
@@ -245,7 +245,7 @@ const LAYS={
   C:{name:'C · 소프트 U',note:'앞쪽 옆문으로 탑승. 옆벽 포드 + 뒷줄 2석, 모두 앞 공용 화면을 봄. 머묾에서 옆 포드 45° 회전'},
 };
 const SD=500,BK=120,P=50,PIT=750,PW=520;
-const MODE_NOTE={board:'책상 수납 · 케어러 좌석 접힘 · 바닥을 최대로 비움',move:'벨트 착용 · 책상 잠금 · 케어러 착석 · 공용 화면 = 경로와 도착 시각',stay:'책상 펼침 · 케어러는 바닥으로 · 공용 화면 = 활동'};
+const MODE_NOTE={board:'책상 수납 · 케어러 좌석 접힘 · 바닥을 최대로 비움',move:'벨트 착용 · 책상은 편 채로 · 공용 화면 = 경로와 수업',stay:'책상 펼침 · 케어러는 바닥으로 · 공용 화면 = 활동'};
 
 function seatD(x,y,w,face,stand){return {x,y,w,h:SD,face,stand}}
 function build(bodyId,lay,n,door){
@@ -442,7 +442,7 @@ function draw(svg,o,mode,agents,small){
   if(agents)agents.forEach(a=>{if(a.st!=='queue'&&!a.out)kid(a.pos,a.i,a.st==='walk'?null:.85)});
   else if(mode!=='board')o.seats.forEach((s,i)=>kid({x:s.x+s.w/2,y:s.y+s.h/2},i));
   // 책상: 머묾 = 무릎 위로 펼침 (아이 위에 그림), 그 외 = 팔걸이 상자 속 세움
-  if(mode==='stay')for(const k of o.desks){R(k.x,k.y,k.w,k.h,'fill="#8C9BC8" stroke="#1B2A5E" stroke-width="'+sw*.6+'" opacity=".95"');R(k.x+k.w*.18,k.y+k.h*.2,k.w*.64,k.h*.6,'fill="#1B2A5E"')}
+  if(mode!=='board')for(const k of o.desks){R(k.x,k.y,k.w,k.h,'fill="#8C9BC8" stroke="#1B2A5E" stroke-width="'+sw*.6+'" opacity=".95"');R(k.x+k.w*.18,k.y+k.h*.2,k.w*.64,k.h*.6,'fill="#1B2A5E"')}
   else for(const k of (o.stow||[]).filter(q=>!q.arm))R(k.x,k.y,k.w,k.h,'fill="#8C9BC8" stroke="#1B2A5E" stroke-width="'+sw*.5+'"');
   // 치수 글자
   const f0=(mode==='stay'?o.floorStay:o.floor)[0];
@@ -712,7 +712,7 @@ function build3D(o,mode){const T=THREE,k=.001,B=o.B,W=B.W*k,L=B.L*k,Hc=B.H*k,ew=
       const edge=new T.Mesh(new T.BoxGeometry(H-.01,.004,.004),lightW);edge.position.set(0,0,-.166);l.add(edge);return l};
     const scr=new T.Mesh(new T.PlaneGeometry(2*H-.012,.31),dm);scr.rotation.x=-Math.PI/2;scr.position.set(0,.5895,-.315);g.add(scr);
     return {g,dr,bag,A:leaf(0),Bf:leaf(1),scr,w,H}});
-  V3.deskP=V3.deskP===undefined?(mode==='stay'?1:0):V3.deskP;V3.deskTo=mode==='stay'?1:0;poseRigs();poseDoors();
+  V3.deskP=V3.deskP===undefined?(mode==='board'?0:1):V3.deskP;V3.deskTo=mode==='board'?0:1;poseRigs();poseDoors();
   for(const a of (o.stow||[])){rb(car,lock,a.x*k,a.y*k,a.w*k,a.h*k,.6,0,.015);rb(car,navy,a.x*k+.004,a.y*k+.02,a.w*k-.008,a.h*k-.04,.012,.6,.005,false)}
   if(mode==='stay'&&!o.stow)for(const d of o.desks){rb(car,deskTop,d.x*k,d.y*k,d.w*k,d.h*k,.02,.57,.006)}
   // ── 사람 (Care Yard 마네킹, 앉은 자세 포함). 만들 때는 +z를 보고, 끝에 돌림
